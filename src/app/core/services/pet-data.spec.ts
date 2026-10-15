@@ -22,7 +22,7 @@ describe('PetData', () => {
 
   it('should expose the latest weight, calories consumed today, and calories remaining', () => {
     expect(service.currentWeightKg()).toBe(6);
-    expect(service.consumedKcalToday()).toBe(175.5);
-    expect(service.remainingKcalToday()).toBe(44.5);
+    expect(service.kcalToday()).toBe(175.5);
+    expect(service.kcalRemainingToday()).toBe(224.5);
   });
 });
