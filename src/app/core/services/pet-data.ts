@@ -3,16 +3,20 @@ import { Pet } from '../models/pet.model';
 import { WeightEntry } from '../models/weight-entry.model';
 import { MealEvent } from '../models/meal-event.model';
 import { Food } from '../models/food.model';
+import { localDateKey } from '../utils/date';
 
 @Service()
 export class PetData {
+  // This date is set when the service is created and does not refresh at midnight yet.
+  private readonly today = signal(localDateKey(new Date()));
+
   private readonly _pet = signal<Pet>({
     id: '1',
     name: 'Rubio',
     species: 'cat',
     birthDate: '2020-03-12',
     nutritionGoal: 'lose',
-    dailyKcalTarget: 220,
+    dailyKcalTarget: 400,
   });
 
   private readonly _weightEntries = signal<WeightEntry[]>([
@@ -36,7 +40,7 @@ export class PetData {
       type: 'meal',
       foodId: 'f1',
       grams: 35,
-      eatenAt: '2026-10-15T08:10:00-03:00',
+      eatenAt: '2026-10-15T08:10:00',
     },
     {
       id: 'm2',
@@ -44,7 +48,7 @@ export class PetData {
       type: 'meal',
       foodId: 'f2',
       grams: 40,
-      eatenAt: '2026-10-15T13:05:00-03:00',
+      eatenAt: '2026-10-15T13:05:00',
     },
     {
       id: 'm3',
@@ -52,7 +56,7 @@ export class PetData {
       type: 'treat',
       foodId: 'f1',
       grams: 5,
-      eatenAt: '2026-10-15T15:30:00-03:00',
+      eatenAt: '2026-10-15T15:30:00',
     },
     {
       id: 'm4',
@@ -60,7 +64,7 @@ export class PetData {
       type: 'treat',
       foodId: 'f2',
       grams: 10,
-      eatenAt: '2026-10-15T16:00:00-03:00',
+      eatenAt: '2026-10-15T16:00:00',
     },
   ]);
 
@@ -68,29 +72,23 @@ export class PetData {
   readonly weightEntries = this._weightEntries.asReadonly();
   readonly foods = this._foods.asReadonly();
   readonly mealEvents = this._mealEvents.asReadonly();
+
+  readonly currentWeightKg = computed<number | undefined>(() => {
+    const sortedEntries = [...this._weightEntries()].sort((a, b) =>
+      a.date.localeCompare(b.date),
+    );
+    return sortedEntries[sortedEntries.length - 1]?.weightKg;
+  });
+
   private readonly foodsById = computed(
     () => new Map(this._foods().map((food) => [food.id, food])),
   );
 
-  readonly currentWeightKg = computed(() => {
-    const entries = this._weightEntries();
-    if (entries.length === 0) {
-      return null;
-    }
-
-    const latestEntry = entries.reduce((latest, entry) =>
-      entry.date > latest.date ? entry : latest,
-    );
-    return latestEntry.weightKg;
-  });
-
-  readonly consumedKcalToday = computed(() => {
-    const now = new Date();
-    const today = this.localDateKey(now);
+  readonly kcalToday = computed(() => {
+    const today = this.today();
     const foodsById = this.foodsById();
-
     return this._mealEvents().reduce((total, event) => {
-      if (this.localDateKey(new Date(event.eatenAt)) !== today) {
+      if (!event.eatenAt.startsWith(today)) {
         return total;
       }
 
@@ -103,9 +101,9 @@ export class PetData {
     }, 0);
   });
 
-  readonly remainingKcalToday = computed(() => {
+  readonly kcalRemainingToday = computed<number | undefined>(() => {
     const target = this._pet().dailyKcalTarget;
-    return target === undefined ? null : target - this.consumedKcalToday();
+    return target === undefined ? undefined : target - this.kcalToday();
   });
 
   readonly weightChangeKg = computed(() => {
@@ -119,12 +117,4 @@ export class PetData {
       (sortedEntries[sortedEntries.length - 1].weightKg - sortedEntries[0].weightKg).toFixed(2),
     );
   });
-
-  private localDateKey(date: Date): string {
-    return [
-      date.getFullYear(),
-      String(date.getMonth() + 1).padStart(2, '0'),
-      String(date.getDate()).padStart(2, '0'),
-    ].join('-');
-  }
 }
