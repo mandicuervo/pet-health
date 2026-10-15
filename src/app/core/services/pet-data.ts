@@ -16,7 +16,7 @@ export class PetData {
     species: 'cat',
     birthDate: '2020-03-12',
     nutritionGoal: 'lose',
-    dailyKcalTarget: 400,
+    dailyKcalTarget: 250,
   });
 
   private readonly _weightEntries = signal<WeightEntry[]>([
@@ -33,6 +33,7 @@ export class PetData {
     { id: 'f2', name: 'Ração úmida para gatos', kcalPerKg: 950 },
   ]);
 
+  // These mock dates are static; make them relative to today when populating the Dashboard.
   private readonly _mealEvents = signal<MealEvent[]>([
     {
       id: 'm1',
@@ -73,11 +74,12 @@ export class PetData {
   readonly foods = this._foods.asReadonly();
   readonly mealEvents = this._mealEvents.asReadonly();
 
+  private readonly sortedWeightEntries = computed(() =>
+    [...this._weightEntries()].sort((a, b) => a.date.localeCompare(b.date)),
+  );
+
   readonly currentWeightKg = computed<number | undefined>(() => {
-    const sortedEntries = [...this._weightEntries()].sort((a, b) =>
-      a.date.localeCompare(b.date),
-    );
-    return sortedEntries[sortedEntries.length - 1]?.weightKg;
+    return this.sortedWeightEntries().at(-1)?.weightKg;
   });
 
   private readonly foodsById = computed(
@@ -88,7 +90,7 @@ export class PetData {
     const today = this.today();
     const foodsById = this.foodsById();
     return this._mealEvents().reduce((total, event) => {
-      if (!event.eatenAt.startsWith(today)) {
+      if (localDateKey(new Date(event.eatenAt)) !== today) {
         return total;
       }
 
@@ -107,14 +109,13 @@ export class PetData {
   });
 
   readonly weightChangeKg = computed(() => {
-    const entries = this._weightEntries();
+    const entries = this.sortedWeightEntries();
     if (entries.length < 2) {
       return 0;
     }
 
-    const sortedEntries = [...entries].sort((a, b) => a.date.localeCompare(b.date));
     return Number(
-      (sortedEntries[sortedEntries.length - 1].weightKg - sortedEntries[0].weightKg).toFixed(2),
+      (entries[entries.length - 1].weightKg - entries[0].weightKg).toFixed(2),
     );
   });
 }

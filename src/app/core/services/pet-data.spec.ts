@@ -7,7 +7,7 @@ describe('PetData', () => {
 
   beforeEach(() => {
     vi.useFakeTimers();
-    vi.setSystemTime(new Date(2026, 9, 15, 22, 52));
+    vi.setSystemTime(new Date(2026, 9, 15, 17, 0));
     TestBed.configureTestingModule({});
     service = TestBed.inject(PetData);
   });
@@ -20,9 +20,10 @@ describe('PetData', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should expose the latest weight, calories consumed today, and calories remaining', () => {
+  it("should calculate today's calories and expose the latest weight metrics", () => {
+    expect(service.kcalToday()).toBeCloseTo(175.5);
+    expect(service.kcalRemainingToday()).toBeCloseTo(74.5);
+    expect(service.weightChangeKg()).toBe(-0.4);
     expect(service.currentWeightKg()).toBe(6);
-    expect(service.kcalToday()).toBe(175.5);
-    expect(service.kcalRemainingToday()).toBe(224.5);
   });
 });
