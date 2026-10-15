@@ -12,6 +12,7 @@ export class PetData {
     species: 'cat',
     birthDate: '2020-03-12',
     nutritionGoal: 'lose',
+    dailyKcalTarget: 220,
   });
 
   private readonly _weightEntries = signal<WeightEntry[]>([
@@ -35,8 +36,7 @@ export class PetData {
       type: 'meal',
       foodId: 'f1',
       grams: 35,
-      scheduledTime: '2026-10-15T08:00:00',
-      completedAt: '2026-10-15T08:10:00',
+      eatenAt: '2026-10-15T08:10:00-03:00',
     },
     {
       id: 'm2',
@@ -44,16 +44,23 @@ export class PetData {
       type: 'meal',
       foodId: 'f2',
       grams: 40,
-      scheduledTime: '2026-10-15T13:00:00',
-      completedAt: '2026-10-15T13:05:00',
+      eatenAt: '2026-10-15T13:05:00-03:00',
     },
     {
       id: 'm3',
       petId: '1',
-      type: 'meal',
+      type: 'treat',
       foodId: 'f1',
-      grams: 35,
-      scheduledTime: '2026-10-15T20:00:00',
+      grams: 5,
+      eatenAt: '2026-10-15T15:30:00-03:00',
+    },
+    {
+      id: 'm4',
+      petId: '1',
+      type: 'treat',
+      foodId: 'f2',
+      grams: 10,
+      eatenAt: '2026-10-15T16:00:00-03:00',
     },
   ]);
 
@@ -61,6 +68,45 @@ export class PetData {
   readonly weightEntries = this._weightEntries.asReadonly();
   readonly foods = this._foods.asReadonly();
   readonly mealEvents = this._mealEvents.asReadonly();
+  private readonly foodsById = computed(
+    () => new Map(this._foods().map((food) => [food.id, food])),
+  );
+
+  readonly currentWeightKg = computed(() => {
+    const entries = this._weightEntries();
+    if (entries.length === 0) {
+      return null;
+    }
+
+    const latestEntry = entries.reduce((latest, entry) =>
+      entry.date > latest.date ? entry : latest,
+    );
+    return latestEntry.weightKg;
+  });
+
+  readonly consumedKcalToday = computed(() => {
+    const now = new Date();
+    const today = this.localDateKey(now);
+    const foodsById = this.foodsById();
+
+    return this._mealEvents().reduce((total, event) => {
+      if (this.localDateKey(new Date(event.eatenAt)) !== today) {
+        return total;
+      }
+
+      const food = foodsById.get(event.foodId);
+      if (!food) {
+        throw new Error(`Food ${event.foodId} not found for meal ${event.id}`);
+      }
+
+      return total + (event.grams * food.kcalPerKg) / 1000;
+    }, 0);
+  });
+
+  readonly remainingKcalToday = computed(() => {
+    const target = this._pet().dailyKcalTarget;
+    return target === undefined ? null : target - this.consumedKcalToday();
+  });
 
   readonly weightChangeKg = computed(() => {
     const entries = this._weightEntries();
@@ -73,4 +119,12 @@ export class PetData {
       (sortedEntries[sortedEntries.length - 1].weightKg - sortedEntries[0].weightKg).toFixed(2),
     );
   });
+
+  private localDateKey(date: Date): string {
+    return [
+      date.getFullYear(),
+      String(date.getMonth() + 1).padStart(2, '0'),
+      String(date.getDate()).padStart(2, '0'),
+    ].join('-');
+  }
 }

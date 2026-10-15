@@ -1,4 +1,4 @@
-export type MealEventType = 'meal';
+export type MealEventType = 'meal' | 'treat';
 
 export interface MealEvent {
   id: string;
@@ -6,6 +6,5 @@ export interface MealEvent {
   type: MealEventType;
   foodId: string;
   grams: number;
-  scheduledTime: string;
-  completedAt?: string;
+  eatenAt: string;
 }
