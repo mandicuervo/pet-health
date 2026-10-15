@@ -1,12 +1,13 @@
-export type HealthCondition = 'diabetes' | 'obesity';
+export type NutritionGoal = 'lose' | 'maintain' | 'gain';
 
 export interface Pet {
   id: string;
   name: string;
   species: 'cat' | 'dog';
   breed?: string;
-  ageYears: number;
-  weightKg: number;
+  birthDate: string;
   photoUrl?: string;
-  healthConditions: HealthCondition[];
+  nutritionGoal: NutritionGoal;
+  targetWeightKg?: number;
+  dailyKcalTarget?: number;
 }
