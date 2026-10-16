@@ -1,0 +1,83 @@
+{
+  "app": {
+    "name": "Salud para Mascotas"
+  },
+  "dashboard": {
+    "weightLoss": "BAJAR DE PESO",
+    "weightEvolution": "EVOLUCIÓN",
+    "weightChangeSinceStart": "{{value}} kg desde el inicio",
+    "todaySummary": "Resumen de Hoy",
+    "dailyGoal": "Meta: {{amount}} kcal",
+    "consumed": "CONSUMIDO",
+    "remaining": "RESTANTE",
+    "dailyGoalProgress": "{{percent}}% DE LA META",
+    "meals": "Comidas",
+    "viewHistory": "Ver historial",
+    "foodTypes": {
+      "dryFood": "Alimento Seco",
+      "wetFood": "Alimento Húmedo",
+      "treat": "Chuches"
+    },
+    "mealDetails": "{{grams}} g · {{time}}",
+    "calories": "{{amount}} kcal",
+    "healthTipTitle": "Consejo de Salud",
+    "healthTips": {
+      "cat": "¡Mantén a tu gato hidratado! Los gatos con una dieta para bajar de peso pueden beneficiarse de beber más agua para sentirse saciados.",
+      "dog": "¡Mantén a tu perro hidratado! Los perros con una dieta para bajar de peso pueden beneficiarse de beber más agua para sentirse saciados."
+    },
+    "addMeal": "Añadir comida",
+    "addRecord": "Añadir un registro nutricional",
+    "chooseRecordType": "Elige el tipo de registro"
+  },
+  "questionnaire": {
+    "title": "Sobre tu mascota",
+    "intro": "Cuéntanos un poco sobre tu mascota para personalizar su perfil nutricional.",
+    "petName": "Nombre de la mascota",
+    "species": "Tipo de mascota",
+    "breed": "Raza",
+    "birthDate": "Fecha de nacimiento",
+    "nutritionGoal": "Objetivo nutricional",
+    "currentWeight": "Peso actual",
+    "targetWeight": "Peso deseado",
+    "dailyCalorieGoal": "Meta diaria de calorías",
+    "bodyConditionScore": "Puntuación de condición corporal",
+    "optional": "Opcional",
+    "required": "Obligatorio",
+    "continue": "Continuar",
+    "save": "Guardar"
+  },
+  "pet": {
+    "species": {
+      "cat": "Gato",
+      "dog": "Perro"
+    },
+    "nutritionGoals": {
+      "lose": "Bajar de peso",
+      "maintain": "Mantener el peso",
+      "gain": "Subir de peso"
+    },
+    "year": "año",
+    "years": "años",
+    "weightUnit": "kg"
+  },
+  "navigation": {
+    "label": "Navegación principal",
+    "nutrition": "Nutrición",
+    "weight": "Peso",
+    "foods": "Alimentos",
+    "profile": "Perfil"
+  },
+  "accessibility": {
+    "settings": "Configuración de la mascota",
+    "weightProgress": "Evolución del peso de la mascota",
+    "dailyCalories": "Resumen diario de calorías",
+    "mealHistory": "Historial de comidas",
+    "addRecord": "Añadir un registro nutricional"
+  },
+  "language": {
+    "label": "Idioma",
+    "english": "English",
+    "portuguese": "Português",
+    "spanish": "Español"
+  }
+}

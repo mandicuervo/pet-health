@@ -1,0 +1,83 @@
+{
+  "app": {
+    "name": "Pet Health"
+  },
+  "dashboard": {
+    "weightLoss": "WEIGHT LOSS",
+    "weightEvolution": "WEIGHT PROGRESS",
+    "weightChangeSinceStart": "{{value}} kg since start",
+    "todaySummary": "Today's summary",
+    "dailyGoal": "Goal: {{amount}} kcal",
+    "consumed": "CONSUMED",
+    "remaining": "REMAINING",
+    "dailyGoalProgress": "{{percent}}% OF GOAL",
+    "meals": "Meals",
+    "viewHistory": "View history",
+    "foodTypes": {
+      "dryFood": "Dry food",
+      "wetFood": "Wet food",
+      "treat": "Treat"
+    },
+    "mealDetails": "{{grams}} g · {{time}}",
+    "calories": "{{amount}} kcal",
+    "healthTipTitle": "Health tip",
+    "healthTips": {
+      "cat": "Keep your cat hydrated! Cats on a weight-loss diet may benefit from more water to help them feel full.",
+      "dog": "Keep your dog hydrated! Dogs on a weight-loss diet may benefit from more water to help them feel full."
+    },
+    "addMeal": "Add meal",
+    "addRecord": "Add a nutrition record",
+    "chooseRecordType": "Choose a record type to add"
+  },
+  "questionnaire": {
+    "title": "About your pet",
+    "intro": "Tell us a little about your pet to personalize their nutrition profile.",
+    "petName": "Pet's name",
+    "species": "Pet type",
+    "breed": "Breed",
+    "birthDate": "Date of birth",
+    "nutritionGoal": "Nutrition goal",
+    "currentWeight": "Current weight",
+    "targetWeight": "Target weight",
+    "dailyCalorieGoal": "Daily calorie goal",
+    "bodyConditionScore": "Body condition score",
+    "optional": "Optional",
+    "required": "Required",
+    "continue": "Continue",
+    "save": "Save"
+  },
+  "pet": {
+    "species": {
+      "cat": "Cat",
+      "dog": "Dog"
+    },
+    "nutritionGoals": {
+      "lose": "Lose weight",
+      "maintain": "Maintain weight",
+      "gain": "Gain weight"
+    },
+    "year": "year",
+    "years": "years",
+    "weightUnit": "kg"
+  },
+  "navigation": {
+    "label": "Main navigation",
+    "nutrition": "Nutrition",
+    "weight": "Weight",
+    "foods": "Foods",
+    "profile": "Profile"
+  },
+  "accessibility": {
+    "settings": "Pet settings",
+    "weightProgress": "Pet weight progress",
+    "dailyCalories": "Daily calorie summary",
+    "mealHistory": "Meal history",
+    "addRecord": "Add a nutrition record"
+  },
+  "language": {
+    "label": "Language",
+    "english": "English",
+    "portuguese": "Português",
+    "spanish": "Español"
+  }
+}

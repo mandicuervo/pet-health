@@ -1,0 +1,83 @@
+{
+  "app": {
+    "name": "Saúde Pet"
+  },
+  "dashboard": {
+    "weightLoss": "PERDER PESO",
+    "weightEvolution": "EVOLUÇÃO",
+    "weightChangeSinceStart": "{{value}} kg desde o início",
+    "todaySummary": "Resumo de Hoje",
+    "dailyGoal": "Meta: {{amount}} kcal",
+    "consumed": "CONSUMIDO",
+    "remaining": "RESTANTE",
+    "dailyGoalProgress": "{{percent}}% DA META",
+    "meals": "Refeições",
+    "viewHistory": "Ver histórico",
+    "foodTypes": {
+      "dryFood": "Ração Seca",
+      "wetFood": "Ração Úmida",
+      "treat": "Petisco"
+    },
+    "mealDetails": "{{grams}} g · {{time}}",
+    "calories": "{{amount}} kcal",
+    "healthTipTitle": "Dica de Saúde",
+    "healthTips": {
+      "cat": "Mantenha a hidratação! Gatos em dieta de emagrecimento podem se beneficiar de mais água para sentir saciedade.",
+      "dog": "Mantenha a hidratação! Cães em dieta de emagrecimento podem se beneficiar de mais água para sentir saciedade."
+    },
+    "addMeal": "Adicionar refeição",
+    "addRecord": "Adicionar registro nutricional",
+    "chooseRecordType": "Escolha o tipo de registro"
+  },
+  "questionnaire": {
+    "title": "Sobre seu pet",
+    "intro": "Conte um pouco sobre seu pet para personalizarmos o perfil nutricional.",
+    "petName": "Nome do pet",
+    "species": "Tipo de pet",
+    "breed": "Raça",
+    "birthDate": "Data de nascimento",
+    "nutritionGoal": "Objetivo nutricional",
+    "currentWeight": "Peso atual",
+    "targetWeight": "Peso desejado",
+    "dailyCalorieGoal": "Meta diária de calorias",
+    "bodyConditionScore": "Escore de condição corporal",
+    "optional": "Opcional",
+    "required": "Obrigatório",
+    "continue": "Continuar",
+    "save": "Salvar"
+  },
+  "pet": {
+    "species": {
+      "cat": "Gato",
+      "dog": "Cachorro"
+    },
+    "nutritionGoals": {
+      "lose": "Perder peso",
+      "maintain": "Manter o peso",
+      "gain": "Ganhar peso"
+    },
+    "year": "ano",
+    "years": "anos",
+    "weightUnit": "kg"
+  },
+  "navigation": {
+    "label": "Navegação principal",
+    "nutrition": "Nutrição",
+    "weight": "Peso",
+    "foods": "Alimentos",
+    "profile": "Perfil"
+  },
+  "accessibility": {
+    "settings": "Configurações do pet",
+    "weightProgress": "Evolução do peso do pet",
+    "dailyCalories": "Resumo diário de calorias",
+    "mealHistory": "Histórico de refeições",
+    "addRecord": "Adicionar registro nutricional"
+  },
+  "language": {
+    "label": "Idioma",
+    "english": "English",
+    "portuguese": "Português",
+    "spanish": "Español"
+  }
+}
