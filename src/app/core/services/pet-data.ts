@@ -5,6 +5,10 @@ import { MealEvent } from '../models/meal-event.model';
 import { Food } from '../models/food.model';
 import { localDateKey } from '../utils/date';
 
+function todayAt(time: string): string {
+  return `${localDateKey(new Date())}T${time}`;
+}
+
 @Service()
 export class PetData {
   // This date is set when the service is created and does not refresh at midnight yet.
@@ -12,9 +16,9 @@ export class PetData {
 
   private readonly _pet = signal<Pet>({
     id: '1',
-    name: 'Rubio',
+    name: 'Bagheera',
     species: 'cat',
-    birthDate: '2020-03-12',
+    birthDate: '2019-04-26',
     nutritionGoal: 'lose',
     dailyKcalTarget: 250,
   });
@@ -29,43 +33,35 @@ export class PetData {
   ]);
 
   private readonly _foods = signal<Food[]>([
-    { id: 'f1', name: 'Ração seca para controle de peso', kcalPerKg: 3200 },
-    { id: 'f2', name: 'Ração úmida para gatos', kcalPerKg: 950 },
+    { id: 'f1', name: 'Ração seca para controle de peso', kcalPerKg: 3200, category: 'dryFood' },
+    { id: 'f2', name: 'Ração úmida para gatos', kcalPerKg: 950, category: 'wetFood' },
+    { id: 'f3', name: 'Petisco', kcalPerKg: 3250, category: 'treat' },
   ]);
 
-  // These mock dates are static; make them relative to today when populating the Dashboard.
   private readonly _mealEvents = signal<MealEvent[]>([
     {
       id: 'm1',
       petId: '1',
       type: 'meal',
       foodId: 'f1',
-      grams: 35,
-      eatenAt: '2026-10-15T08:10:00',
+      grams: 15,
+      eatenAt: todayAt('07:30:00'),
     },
     {
       id: 'm2',
       petId: '1',
       type: 'meal',
       foodId: 'f2',
-      grams: 40,
-      eatenAt: '2026-10-15T13:05:00',
+      grams: 100,
+      eatenAt: todayAt('12:30:00'),
     },
     {
       id: 'm3',
       petId: '1',
       type: 'treat',
-      foodId: 'f1',
-      grams: 5,
-      eatenAt: '2026-10-15T15:30:00',
-    },
-    {
-      id: 'm4',
-      petId: '1',
-      type: 'treat',
-      foodId: 'f2',
       grams: 10,
-      eatenAt: '2026-10-15T16:00:00',
+      foodId: 'f3',
+      eatenAt: todayAt('16:15:00'),
     },
   ]);
 
