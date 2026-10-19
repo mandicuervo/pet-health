@@ -432,54 +432,6 @@
   }
 }
 
-.bottom-nav {
-  position: fixed;
-  z-index: 2;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  width: min(100%, 460px);
-  height: calc(57px + env(safe-area-inset-bottom));
-  justify-content: space-around;
-  margin: 0 auto;
-  padding: 8px 7px max(8px, env(safe-area-inset-bottom));
-  border-top: 1px solid #28282b;
-  border-radius: 20px 20px 0 0;
-  background: #1a1a1c;
-}
-
-.nav-item {
-  display: grid;
-  min-width: 52px;
-  justify-items: center;
-  align-content: center;
-  gap: 4px;
-  padding: 1px 8px;
-  border: 0;
-  background: transparent;
-  color: #687387;
-  cursor: pointer;
-
-  svg {
-    width: 17px;
-    height: 17px;
-    fill: currentColor;
-    stroke: currentColor;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke-width: 1.5;
-  }
-
-  span {
-    font-size: 12px;
-  }
-
-  &.active {
-    color: #e5b5ff;
-  }
-}
-
 .add-button {
   position: fixed;
   z-index: 3;

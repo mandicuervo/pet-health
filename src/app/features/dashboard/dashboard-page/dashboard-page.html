@@ -136,31 +136,4 @@
     <div class="add-popover" role="status">{{ 'dashboard.chooseRecordType' | translate }}</div>
   }
 
-  <nav class="bottom-nav" [attr.aria-label]="'navigation.label' | translate">
-    @for (tab of navigation; track tab.id) {
-      <button
-        class="nav-item"
-        [class.active]="selectedTab() === tab.id"
-        [attr.aria-current]="selectedTab() === tab.id ? 'page' : null"
-        type="button"
-        (click)="selectTab(tab.id)"
-      >
-        @switch (tab.id) {
-          @case ('home') {
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9h-9Z" /><path d="M14 3.2V10h6.8A9 9 0 0 0 14 3.2Z" /></svg>
-          }
-          @case ('trends') {
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v4M12 17v4M5.6 5.6l2.8 2.8m7.2 7.2 2.8 2.8M3 12h4m10 0h4M5.6 18.4l2.8-2.8m7.2-7.2 2.8-2.8" /><circle cx="12" cy="12" r="4" /></svg>
-          }
-          @case ('schedule') {
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2 9 3-12 3 12 2-9h3M6 4v2m12-2v2" /></svg>
-          }
-          @case ('profile') {
-            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="8" r="2" /><circle cx="17" cy="8" r="2" /><circle cx="5" cy="13" r="2" /><circle cx="19" cy="13" r="2" /><path d="M8 18c0-2 1.8-4 4-4s4 2 4 4c0 1.5-1.2 2.5-4 2.5S8 19.5 8 18Z" /></svg>
-          }
-        }
-        <span>{{ tab.key | translate }}</span>
-      </button>
-    }
-  </nav>
 </main>

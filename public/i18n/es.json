@@ -67,6 +67,11 @@
     "foods": "Alimentos",
     "profile": "Perfil"
   },
+  "pages": {
+    "weightDescription": "Sigue el peso y la evolución de tu mascota a lo largo del tiempo.",
+    "foodsDescription": "Gestiona los alimentos y las comidas del plan nutricional de tu mascota.",
+    "profileDescription": "Consulta y gestiona el perfil y las preferencias de tu mascota."
+  },
   "accessibility": {
     "settings": "Configuración de la mascota",
     "weightProgress": "Evolución del peso de la mascota",

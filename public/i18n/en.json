@@ -67,6 +67,11 @@
     "foods": "Foods",
     "profile": "Profile"
   },
+  "pages": {
+    "weightDescription": "Track your pet's weight and progress over time.",
+    "foodsDescription": "Manage the foods and meals in your pet's nutrition plan.",
+    "profileDescription": "View and manage your pet's profile and preferences."
+  },
   "accessibility": {
     "settings": "Pet settings",
     "weightProgress": "Pet weight progress",

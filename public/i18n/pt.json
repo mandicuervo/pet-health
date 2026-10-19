@@ -67,6 +67,11 @@
     "foods": "Alimentos",
     "profile": "Perfil"
   },
+  "pages": {
+    "weightDescription": "Acompanhe o peso e a evolução do seu pet ao longo do tempo.",
+    "foodsDescription": "Gerencie os alimentos e as refeições do plano nutricional do seu pet.",
+    "profileDescription": "Consulte e gerencie o perfil e as preferências do seu pet."
+  },
   "accessibility": {
     "settings": "Configurações do pet",
     "weightProgress": "Evolução do peso do pet",

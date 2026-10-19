@@ -4,7 +4,6 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { FoodCategory } from '../../../core/models/food.model';
 import { PetData } from '../../../core/services/pet-data';
 
-type DashboardTab = 'home' | 'trends' | 'schedule' | 'profile';
 type LanguageCode = 'en' | 'pt' | 'es';
 
 interface DashboardRecord {
@@ -36,7 +35,6 @@ export class DashboardPage {
   readonly weight = this.petData.currentWeightKg;
   readonly calories = this.petData.kcalToday;
   readonly caloriesRemaining = this.petData.kcalRemainingToday;
-  readonly selectedTab = signal<DashboardTab>('home');
   readonly addMenuOpen = signal(false);
   readonly weightChange = this.petData.weightChangeKg;
   readonly calorieProgress = computed(() => {
@@ -80,17 +78,6 @@ export class DashboardPage {
       };
     });
   });
-
-  readonly navigation: { id: DashboardTab; key: string }[] = [
-    { id: 'home', key: 'navigation.nutrition' },
-    { id: 'trends', key: 'navigation.weight' },
-    { id: 'schedule', key: 'navigation.foods' },
-    { id: 'profile', key: 'navigation.profile' },
-  ];
-
-  selectTab(tab: DashboardTab): void {
-    this.selectedTab.set(tab);
-  }
 
   setLanguage(event: Event): void {
     const target = event.target;
