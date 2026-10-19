@@ -6,6 +6,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { map } from 'rxjs';
 import { WeightEntry } from '../../../core/models/weight-entry.model';
 import { PetData } from '../../../core/services/pet-data';
+import { Theme } from '../../../core/services/theme';
 import { localDateKey } from '../../../core/utils/date';
 
 type Period = '3m' | '6m' | 'all';
@@ -25,6 +26,7 @@ interface ChartPoint {
 export class WeightPage {
   private readonly petData = inject(PetData);
   private readonly translate = inject(TranslateService);
+  readonly theme = inject(Theme);
   private readonly language = toSignal(
     this.translate.onLangChange.pipe(map(({ lang }) => lang)),
     { initialValue: this.translate.getCurrentLang() ?? 'en' },

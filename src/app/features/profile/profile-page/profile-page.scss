@@ -1,8 +1,8 @@
 :host {
   display: block;
   min-height: 100dvh;
-  background: #101012;
-  color: #f7f5ff;
+  background: var(--app-background);
+  color: var(--app-text);
 }
 
 .section-shell {
@@ -15,9 +15,9 @@
 
 .section-card {
   padding: 20px;
-  border: 1px solid #29292b;
+  border: 1px solid var(--app-border);
   border-radius: 18px;
-  background: #1d1d1f;
+  background: var(--app-surface);
 
   h1 {
     margin: 0;
@@ -26,7 +26,7 @@
 
   p {
     margin: 10px 0 0;
-    color: #8290a7;
+    color: var(--app-muted);
     line-height: 1.5;
   }
 }

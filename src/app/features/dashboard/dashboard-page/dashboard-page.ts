@@ -3,6 +3,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { FoodCategory } from '../../../core/models/food.model';
 import { PetData } from '../../../core/services/pet-data';
+import { Theme } from '../../../core/services/theme';
 
 type LanguageCode = 'en' | 'pt' | 'es';
 
@@ -24,6 +25,7 @@ export class DashboardPage {
   private readonly petData = inject(PetData);
   private readonly translate = inject(TranslateService);
   private readonly document = inject(DOCUMENT);
+  readonly theme = inject(Theme);
 
   readonly activeLanguage = signal<LanguageCode>('en');
   readonly languages: { code: LanguageCode; key: string }[] = [

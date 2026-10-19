@@ -2,6 +2,10 @@
   "app": {
     "name": "Saúde Pet"
   },
+  "theme": {
+    "switchToSoft": "Ativar tema suave",
+    "switchToDark": "Ativar tema escuro"
+  },
   "dashboard": {
     "weightLoss": "PERDER PESO",
     "weightEvolution": "EVOLUÇÃO",

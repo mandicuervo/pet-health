@@ -2,6 +2,10 @@
   "app": {
     "name": "Pet Health"
   },
+  "theme": {
+    "switchToSoft": "Switch to soft theme",
+    "switchToDark": "Switch to dark theme"
+  },
   "dashboard": {
     "weightLoss": "WEIGHT LOSS",
     "weightEvolution": "WEIGHT PROGRESS",

@@ -1,15 +1,45 @@
 :host {
-  --surface: #1d1d1f;
-  --surface-raised: #232426;
-  --surface-muted: #303234;
-  --text: #f7f5ff;
-  --muted: #8290a7;
-  --purple: #dbaeff;
-  --pink: #f39bd7;
+  --surface: var(--app-surface);
+  --surface-raised: var(--app-surface-raised);
+  --surface-muted: var(--app-surface-muted);
+  --text: var(--app-text);
+  --muted: var(--app-muted);
+  --dashboard-background: var(--app-background);
+  --dashboard-border: var(--app-border);
+  --dashboard-subtle-text: #bec5d1;
+  --dashboard-strong-text: var(--app-text);
+  --dashboard-goal-background: #492b5f;
+  --dashboard-goal-text: #e2b5ff;
+  --dashboard-weight-background: #202523;
+  --dashboard-weight-border: #303a36;
+  --dashboard-weight-icon-background: #29312f;
+  --dashboard-weight-icon-color: #b5e9db;
+  --dashboard-health-background: #1b252a;
+  --dashboard-health-border: #30444e;
+  --dashboard-health-title: #b4d7ec;
+  --dashboard-health-text: #8f9eac;
+  --dashboard-popover-background: #252528;
+  --dashboard-popover-border: #343439;
   display: block;
   min-height: 100dvh;
-  background: #101012;
+  background: var(--dashboard-background);
   color: var(--text);
+}
+
+:host-context(html[data-theme='soft']) {
+  --dashboard-subtle-text: #68758a;
+  --dashboard-goal-background: #f5e8fb;
+  --dashboard-goal-text: #a85dc4;
+  --dashboard-weight-background: #effaf4;
+  --dashboard-weight-border: #dcf4e8;
+  --dashboard-weight-icon-background: #fff;
+  --dashboard-weight-icon-color: #75cda6;
+  --dashboard-health-background: #eff8fb;
+  --dashboard-health-border: #dceef4;
+  --dashboard-health-title: #52788d;
+  --dashboard-health-text: #6f8794;
+  --dashboard-popover-background: #fff;
+  --dashboard-popover-border: #e8ebf0;
 }
 
 .dashboard-shell {
@@ -19,7 +49,6 @@
   min-height: 100dvh;
   margin: 0 auto;
   padding: 22px clamp(16px, 4.5vw, 20px) calc(100px + env(safe-area-inset-bottom));
-  background: #101012;
 }
 
 .pet-header {
@@ -35,9 +64,9 @@
   height: 44px;
   flex: 0 0 44px;
   place-items: center;
-  border: 2px solid #434146;
+  border: 2px solid var(--dashboard-border);
   border-radius: 13px;
-  background: #d2d0ce;
+  background: var(--surface-muted);
   font-size: 23px;
 }
 
@@ -61,8 +90,8 @@
 .goal-badge {
   padding: 4px 7px;
   border-radius: 20px;
-  background: #492b5f;
-  color: #e2b5ff;
+  background: var(--dashboard-goal-background);
+  color: var(--dashboard-goal-text);
   font-size: 12px;
   font-weight: 800;
 }
@@ -76,10 +105,10 @@
   select {
     max-width: 86px;
     padding: 7px 4px;
-    border: 1px solid #303136;
+    border: 1px solid var(--dashboard-border);
     border-radius: 9px;
     background: var(--surface);
-    color: #bec5d1;
+    color: var(--dashboard-subtle-text);
     font-size: 12px;
   }
 }
@@ -102,8 +131,8 @@
   place-items: center;
   border: 0;
   border-radius: 50%;
-  background: #202124;
-  color: #b8c0cd;
+  background: var(--surface-raised);
+  color: var(--dashboard-subtle-text);
   cursor: pointer;
 
   svg {
@@ -118,9 +147,9 @@
   align-items: center;
   gap: 11px;
   padding: 9px 12px;
-  border: 1px solid #303a36;
+  border: 1px solid var(--dashboard-weight-border);
   border-radius: 17px;
-  background: #202523;
+  background: var(--dashboard-weight-background);
 }
 
 .weight-icon {
@@ -130,8 +159,8 @@
   flex: 0 0 31px;
   place-items: center;
   border-radius: 10px;
-  background: #29312f;
-  color: #b5e9db;
+  background: var(--dashboard-weight-icon-background);
+  color: var(--dashboard-weight-icon-color);
 
   svg {
     width: 19px;
@@ -145,7 +174,7 @@
 
 .eyebrow {
   display: block;
-  color: #8293aa;
+  color: var(--muted);
   font-size: 12px;
   font-weight: 750;
   letter-spacing: 0.65px;
@@ -157,7 +186,7 @@
   font-size: 12px;
 
   strong {
-    color: #f5f4f8;
+    color: var(--dashboard-strong-text);
     font-size: 12px;
   }
 }
@@ -182,17 +211,17 @@
 }
 
 .daily-goal {
-  color: #8190a8;
+  color: var(--muted);
   font-size: 12px;
   font-style: italic;
 }
 
 .calorie-card {
   padding: 19px 20px 18px;
-  border: 1px solid #29292b;
+  border: 1px solid var(--dashboard-border);
   border-radius: 20px;
   background: var(--surface);
-  box-shadow: 0 8px 18px #0002;
+  box-shadow: var(--app-shadow);
 }
 
 .calorie-values {
@@ -216,7 +245,7 @@
   }
 
   span {
-    color: #7e899b;
+    color: var(--muted);
     font-size: 12px;
   }
 }
@@ -248,7 +277,7 @@
   height: 11px;
   overflow: hidden;
   border-radius: 20px;
-  background: #303032;
+  background: var(--surface-muted);
 
   span {
     display: block;
@@ -265,7 +294,7 @@
   align-items: center;
   gap: 6px;
   margin-top: 11px;
-  color: #8290a7;
+  color: var(--muted);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.2px;
@@ -310,10 +339,10 @@
   align-items: center;
   gap: 11px;
   padding: 9px 12px;
-  border: 1px solid #29292b;
+  border: 1px solid var(--dashboard-border);
   border-radius: 18px;
   background: var(--surface);
-  box-shadow: 0 5px 12px #0002;
+  box-shadow: var(--app-shadow);
 }
 
 .record-icon {
@@ -359,7 +388,7 @@
 
   strong {
     overflow: hidden;
-    color: #f5f3fa;
+    color: var(--dashboard-strong-text);
     font-size: 12px;
     font-weight: 750;
     text-overflow: ellipsis;
@@ -367,7 +396,7 @@
   }
 
   small {
-    color: #8290a7;
+    color: var(--muted);
     font-size: 12px;
   }
 }
@@ -378,13 +407,13 @@
   gap: 3px;
 
   strong {
-    color: #f3f1f8;
+    color: var(--dashboard-strong-text);
     font-size: 12px;
     font-weight: 750;
   }
 
   small {
-    color: #8793a8;
+    color: var(--muted);
     font-size: 12px;
     text-transform: uppercase;
   }
@@ -397,9 +426,9 @@
   gap: 10px;
   margin-top: 23px;
   padding: 14px 13px;
-  border: 1px solid #30444e;
+  border: 1px solid var(--dashboard-health-border);
   border-radius: 18px;
-  background: #1b252a;
+  background: var(--dashboard-health-background);
 }
 
 .tip-icon {
@@ -419,14 +448,14 @@
 
 .tip-copy {
   strong {
-    color: #b4d7ec;
+    color: var(--dashboard-health-title);
     font-size: 12px;
     font-weight: 750;
   }
 
   p {
     margin: 5px 0 0;
-    color: #8f9eac;
+    color: var(--dashboard-health-text);
     font-size: 12px;
     line-height: 1.45;
   }
@@ -458,11 +487,11 @@
   bottom: calc(126px + env(safe-area-inset-bottom));
   max-width: calc(100vw - 36px);
   padding: 10px 13px;
-  border: 1px solid #343439;
+  border: 1px solid var(--dashboard-popover-border);
   border-radius: 11px;
-  background: #252528;
-  box-shadow: 0 4px 15px #0005;
-  color: #d4d0df;
+  background: var(--dashboard-popover-background);
+  box-shadow: var(--app-shadow);
+  color: var(--dashboard-subtle-text);
   font-size: 12px;
 }
 

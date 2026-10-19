@@ -2,6 +2,10 @@
   "app": {
     "name": "Salud para Mascotas"
   },
+  "theme": {
+    "switchToSoft": "Activar tema suave",
+    "switchToDark": "Activar tema oscuro"
+  },
   "dashboard": {
     "weightLoss": "BAJAR DE PESO",
     "weightEvolution": "EVOLUCIÓN",

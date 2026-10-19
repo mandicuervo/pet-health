@@ -1,13 +1,13 @@
 :host {
   --ink: #11243e;
   --muted: #98a3b6;
-  --page-background: #fafbfc;
-  --card-background: #fff;
-  --card-border: #e8ebf0;
-  --card-shadow: 0 5px 15px #1a2d460d;
+  --page-background: var(--app-background);
+  --card-background: var(--app-surface);
+  --card-border: var(--app-border);
+  --card-shadow: var(--app-shadow);
   --soft-text: #9ba5b4;
   --subtle-text: #94a0b2;
-  --control-background: #fff;
+  --control-background: var(--app-surface);
   --grid-line: #f0f1f4;
   --chart-area: #f9f2fc;
   --form-border: #e4e8ef;
@@ -20,6 +20,26 @@
   min-height: 100dvh;
   background: var(--page-background);
   color: var(--ink);
+}
+
+:host-context(html[data-theme='dark']) {
+  --ink: #f7f5ff;
+  --muted: #a4afc0;
+  --page-background: #101012;
+  --card-background: #1d1d1f;
+  --card-border: #29292b;
+  --card-shadow: 0 5px 15px #0003;
+  --soft-text: #aab4c1;
+  --subtle-text: #98a4b7;
+  --control-background: #232426;
+  --grid-line: #343439;
+  --chart-area: #32293a;
+  --form-border: #45434a;
+  --form-soft-background: #303234;
+  --button-text: #17121c;
+  --chart-line: #dbaeff;
+  --chart-point: #f39bd7;
+  --accent: #e5b5ff;
 }
 
 .weight-shell {
@@ -54,6 +74,29 @@
   display: flex;
   align-items: center;
   gap: 7px;
+}
+
+.theme-button {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--card-background);
+  box-shadow: var(--card-shadow);
+  color: var(--soft-text);
+  cursor: pointer;
+
+  svg {
+    width: 17px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.7;
+  }
 }
 
 .settings-button {
