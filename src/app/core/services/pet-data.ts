@@ -20,6 +20,7 @@ export class PetData {
     species: 'cat',
     birthDate: '2019-04-26',
     nutritionGoal: 'lose',
+    targetWeightKg: 5.5,
     dailyKcalTarget: 250,
   });
 
@@ -114,4 +115,38 @@ export class PetData {
       (entries[entries.length - 1].weightKg - entries[0].weightKg).toFixed(2),
     );
   });
+
+  saveWeightEntry(date: string, weightKg: number, id?: string): void {
+    const parsedDate = new Date(`${date}T00:00:00`);
+    if (
+      !Number.isFinite(weightKg) ||
+      weightKg <= 0 ||
+      !/^\d{4}-\d{2}-\d{2}$/.test(date) ||
+      localDateKey(parsedDate) !== date
+    ) {
+      throw new Error('A valid date and positive weight are required');
+    }
+
+    this._weightEntries.update((entries) => {
+      if (id && !entries.some((entry) => entry.id === id)) {
+        throw new Error(`Weight entry ${id} not found`);
+      }
+
+      if (id) {
+        return entries.map((entry) =>
+          entry.id === id ? { ...entry, date, weightKg } : entry,
+        );
+      }
+
+      return [
+        ...entries,
+        {
+          id: `w${Date.now()}`,
+          petId: this._pet().id,
+          date,
+          weightKg,
+        },
+      ];
+    });
+  }
 }
