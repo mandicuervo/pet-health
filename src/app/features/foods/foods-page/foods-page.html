@@ -1,6 +1,239 @@
-<main class="section-shell">
-  <section class="section-card">
-    <h1>{{ titleKey | translate }}</h1>
-    <p>{{ descriptionKey | translate }}</p>
+<main class="foods-shell">
+  <header class="page-header">
+    <h1>{{ 'foods.title' | translate }}</h1>
+    <button
+      class="icon-button search-button"
+      type="button"
+      (click)="toggleSearch()"
+      [attr.aria-label]="'foods.searchLabel' | translate"
+      [attr.aria-expanded]="searchOpen()"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="10.8" cy="10.8" r="6.3" />
+        <path d="m15.5 15.5 4.2 4.2" />
+      </svg>
+    </button>
+  </header>
+
+  @if (searchOpen()) {
+    <label class="search-field">
+      <span class="visually-hidden">{{ 'foods.searchLabel' | translate }}</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="10.8" cy="10.8" r="6.3" />
+        <path d="m15.5 15.5 4.2 4.2" />
+      </svg>
+      <input
+        type="search"
+        [placeholder]="'foods.search' | translate"
+        [value]="searchQuery()"
+        (input)="updateSearch($event)"
+      />
+    </label>
+  }
+
+  <section class="daily-plan" [attr.aria-label]="'foods.dailyPlan' | translate">
+    <div class="plan-heading">
+      <div>
+        <h2>{{ 'foods.dailyPlan' | translate }}</h2>
+        <p>{{ 'foods.petPlanDetails' | translate: { name: pet().name, lifeStage: (lifeStageKey() | translate) } }}</p>
+      </div>
+      <button class="plan-edit-button" type="button" (click)="togglePlanForm()">
+        {{ 'foods.editPlan' | translate }}
+      </button>
+    </div>
+
+    @if (editingPlan()) {
+      <form class="plan-form" (submit)="savePlan($event)">
+        <label>
+          <span>{{ 'foods.morning' | translate }}</span>
+          <span class="plan-input">
+            <input name="morning" type="number" min="0" max="1000" step="1" [value]="dailyPlan().morningGrams" required />
+            <small>{{ 'foods.gramsShort' | translate }}</small>
+          </span>
+        </label>
+        <label>
+          <span>{{ 'foods.afternoon' | translate }}</span>
+          <span class="plan-input">
+            <input name="afternoon" type="number" min="0" max="1000" step="1" [value]="dailyPlan().afternoonGrams" required />
+            <small>{{ 'foods.gramsShort' | translate }}</small>
+          </span>
+        </label>
+        <label>
+          <span>{{ 'foods.night' | translate }}</span>
+          <span class="plan-input">
+            <input name="night" type="number" min="0" max="1000" step="1" [value]="dailyPlan().nightGrams" required />
+            <small>{{ 'foods.gramsShort' | translate }}</small>
+          </span>
+        </label>
+        <div class="plan-actions">
+          <button class="secondary-button" type="button" (click)="togglePlanForm()">{{ 'foods.cancel' | translate }}</button>
+          <button class="primary-button" type="submit">{{ 'foods.save' | translate }}</button>
+        </div>
+      </form>
+    } @else {
+      <div class="plan-portions">
+        <article class="portion">
+          <span>{{ 'foods.morning' | translate }}</span>
+          <strong>{{ dailyPlan().morningGrams }}<small>g</small></strong>
+        </article>
+        <article class="portion">
+          <span>{{ 'foods.afternoon' | translate }}</span>
+          <strong>{{ dailyPlan().afternoonGrams }}<small>g</small></strong>
+        </article>
+        <article class="portion">
+          <span>{{ 'foods.night' | translate }}</span>
+          <strong>{{ dailyPlan().nightGrams }}<small>g</small></strong>
+        </article>
+      </div>
+    }
+  </section>
+
+  <section class="food-section">
+    <div class="section-heading">
+      <h2>{{ 'foods.myFoods' | translate }}</h2>
+      <button class="new-food-button" type="button" (click)="openFoodForm()">
+        {{ 'foods.addNew' | translate }}
+      </button>
+    </div>
+
+    @if (errorKey()) {
+      <p class="form-error" role="alert">{{ errorKey() | translate }}</p>
+    }
+
+    @if (foodFormOpen()) {
+      <section class="food-form-card" [attr.aria-label]="'foods.foodForm' | translate">
+        <h3>{{ (foodFormItem() ? 'foods.editFood' : 'foods.addFood') | translate }}</h3>
+        <form (submit)="saveFood($event)">
+          <label class="form-field">
+            <span>{{ 'foods.foodName' | translate }}</span>
+            <input name="name" type="text" maxlength="80" [value]="foodFormItem()?.name ?? ''" required />
+          </label>
+          <label class="form-field">
+            <span>{{ 'foods.brand' | translate }}</span>
+            <input name="brand" type="text" maxlength="80" [value]="foodFormItem()?.brand ?? ''" />
+          </label>
+          <label class="form-field">
+            <span>{{ 'foods.category' | translate }}</span>
+            <select name="category" [value]="foodFormItem()?.category ?? 'dryFood'" required>
+              <option value="dryFood">{{ 'foods.dryFood' | translate }}</option>
+              <option value="wetFood">{{ 'foods.wetFood' | translate }}</option>
+              <option value="treat">{{ 'foods.treat' | translate }}</option>
+            </select>
+          </label>
+          <label class="form-field">
+            <span>{{ 'foods.energyDensity' | translate }}</span>
+            <input
+              name="kcalPer100g"
+              type="number"
+              min="0.1"
+              max="1000"
+              step="0.1"
+              [value]="foodFormItem() ? foodFormItem()!.kcalPerKg / 10 : ''"
+              required
+            />
+          </label>
+          <label class="form-field">
+            <span>{{ 'foods.caloriesPerUnit' | translate }}</span>
+            <input name="kcalPerUnit" type="number" min="0" max="1000" step="0.1" [value]="foodFormItem()?.kcalPerUnit ?? ''" />
+          </label>
+          <label class="form-field">
+            <span>{{ 'foods.fiberPercent' | translate }}</span>
+            <input name="fiberPercent" type="number" min="0" max="100" step="0.1" [value]="foodFormItem()?.fiberPercent ?? ''" />
+          </label>
+          <label class="form-field">
+            <span>{{ 'foods.proteinPercent' | translate }}</span>
+            <input name="proteinPercent" type="number" min="0" max="100" step="0.1" [value]="foodFormItem()?.proteinPercent ?? ''" />
+          </label>
+          <div class="form-actions">
+            <button class="secondary-button" type="button" (click)="closeFoodForm()">{{ 'foods.cancel' | translate }}</button>
+            <button class="primary-button" type="submit">{{ 'foods.save' | translate }}</button>
+          </div>
+        </form>
+      </section>
+    }
+
+    @if (pendingDelete(); as foodToDelete) {
+      <section class="delete-confirmation" role="alertdialog" [attr.aria-label]="'foods.confirmDelete' | translate: { name: foodToDelete.name }">
+        <p>{{ 'foods.confirmDelete' | translate: { name: foodToDelete.name } }}</p>
+        <div>
+          <button class="secondary-button" type="button" (click)="cancelDelete()">{{ 'foods.cancel' | translate }}</button>
+          <button class="delete-button" type="button" (click)="confirmDelete()">{{ 'foods.deleteFood' | translate }}</button>
+        </div>
+      </section>
+    }
+
+    @if (foods().length > 0) {
+      <div class="food-list">
+        @for (food of foods(); track food.id) {
+          <article class="food-card">
+            <div class="food-main">
+              <span class="food-icon" [class.dry]="food.category === 'dryFood'" [class.wet]="food.category === 'wetFood'" [class.treat]="food.category === 'treat'" aria-hidden="true">
+                @switch (food.category) {
+                  @case ('dryFood') {
+                    <svg viewBox="0 0 24 24"><path d="M4 11h16l-1.7 6.2a2 2 0 0 1-1.9 1.5H7.6a2 2 0 0 1-1.9-1.5L4 11Z" /><path d="M3 9h18M8 6c0-1 1-1.5 1-2m4 2c0-1 1-1.5 1-2" /></svg>
+                  }
+                  @case ('wetFood') {
+                    <svg viewBox="0 0 24 24"><path d="M3 12c2-3.5 5-5 8-5 4 0 7 2 10 5-3 3-6 5-10 5-3 0-6-1.5-8-5Z" /><circle cx="14" cy="10" r="1" /><path d="M3 12 1.5 9m1.5 3-1.5 3" /></svg>
+                  }
+                  @case ('treat') {
+                    <svg viewBox="0 0 24 24"><path d="M12 3.5c-1.7-1.5-4.8-.5-4.8 2a3.5 3.5 0 0 0-2.8 3.6c-1.8 1.8-1.2 4.7.7 5.6-.4 2.5 1.8 4.5 4.3 3.7 1.5 1.7 4.2 1.2 5-.7 2.4.1 4-2.2 3-4.3 1.4-2 .4-4.8-1.8-5.3.2-2.7-1.8-4.3-3.6-3.8Z" /><circle cx="9" cy="10" r="1" /><circle cx="15" cy="10" r="1" /><circle cx="12" cy="14" r="1.2" /></svg>
+                  }
+                }
+              </span>
+              <span class="food-name">
+                <strong>{{ food.name }}</strong>
+                @if (food.brand) {
+                  <small>{{ food.brand }}</small>
+                }
+              </span>
+              <button
+                class="more-button"
+                type="button"
+                (click)="toggleFoodMenu(food.id)"
+                [attr.aria-label]="'foods.actionsFor' | translate: { name: food.name }"
+                [attr.aria-expanded]="openMenuId() === food.id"
+              >⋮</button>
+            </div>
+
+            @if (openMenuId() === food.id) {
+              <div class="food-menu">
+                <button type="button" (click)="openFoodForm(food)">{{ 'foods.editFood' | translate }}</button>
+                <button type="button" (click)="requestDelete(food)">{{ 'foods.deleteFood' | translate }}</button>
+              </div>
+            }
+
+            <div class="food-details">
+              <div class="food-stat">
+                <span>{{ 'foods.density' | translate }}</span>
+                <strong>
+                  @if (food.kcalPerUnit !== undefined) {
+                    {{ 'foods.caloriesPerUnitShort' | translate: { amount: (food.kcalPerUnit | number: '1.0-1') } }}
+                  } @else {
+                    {{ 'foods.caloriesPer100gShort' | translate: { amount: (food.kcalPerKg / 10 | number: '1.0-1') } }}
+                  }
+                </strong>
+              </div>
+              @if (food.fiberPercent !== undefined) {
+                <div class="food-stat">
+                  <span>{{ 'foods.fiber' | translate }}</span>
+                  <strong>{{ food.fiberPercent | number: '1.0-1' }}%</strong>
+                </div>
+              }
+              @if (food.proteinPercent !== undefined) {
+                <div class="food-stat">
+                  <span>{{ 'foods.protein' | translate }}</span>
+                  <strong>{{ food.proteinPercent | number: '1.0-1' }}%</strong>
+                </div>
+              }
+              <button class="edit-link" type="button" (click)="openFoodForm(food)">{{ 'foods.edit' | translate }}</button>
+            </div>
+          </article>
+        }
+      </div>
+    } @else {
+      <p class="empty-state">
+        {{ (searchQuery() ? 'foods.noSearchResults' : 'foods.noFoods') | translate }}
+      </p>
+    }
   </section>
 </main>
