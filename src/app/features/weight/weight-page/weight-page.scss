@@ -133,7 +133,7 @@
 .eyebrow {
   display: block;
   color: var(--subtle-text);
-  font-size: 8px;
+  font-size: 14px;
   font-weight: 800;
   letter-spacing: 0.45px;
   text-transform: uppercase;
@@ -148,7 +148,7 @@
 
   small {
     color: var(--soft-text);
-    font-size: 9px;
+    font-size: 12px;
     font-weight: 650;
   }
 }
@@ -162,7 +162,7 @@
   display: block;
   overflow: hidden;
   color: #8dddbd;
-  font-size: 8px;
+  font-size: 12px;
   font-weight: 700;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -190,7 +190,7 @@
   h2 {
     margin: 0;
     color: var(--ink);
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 800;
   }
 }
@@ -203,7 +203,7 @@
     background: var(--control-background);
     color: var(--subtle-text);
     font-family: inherit;
-    font-size: 9px;
+    font-size: 12px;
     text-align: right;
   }
 }
@@ -228,7 +228,7 @@
 .chart-label {
   fill: var(--subtle-text);
   font-family: inherit;
-  font-size: 9px;
+  font-size: 12px;
 }
 
 .chart-label {
@@ -275,7 +275,7 @@
   background: transparent;
   color: var(--accent);
   font-family: inherit;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 750;
   cursor: pointer;
 }
@@ -335,7 +335,7 @@
   strong {
     overflow: hidden;
     color: var(--ink);
-    font-size: 10px;
+    font-size: 14px;
     font-weight: 800;
     text-overflow: ellipsis;
     text-transform: capitalize;
@@ -345,7 +345,7 @@
   small {
     overflow: hidden;
     color: var(--soft-text);
-    font-size: 8px;
+    font-size: 12px;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -354,7 +354,7 @@
 .history-value {
   flex: 0 0 auto;
   color: var(--ink);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 800;
 }
 
@@ -402,7 +402,7 @@
     display: grid;
     gap: 5px;
     color: var(--subtle-text);
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 700;
   }
 
@@ -430,7 +430,7 @@
     border: 0;
     border-radius: 9px;
     font-family: inherit;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 750;
     cursor: pointer;
   }
