@@ -1,0 +1,121 @@
+<main class="diary-shell">
+  <header class="diary-header">
+    <a class="back-button" routerLink="/" [attr.aria-label]="'foodDiary.back' | translate">‹</a>
+    <h1>{{ 'foodDiary.title' | translate }}</h1>
+    <button
+      class="calendar-button"
+      type="button"
+      [attr.aria-label]="(monthlyView() ? 'foodDiary.weekView' : 'foodDiary.monthView') | translate"
+      [attr.aria-pressed]="monthlyView()"
+      (click)="toggleView()"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="3.5" y="5" width="17" height="16" rx="3" />
+        <path d="M7.5 3v4M16.5 3v4M4 9.5h16M8 13h.01M12 13h.01M16 13h.01M8 17h.01M12 17h.01" />
+      </svg>
+    </button>
+  </header>
+
+  @if (monthlyView()) {
+    <section class="month-picker" [attr.aria-label]="'foodDiary.monthView' | translate">
+      <div class="month-heading">
+        <button type="button" (click)="shiftMonth(-1)" [attr.aria-label]="'foodDiary.previousMonth' | translate">‹</button>
+        <h2>{{ monthLabel() }}</h2>
+        <button type="button" (click)="shiftMonth(1)" [attr.aria-label]="'foodDiary.nextMonth' | translate">›</button>
+      </div>
+      <div class="month-weekdays" aria-hidden="true">
+        @for (date of weekDates(); track date.key) {
+          <span>{{ date.weekday }}</span>
+        }
+      </div>
+      <div class="month-grid">
+        @for (date of monthDates(); track date.key) {
+          <button
+            type="button"
+            [class.outside-month]="!date.inCurrentMonth"
+            [class.selected]="selectedDate() === date.key"
+            [attr.aria-pressed]="selectedDate() === date.key"
+            [attr.aria-label]="formatDate(date.date, { dateStyle: 'full' })"
+            (click)="selectDate(date.key)"
+          >
+            {{ date.dayNumber }}
+            @if (date.hasMeals) { <span class="meal-dot"></span> }
+          </button>
+        }
+      </div>
+    </section>
+  } @else {
+    <section class="week-picker" [attr.aria-label]="'foodDiary.weekView' | translate">
+      @for (date of weekDates(); track date.key) {
+        <button
+          type="button"
+          [class.selected]="selectedDate() === date.key"
+          [attr.aria-pressed]="selectedDate() === date.key"
+          [attr.aria-label]="formatDate(date.date, { dateStyle: 'full' })"
+          (click)="selectDate(date.key)"
+        >
+          <span>{{ date.weekday }}</span>
+          <strong>{{ date.dayNumber }}</strong>
+          @if (date.hasMeals) { <i class="meal-dot"></i> }
+        </button>
+      }
+    </section>
+  }
+
+  <section class="day-summary" [attr.aria-label]="'foodDiary.dailySummary' | translate">
+    <div>
+      <span>{{ 'foodDiary.totalToday' | translate }}</span>
+      <strong>{{ totalCalories() | number: '1.0-1' }} <small>kcal</small></strong>
+    </div>
+    <div class="remaining">
+      <span>{{ 'foodDiary.remaining' | translate }}</span>
+      @if (remainingCalories() !== undefined) {
+        <strong>{{ remainingCalories() | number: '1.0-1' }} <small>kcal</small></strong>
+      } @else {
+        <strong>—</strong>
+      }
+    </div>
+  </section>
+
+  <section class="diary-records" [attr.aria-label]="'foodDiary.records' | translate">
+    <h2>{{ 'foodDiary.records' | translate }}</h2>
+    @if (meals().length > 0) {
+      <div class="meal-list">
+        @for (meal of meals(); track meal.id) {
+          <article class="meal-card" [class.dry-food]="meal.category === 'dryFood'" [class.wet-food]="meal.category === 'wetFood'" [class.treat-food]="meal.category === 'treat'">
+            <span class="timeline-dot" aria-hidden="true"></span>
+            <span class="meal-icon" aria-hidden="true">
+              @switch (meal.category) {
+                @case ('dryFood') {
+                  <svg viewBox="0 0 24 24"><path d="M4 11h16l-1.7 6.2a2 2 0 0 1-1.9 1.5H7.6a2 2 0 0 1-1.9-1.5L4 11Z" /><path d="M3 9h18M8 6c0-1 1-1.5 1-2m4 2c0-1 1-1.5 1-2" /></svg>
+                }
+                @case ('wetFood') {
+                  <svg viewBox="0 0 24 24"><path d="M3 12c2-3.5 5-5 8-5 4 0 7 2 10 5-3 3-6 5-10 5-3 0-6-1.5-8-5Z" /><circle cx="14" cy="10" r="1" /><path d="M3 12 1.5 9m1.5 3-1.5 3" /></svg>
+                }
+                @case ('treat') {
+                  <svg viewBox="0 0 24 24"><path d="M12 3.5c-1.7-1.5-4.8-.5-4.8 2a3.5 3.5 0 0 0-2.8 3.6c-1.8 1.8-1.2 4.7.7 5.6-.4 2.5 1.8 4.5 4.3 3.7 1.5 1.7 4.2 1.2 5-.7 2.4.1 4-2.2 3-4.3 1.4-2 .4-4.8-1.8-5.3.2-2.7-1.8-4.3-3.6-3.8Z" /><circle cx="9" cy="10" r="1" /><circle cx="15" cy="10" r="1" /><circle cx="12" cy="14" r="1.2" /></svg>
+                }
+              }
+            </span>
+            <span class="meal-copy">
+              <strong>{{ meal.name }}</strong>
+              <small>{{ meal.time }} · {{ meal.grams }} g {{ mealTypeKey(meal.category) | translate }}</small>
+            </span>
+            <strong class="meal-calories">{{ meal.calories | number: '1.0-1' }} kcal</strong>
+          </article>
+        }
+      </div>
+    } @else {
+      <p class="empty-state">{{ 'foodDiary.noMeals' | translate }}</p>
+    }
+  </section>
+
+  <footer class="diary-actions">
+    <button class="month-view-button" type="button" (click)="toggleView()">
+      {{ (monthlyView() ? 'foodDiary.weekView' : 'foodDiary.monthView') | translate }}
+    </button>
+    <a class="add-button" routerLink="/records/new" [attr.aria-label]="'accessibility.addRecord' | translate">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+    </a>
+  </footer>
+</main>

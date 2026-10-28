@@ -1,0 +1,458 @@
+:host {
+  --diary-ink: #11243e;
+  --diary-muted: #8391a6;
+  --diary-card: var(--app-surface);
+  --diary-border: var(--app-border);
+  display: block;
+  min-height: 100dvh;
+  background: var(--app-background);
+  color: var(--diary-ink);
+}
+
+:host-context(html[data-theme='dark']) {
+  --diary-ink: #f7f5ff;
+  --diary-muted: #98a4b7;
+}
+
+.diary-shell {
+  width: 100%;
+  max-width: 460px;
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: 18px 20px calc(125px + env(safe-area-inset-bottom));
+  background: var(--app-background);
+}
+
+.diary-header {
+  display: grid;
+  grid-template-columns: 36px 1fr 36px;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 15px;
+
+  h1 {
+    margin: 0;
+    color: var(--diary-ink);
+    font-size: 18px;
+    font-weight: 800;
+    text-align: center;
+  }
+}
+
+.back-button,
+.calendar-button {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: var(--diary-card);
+  box-shadow: var(--app-shadow);
+  color: var(--diary-muted);
+  text-decoration: none;
+}
+
+.back-button {
+  font-size: 25px;
+  line-height: 1;
+}
+
+.calendar-button {
+  justify-self: end;
+  cursor: pointer;
+
+  svg {
+    width: 17px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.7;
+  }
+}
+
+.week-picker {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+  margin-bottom: 17px;
+
+  button {
+    position: relative;
+    display: grid;
+    min-width: 0;
+    min-height: 54px;
+    align-content: center;
+    justify-items: center;
+    gap: 5px;
+    padding: 5px 2px;
+    border: 1px solid transparent;
+    border-radius: 14px;
+    background: var(--diary-card);
+    box-shadow: var(--app-shadow);
+    color: var(--diary-muted);
+    cursor: pointer;
+
+    span {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    strong {
+      font-size: 14px;
+      font-weight: 750;
+    }
+
+    &.selected {
+      border-color: #e3b0f2;
+      background: #f3d9fa;
+      color: #a45cc0;
+    }
+  }
+}
+
+.meal-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #e78be6;
+}
+
+.week-picker .meal-dot {
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+}
+
+.month-picker {
+  margin-bottom: 17px;
+  padding: 12px;
+  border: 1px solid var(--diary-border);
+  border-radius: 17px;
+  background: var(--diary-card);
+  box-shadow: var(--app-shadow);
+}
+
+.month-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+
+  h2 {
+    margin: 0;
+    color: var(--diary-ink);
+    font-size: 14px;
+    font-weight: 800;
+    text-transform: capitalize;
+  }
+
+  button {
+    width: 28px;
+    height: 28px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--app-surface-raised);
+    color: var(--diary-muted);
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+  }
+}
+
+.month-weekdays,
+.month-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.month-weekdays {
+  margin-bottom: 5px;
+
+  span {
+    color: var(--diary-muted);
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
+    text-transform: uppercase;
+  }
+}
+
+.month-grid button {
+  position: relative;
+  display: grid;
+  min-height: 34px;
+  place-items: center;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--diary-ink);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+
+  &.outside-month {
+    color: var(--diary-muted);
+    opacity: 0.5;
+  }
+
+  &.selected {
+    background: #e8c1f3;
+    color: #82469c;
+    font-weight: 800;
+  }
+
+  .meal-dot {
+    position: absolute;
+    bottom: 3px;
+  }
+}
+
+.day-summary {
+  display: flex;
+  min-height: 68px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 23px;
+  padding: 12px 14px;
+  border: 1px solid rgb(255 255 255 / 55%);
+  border-radius: 17px;
+  background: linear-gradient(110deg, #e1f1fb 0%, #f2e7f7 58%, #e8f4ec 100%);
+  box-shadow: var(--app-shadow);
+
+  div {
+    display: grid;
+    min-width: 0;
+    gap: 4px;
+  }
+
+  span {
+    color: #68758a;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.45px;
+    text-transform: uppercase;
+  }
+
+  strong {
+    color: #11243e;
+    font-size: 20px;
+    font-weight: 850;
+    white-space: nowrap;
+  }
+
+  small {
+    font-size: 12px;
+    font-weight: 650;
+  }
+
+  .remaining {
+    text-align: right;
+
+    strong {
+      color: #d86fb1;
+    }
+  }
+}
+
+.diary-records {
+  h2 {
+    margin: 0 0 12px 2px;
+    color: var(--diary-ink);
+    font-size: 15px;
+    font-weight: 800;
+  }
+}
+
+.meal-list {
+  position: relative;
+  display: grid;
+  gap: 12px;
+  padding-left: 29px;
+
+  &::before {
+    position: absolute;
+    top: 17px;
+    bottom: 17px;
+    left: 9px;
+    width: 1px;
+    background: var(--diary-border);
+    content: '';
+  }
+}
+
+.meal-card {
+  position: relative;
+  display: flex;
+  min-height: 65px;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 11px;
+  border: 1px solid var(--diary-border);
+  border-radius: 17px;
+  background: var(--diary-card);
+  box-shadow: var(--app-shadow);
+}
+
+.timeline-dot {
+  position: absolute;
+  top: 50%;
+  left: -20px;
+  width: 7px;
+  height: 7px;
+  border: 2px solid var(--app-background);
+  border-radius: 50%;
+  background: #e9c2f3;
+  transform: translateY(-50%);
+}
+
+.wet-food .timeline-dot {
+  background: #7edec3;
+}
+
+.treat-food .timeline-dot {
+  background: #f28dc3;
+}
+
+.meal-icon {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  place-items: center;
+  border-radius: 12px;
+
+  svg {
+    width: 19px;
+    height: 19px;
+    fill: currentColor;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.2;
+  }
+}
+
+.dry-food .meal-icon {
+  background: #fff8e8;
+  color: #ff9d3c;
+}
+
+.wet-food .meal-icon {
+  background: #e9f9f2;
+  color: #19bea5;
+}
+
+.treat-food .meal-icon {
+  background: #fff0f7;
+  color: #f47db7;
+}
+
+.meal-copy {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  gap: 4px;
+
+  strong {
+    overflow: hidden;
+    color: var(--diary-ink);
+    font-size: 13px;
+    font-weight: 800;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  small {
+    overflow: hidden;
+    color: var(--diary-muted);
+    font-size: 12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.meal-calories {
+  flex: 0 0 auto;
+  color: var(--diary-ink);
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.empty-state {
+  margin: 0;
+  padding: 22px 14px;
+  border: 1px dashed var(--diary-border);
+  border-radius: 16px;
+  color: var(--diary-muted);
+  font-size: 13px;
+  text-align: center;
+}
+
+.diary-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.month-view-button {
+  min-height: 38px;
+  padding: 8px 16px;
+  border: 1px dashed var(--diary-border);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--diary-muted);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.add-button {
+  position: fixed;
+  z-index: 3;
+  right: max(calc((100vw - 420px) / 2), 18px);
+  bottom: calc(72px + env(safe-area-inset-bottom));
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: 14px;
+  background: linear-gradient(145deg, #f7a5df, #de8de8);
+  box-shadow: 0 6px 16px #e78be64d;
+  color: #fff;
+  text-decoration: none;
+
+  svg {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-width: 2.5;
+  }
+}
+
+@media (max-width: 360px) {
+  .diary-shell {
+    padding-right: 16px;
+    padding-left: 16px;
+  }
+
+  .meal-card {
+    gap: 7px;
+    padding-right: 8px;
+    padding-left: 8px;
+  }
+
+  .meal-calories {
+    font-size: 12px;
+  }
+}

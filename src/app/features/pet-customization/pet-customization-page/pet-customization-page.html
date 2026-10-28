@@ -1,0 +1,94 @@
+<main class="customization-shell">
+  <header class="page-header">
+    @if (!firstSetup) {
+      <a routerLink="/profile" class="back-button" [attr.aria-label]="'customization.back' | translate">‹</a>
+    }
+    <span class="pet-avatar" aria-hidden="true">{{ pet().species === 'cat' ? '🐈' : '🐕' }}</span>
+    <p class="eyebrow">{{ 'customization.eyebrow' | translate }}</p>
+    <h1>{{ 'customization.title' | translate: { name: pet().name } }}</h1>
+    <p class="intro">{{ 'customization.intro' | translate }}</p>
+  </header>
+
+  <form class="customization-form" (submit)="saveCustomization($event)">
+    @if (firstSetup) {
+      <section class="pet-details">
+        <h2>{{ 'questionnaire.title' | translate }}</h2>
+        <label>
+          <span>{{ 'questionnaire.petName' | translate }}</span>
+          <input name="name" type="text" maxlength="60" [value]="pet().name" required />
+        </label>
+        <label>
+          <span>{{ 'questionnaire.species' | translate }}</span>
+          <select name="species" [value]="pet().species" required>
+            <option value="cat">{{ 'profile.cat' | translate }}</option>
+            <option value="dog">{{ 'profile.dog' | translate }}</option>
+          </select>
+        </label>
+        <label>
+          <span>{{ 'questionnaire.birthDate' | translate }}</span>
+          <input name="birthDate" type="date" [max]="currentDate" [value]="pet().birthDate" required />
+        </label>
+      </section>
+    }
+
+    <section class="mode-list" [attr.aria-label]="'customization.title' | translate: { name: pet().name }">
+    <button
+      class="mode-card diabetes"
+      type="button"
+      [class.selected]="selectedModes().has('diabetes')"
+      [attr.aria-pressed]="selectedModes().has('diabetes')"
+      (click)="toggleMode('diabetes')"
+    >
+      <span class="mode-icon" aria-hidden="true">◉</span>
+      <span class="mode-copy">
+        <strong>{{ 'customization.diabetes' | translate }}</strong>
+        <small>{{ 'customization.diabetesDescription' | translate }}</small>
+      </span>
+      <span class="checkmark" aria-hidden="true">{{ selectedModes().has('diabetes') ? '✓' : '×' }}</span>
+    </button>
+
+    <button
+      class="mode-card obesity"
+      type="button"
+      [class.selected]="selectedModes().has('obesity')"
+      [attr.aria-pressed]="selectedModes().has('obesity')"
+      (click)="toggleMode('obesity')"
+    >
+      <span class="mode-icon" aria-hidden="true">◷</span>
+      <span class="mode-copy">
+        <strong>{{ 'customization.obesity' | translate }}</strong>
+        <small>{{ 'customization.obesityDescription' | translate }}</small>
+      </span>
+      <span class="checkmark" aria-hidden="true">{{ selectedModes().has('obesity') ? '✓' : '×' }}</span>
+    </button>
+
+    <button
+      class="mode-card journal"
+      type="button"
+      [class.selected]="selectedModes().has('journal')"
+      [attr.aria-pressed]="selectedModes().has('journal')"
+      (click)="toggleMode('journal')"
+    >
+      <span class="mode-icon" aria-hidden="true">▤</span>
+      <span class="mode-copy">
+        <strong>{{ 'customization.journal' | translate }}</strong>
+        <small>{{ 'customization.journalDescription' | translate }}</small>
+      </span>
+      <span class="checkmark" aria-hidden="true">{{ selectedModes().has('journal') ? '✓' : '×' }}</span>
+    </button>
+    </section>
+
+    @if (errorKey()) {
+      <p class="form-error" role="alert">{{ errorKey() | translate }}</p>
+    }
+
+    <footer class="page-actions">
+      @if (!firstSetup) {
+        <a class="cancel-button" routerLink="/profile">{{ 'customization.cancel' | translate }}</a>
+      }
+      <button class="confirm-button" type="submit">
+        {{ (firstSetup ? 'customization.confirmProfile' : 'customization.save') | translate }}
+      </button>
+    </footer>
+  </form>
+</main>

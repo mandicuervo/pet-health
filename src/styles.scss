@@ -52,3 +52,148 @@ body {
 button {
   font: inherit;
 }
+
+.dashboard-shell .glucose-summary {
+  margin-top: 13px;
+  padding: 18px;
+  border: 1px solid #d9c9fb;
+  border-radius: 22px;
+  background: linear-gradient(90deg, #82b5e3 0%, #b1a5df 58%, #9992b0 100%);
+  box-shadow: 0 9px 22px rgb(143 128 204 / 18%);
+  color: #fff;
+}
+
+.dashboard-shell .glucose-summary .eyebrow {
+  color: #fff;
+  font-size: 14px;
+}
+
+.dashboard-shell .glucose-value {
+  margin: 3px 0 0;
+  font-size: 32px;
+  font-weight: 850;
+}
+
+.dashboard-shell .glucose-value small {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.dashboard-shell .glucose-time,
+.dashboard-shell .glucose-empty {
+  margin: 3px 0 0;
+  color: #fff;
+  font-size: 12px;
+}
+
+.dashboard-shell .treatment-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+  margin-top: 15px;
+}
+
+.dashboard-shell .treatment-summary article {
+  display: grid;
+  min-width: 0;
+  gap: 4px;
+  padding: 10px;
+  border: 1px solid rgb(255 255 255 / 20%);
+  border-radius: 13px;
+  background: rgb(16 16 18 / 16%);
+}
+
+.dashboard-shell .treatment-summary span,
+.dashboard-shell .treatment-summary small {
+  overflow: hidden;
+  color: #fff;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dashboard-shell .treatment-summary strong {
+  overflow: hidden;
+  color: #fff;
+  font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dashboard-shell .health-records-section {
+  margin-top: 18px;
+}
+
+.dashboard-shell .health-record-list {
+  display: grid;
+  gap: 9px;
+}
+
+.dashboard-shell .health-record {
+  display: flex;
+  min-height: 65px;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--dashboard-border);
+  border-radius: 17px;
+  background: var(--surface);
+}
+
+.dashboard-shell .health-record-icon {
+  display: grid;
+  width: 35px;
+  height: 35px;
+  flex: 0 0 35px;
+  place-items: center;
+  border-radius: 12px;
+  background: #e8f7fd;
+  color: #79cde9;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.dashboard-shell .health-record.insulin .health-record-icon {
+  background: #f5eafa;
+  color: #bd82d4;
+}
+
+.dashboard-shell .health-record.medication .health-record-icon {
+  background: #e9f8ef;
+  color: #62bb87;
+}
+
+.dashboard-shell .health-record-copy {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  gap: 4px;
+}
+
+.dashboard-shell .health-record-copy strong {
+  overflow: hidden;
+  color: var(--dashboard-strong-text);
+  font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dashboard-shell .health-record-copy small {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.dashboard-shell .health-record-value {
+  color: var(--dashboard-strong-text);
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.dashboard-shell .empty-records {
+  margin: 0;
+  padding: 17px;
+  border-radius: 16px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 13px;
+}

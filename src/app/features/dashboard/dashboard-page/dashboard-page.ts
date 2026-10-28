@@ -1,13 +1,17 @@
 import { DecimalPipe, DOCUMENT } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { FoodCategory } from '../../../core/models/food.model';
+import { HealthEntry } from '../../../core/models/health-entry.model';
+import { localDateKey } from '../../../core/utils/date';
 import { PetData } from '../../../core/services/pet-data';
 import { Theme } from '../../../core/services/theme';
 
 type LanguageCode = 'en' | 'pt' | 'es';
 
 interface DashboardRecord {
+  id: string;
   typeKey: string;
   grams: number;
   calories: number;
@@ -15,8 +19,17 @@ interface DashboardRecord {
   type: FoodCategory;
 }
 
+interface DashboardHealthRecord {
+  id: string;
+  type: HealthEntry['type'];
+  typeKey: string;
+  medicationName?: string;
+  amount: string;
+  time: string;
+}
+
 @Component({
-  imports: [DecimalPipe, TranslatePipe],
+  imports: [DecimalPipe, RouterLink, TranslatePipe],
   selector: 'app-dashboard-page',
   styleUrl: './dashboard-page.scss',
   templateUrl: './dashboard-page.html',
@@ -35,9 +48,16 @@ export class DashboardPage {
   ];
   readonly pet = this.petData.pet;
   readonly weight = this.petData.currentWeightKg;
+  readonly weightEnabled = computed(() => this.pet().tracking.includes('weight'));
+  readonly foodEnabled = computed(() => this.pet().tracking.includes('food'));
+  readonly glucoseEnabled = computed(() => this.pet().tracking.includes('bloodGlucose'));
+  readonly healthTrackingEnabled = computed(() =>
+    this.pet().tracking.some((item) =>
+      ['bloodGlucose', 'insulin', 'medication'].includes(item),
+    ),
+  );
   readonly calories = this.petData.kcalToday;
   readonly caloriesRemaining = this.petData.kcalRemainingToday;
-  readonly addMenuOpen = signal(false);
   readonly weightChange = this.petData.weightChangeKg;
   readonly calorieProgress = computed(() => {
     const target = this.pet().dailyKcalTarget;
@@ -45,6 +65,16 @@ export class DashboardPage {
       ? 0
       : Math.min(100, (this.calories() / target) * 100);
   });
+  readonly latestGlucose = computed(() =>
+    this.latestHealthEntry('bloodGlucose'),
+  );
+  readonly latestInsulin = computed(() => this.latestHealthEntry('insulin'));
+  readonly latestMedication = computed(() =>
+    this.latestHealthEntry('medication'),
+  );
+  readonly latestGlucoseTime = computed(() =>
+    this.formatTime(this.latestGlucose()?.measuredAt),
+  );
 
   readonly records = computed<DashboardRecord[]>(() => {
     const meals = this.petData.mealEvents()
@@ -72,11 +102,45 @@ export class DashboardPage {
 
       const type = event.type === 'treat' ? 'treat' : food.category;
       return {
+        id: event.id,
         typeKey: `dashboard.foodTypes.${type}`,
         grams: event.grams,
         calories: (event.grams * food.kcalPerKg) / 1000,
         time,
         type,
+      };
+    });
+  });
+
+  readonly healthRecords = computed<DashboardHealthRecord[]>(() => {
+    const today = localDateKey(new Date());
+    const entries = this.petData.healthEntries()
+      .filter(
+        (entry) =>
+          entry.petId === this.pet().id &&
+          localDateKey(
+            new Date('measuredAt' in entry ? entry.measuredAt : entry.administeredAt),
+          ) === today,
+      )
+      .sort((a, b) => this.entryTime(a).localeCompare(this.entryTime(b)));
+
+    return entries.map((entry) => {
+      const eventTime = this.entryTime(entry);
+      const amount =
+        entry.type === 'bloodGlucose'
+          ? `${entry.valueMgDl} mg/dL`
+          : entry.type === 'insulin'
+            ? `${entry.doseUnits} UI`
+            : `${entry.doseAmount} ${entry.doseUnit}`;
+      return {
+        id: entry.id,
+        type: entry.type,
+        typeKey: `records.${entry.type}`,
+        ...(entry.type === 'medication'
+          ? { medicationName: entry.medicationName }
+          : {}),
+        amount,
+        time: this.formatTime(eventTime),
       };
     });
   });
@@ -100,7 +164,36 @@ export class DashboardPage {
     this.translate.use(language);
   }
 
-  toggleAddMenu(): void {
-    this.addMenuOpen.update((isOpen) => !isOpen);
+  private latestHealthEntry<T extends HealthEntry['type']>(
+    type: T,
+  ): Extract<HealthEntry, { type: T }> | undefined {
+    const entries = this.petData.healthEntries()
+      .filter(
+        (entry): entry is Extract<HealthEntry, { type: T }> =>
+          entry.petId === this.pet().id && entry.type === type,
+      )
+      .sort((a, b) => this.entryTime(a).localeCompare(this.entryTime(b)));
+    return entries.at(-1);
+  }
+
+  private entryTime(entry: HealthEntry): string {
+    return 'measuredAt' in entry ? entry.measuredAt : entry.administeredAt;
+  }
+
+  formatTime(dateTime: string | undefined): string {
+    if (!dateTime) {
+      return '';
+    }
+    const locale =
+      this.activeLanguage() === 'pt'
+        ? 'pt-BR'
+        : this.activeLanguage() === 'es'
+          ? 'es'
+          : 'en-US';
+    return new Date(dateTime).toLocaleTimeString(locale, {
+      hour: '2-digit',
+      minute: '2-digit',
+      hourCycle: 'h23',
+    });
   }
 }

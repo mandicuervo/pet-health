@@ -1,6 +1,176 @@
-<main class="section-shell">
-  <section class="section-card">
-    <h1>{{ titleKey | translate }}</h1>
-    <p>{{ descriptionKey | translate }}</p>
+<main class="profile-shell">
+  <section class="pet-profile">
+    <button
+      class="edit-profile-button"
+      type="button"
+      (click)="toggleEditing()"
+      [attr.aria-label]="'profile.editProfile' | translate"
+      [attr.aria-expanded]="editing()"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="m15 5 4 4M4 20l4.5-1 10.8-10.8a2.1 2.1 0 0 0-3-3L5.5 16 4 20Z" />
+      </svg>
+    </button>
+
+    <div class="avatar-wrap">
+      @if (pet().photoUrl) {
+        <img class="pet-avatar" [src]="pet().photoUrl" [alt]="'profile.profileImage' | translate: { name: pet().name }" />
+      } @else {
+        <div class="pet-avatar avatar-placeholder" role="img" [attr.aria-label]="'profile.profileImage' | translate: { name: pet().name }">
+          {{ pet().species === 'cat' ? '🐈‍⬛' : '🐕' }}
+        </div>
+      }
+      <label class="photo-button" [attr.aria-label]="'profile.changePhoto' | translate">
+        <input type="file" accept="image/*" (change)="updatePhoto($event)" />
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 8h3l1.5-2h7L17 8h3v11H4V8Z" />
+          <circle cx="12" cy="13" r="3.5" />
+        </svg>
+      </label>
+    </div>
+
+    <h1>{{ pet().name }}</h1>
+    <p class="pet-description">
+      {{ (age() === 1 ? 'profile.petDescriptionOneYear' : 'profile.petDescription') | translate: { species: (pet().breed || (speciesKey() | translate)), age: age() } }}
+    </p>
+  </section>
+
+  <section class="pet-stats" [attr.aria-label]="'profile.petSummary' | translate">
+    <article class="stat-card">
+      <span>{{ 'profile.idealWeight' | translate }}</span>
+      <strong>
+        @if (pet().targetWeightKg !== undefined) {
+          {{ pet().targetWeightKg | number: '1.1-1' }} kg
+        } @else {
+          —
+        }
+      </strong>
+    </article>
+    <article class="stat-card">
+      <span>{{ 'profile.activity' | translate }}</span>
+      <strong>{{ activityKey() | translate }}</strong>
+    </article>
+  </section>
+
+  @if (errorKey()) {
+    <p class="profile-error" role="alert">{{ errorKey() | translate }}</p>
+  }
+
+  @if (editing()) {
+    <section class="profile-form-card">
+      <h2>{{ 'profile.editTitle' | translate }}</h2>
+      <form (submit)="saveProfile($event)">
+        <label>
+          <span>{{ 'profile.name' | translate }}</span>
+          <input name="name" type="text" maxlength="60" [value]="pet().name" required />
+        </label>
+        <label>
+          <span>{{ 'profile.species' | translate }}</span>
+          <select name="species" [value]="pet().species" required>
+            <option value="cat">{{ 'profile.cat' | translate }}</option>
+            <option value="dog">{{ 'profile.dog' | translate }}</option>
+          </select>
+        </label>
+        <label>
+          <span>{{ 'profile.breed' | translate }}</span>
+          <input name="breed" type="text" maxlength="60" [value]="pet().breed ?? ''" />
+        </label>
+        <label>
+          <span>{{ 'profile.birthDate' | translate }}</span>
+          <input name="birthDate" type="date" [max]="today.toISOString().slice(0, 10)" [value]="pet().birthDate" required />
+        </label>
+        <label>
+          <span>{{ 'profile.targetWeight' | translate }}</span>
+          <input name="targetWeight" type="number" min="0.1" max="300" step="0.1" [value]="pet().targetWeightKg ?? ''" />
+        </label>
+        <label>
+          <span>{{ 'profile.activityLevel' | translate }}</span>
+          <select name="activityLevel" [value]="pet().activityLevel ?? 'moderate'" required>
+            <option value="low">{{ 'profile.activityLow' | translate }}</option>
+            <option value="moderate">{{ 'profile.activityModerate' | translate }}</option>
+            <option value="high">{{ 'profile.activityHigh' | translate }}</option>
+          </select>
+        </label>
+        <div class="form-actions">
+          <button class="cancel-button" type="button" (click)="closeEditing()">{{ 'profile.cancel' | translate }}</button>
+          <button class="save-button" type="submit">{{ 'profile.save' | translate }}</button>
+        </div>
+      </form>
+    </section>
+  }
+
+  <section class="settings-section">
+    <h2>{{ 'profile.settings' | translate }}</h2>
+
+    <a class="setting-card setting-button" routerLink="/profile/customization">
+      <span class="setting-icon customization-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M12 3v3m0 12v3M3 12h3m12 0h3M5.6 5.6l2.1 2.1m8.6 8.6 2.1 2.1m0-12.8-2.1 2.1m-8.6 8.6-2.1 2.1" /><circle cx="12" cy="12" r="4" /></svg>
+      </span>
+      <span class="setting-copy">
+        <strong>{{ 'customization.profileLink' | translate }}</strong>
+        <small>{{ 'customization.profileLinkDescription' | translate }}</small>
+      </span>
+      <svg class="chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
+    </a>
+
+    <article class="setting-card notification-card">
+      <span class="setting-icon notification-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9m-8 12h4" /></svg>
+      </span>
+      <span class="setting-copy">
+        <strong>{{ 'profile.notifications' | translate }}</strong>
+        <small>{{ 'profile.notificationsDescription' | translate }}</small>
+      </span>
+      <button
+        class="toggle-switch"
+        [class.enabled]="notificationsEnabled()"
+        type="button"
+        role="switch"
+        [attr.aria-checked]="notificationsEnabled()"
+        [attr.aria-label]="(notificationsEnabled() ? 'profile.notificationsEnabled' : 'profile.notificationsDisabled') | translate"
+        (click)="toggleNotifications()"
+      ><span></span></button>
+    </article>
+
+    <button class="setting-card setting-button" type="button" (click)="togglePanel('health')" [attr.aria-expanded]="openPanel() === 'health'">
+      <span class="setting-icon health-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M12 21s8-4 8-11V5l-8-3-8 3v5c0 7 8 11 8 11Z" /><path d="m9 12 2 2 4-4" /></svg>
+      </span>
+      <span class="setting-copy">
+        <strong>{{ 'profile.healthSafety' | translate }}</strong>
+        <small>{{ 'profile.healthSafetyDescription' | translate }}</small>
+      </span>
+      <svg class="chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
+    </button>
+    @if (openPanel() === 'health') {
+      <p class="setting-details">{{ 'profile.healthSafetyDetails' | translate }}</p>
+    }
+
+    <button class="setting-card setting-button" type="button" (click)="togglePanel('help')" [attr.aria-expanded]="openPanel() === 'help'">
+      <span class="setting-icon help-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M9.5 9a2.5 2.5 0 1 1 4 2c-1 .7-1.5 1.2-1.5 2.5m0 3h.01" /></svg>
+      </span>
+      <span class="setting-copy">
+        <strong>{{ 'profile.helpSupport' | translate }}</strong>
+        <small>{{ 'profile.helpSupportDescription' | translate }}</small>
+      </span>
+      <svg class="chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
+    </button>
+    @if (openPanel() === 'help') {
+      <p class="setting-details">{{ 'profile.helpSupportDetails' | translate }}</p>
+    }
+
+    <button class="setting-card setting-button sign-out-setting" type="button" (click)="togglePanel('signOut')" [attr.aria-expanded]="openPanel() === 'signOut'">
+      <span class="setting-icon sign-out-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M10 4H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h5m5-4 5-4-5-4m5 4H9" /></svg>
+      </span>
+      <span class="setting-copy">
+        <strong>{{ 'profile.signOut' | translate }}</strong>
+      </span>
+      <svg class="chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
+    </button>
+    @if (openPanel() === 'signOut') {
+      <p class="setting-details">{{ 'profile.signOutUnavailable' | translate }}</p>
+    }
   </section>
 </main>

@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
+import { PetData } from '../../services/pet-data';
 
 @Component({
   imports: [RouterLink, RouterLinkActive, TranslatePipe],
@@ -9,10 +10,13 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './bottom-navigation.html',
 })
 export class BottomNavigation {
-  readonly navigation = [
+  private readonly petData = inject(PetData);
+  readonly navigation = computed(() => [
     { path: '/', key: 'navigation.nutrition', icon: 'nutrition' },
-    { path: '/weight', key: 'navigation.weight', icon: 'weight' },
+    ...(this.petData.pet().tracking.includes('weight')
+      ? [{ path: '/weight', key: 'navigation.weight', icon: 'weight' }]
+      : []),
     { path: '/foods', key: 'navigation.foods', icon: 'foods' },
     { path: '/profile', key: 'navigation.profile', icon: 'profile' },
-  ];
+  ]);
 }

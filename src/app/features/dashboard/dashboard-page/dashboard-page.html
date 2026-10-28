@@ -1,55 +1,104 @@
 <main class="dashboard-shell">
   <div class="dashboard">
     <header class="pet-header">
-      <div class="pet-avatar" aria-hidden="true">🐱</div>
+      @if (pet().photoUrl) {
+        <img class="pet-avatar" [src]="pet().photoUrl" [alt]="'profile.profileImage' | translate: { name: pet().name }" />
+      } @else {
+        <div class="pet-avatar" aria-hidden="true">{{ pet().species === 'cat' ? '🐱' : '🐕' }}</div>
+      }
       <div class="pet-heading">
         <h1>{{ pet().name }}</h1>
-        <div class="pet-meta">
-          <span class="goal-badge">{{ ('pet.nutritionGoals.' + pet().nutritionGoal) | translate }}</span>
-          <span class="pet-weight">{{ weight() === undefined ? '—' : (weight() | number: '1.1-1') }} {{ 'pet.weightUnit' | translate }}</span>
-        </div>
       </div>
       <label class="language-picker">
         <span class="visually-hidden">{{ 'language.label' | translate }}</span>
         <select [value]="activeLanguage()" (change)="setLanguage($event)">
           @for (language of languages; track language.code) {
-            <option [value]="language.code">{{ language.key | translate }}</option>
+          <option [value]="language.code">{{ language.key | translate }}</option>
           }
         </select>
       </label>
-      <button
-        class="settings-button"
-        type="button"
-        (click)="theme.toggle()"
+      <button class="settings-button" type="button" (click)="theme.toggle()"
         [attr.aria-label]="(theme.mode() === 'dark' ? 'theme.switchToSoft' : 'theme.switchToDark') | translate"
-        [attr.aria-pressed]="theme.mode() === 'dark'"
-      >
+        [attr.aria-pressed]="theme.mode() === 'dark'">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           @if (theme.mode() === 'dark') {
-            <circle cx="12" cy="12" r="4" />
-            <path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" />
+          <circle cx="12" cy="12" r="4" />
+          <path
+            d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" />
           } @else {
-            <path d="M20.5 15.2A8.5 8.5 0 0 1 8.8 3.5 8.5 8.5 0 1 0 20.5 15.2Z" />
+          <path d="M20.5 15.2A8.5 8.5 0 0 1 8.8 3.5 8.5 8.5 0 1 0 20.5 15.2Z" />
           }
         </svg>
       </button>
     </header>
 
+    <section >
+      <div class="pet-meta">
+        @if (pet().conditions.length > 0) {
+        @for (condition of pet().conditions; track condition) {
+        <span class="goal-badge">{{ ('pet.conditions.' + condition) | translate }}</span>
+        }
+        } @else if (pet().tracking.includes('food')) {
+        <span class="goal-badge">{{ 'dashboard.generalJournal' | translate }}</span>
+        } @else {
+        <span class="goal-badge">{{ ('pet.nutritionGoals.' + pet().nutritionGoal) | translate }}</span>
+        }
+        @if (weightEnabled()) {
+        <span class="pet-weight">{{ weight() === undefined ? '—' : (weight() | number: '1.1-1') }} {{ 'pet.weightUnit' |
+          translate }}</span>
+        }
+      </div>
+    </section>
+
+    @if (weightEnabled()) {
     <section class="weight-card" [attr.aria-label]="'accessibility.weightProgress' | translate">
       <span class="weight-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24"><path d="m4 8 5 5 4-4 7 7M15 16h5v-5" /></svg>
+        <svg viewBox="0 0 24 24">
+          <path d="m4 8 5 5 4-4 7 7M15 16h5v-5" />
+        </svg>
       </span>
       <div>
         <span class="eyebrow">{{ 'dashboard.weightEvolution' | translate }}</span>
         <p>{{ 'dashboard.weightChangeSinceStart' | translate: { value: weightChange() | number: '1.1-1' } }}</p>
       </div>
     </section>
+    }
 
+    @if (glucoseEnabled()) {
+    <section class="glucose-summary" [attr.aria-label]="'dashboard.latestGlucose' | translate">
+      <span class="eyebrow">{{ 'dashboard.latestGlucose' | translate }}</span>
+      @if (latestGlucose(); as glucose) {
+      <p class="glucose-value">{{ glucose.valueMgDl | number: '1.0-0' }} <small>mg/dL</small></p>
+      <p class="glucose-time">{{ 'dashboard.measuredAt' | translate: { time: latestGlucoseTime() } }}</p>
+      } @else {
+      <p class="glucose-empty">{{ 'dashboard.noGlucoseYet' | translate }}</p>
+      }
+      <div class="treatment-summary">
+        @if (latestInsulin(); as insulin) {
+        <article>
+          <span>{{ 'dashboard.lastInsulin' | translate }}</span>
+          <strong>{{ insulin.doseUnits | number: '1.0-2' }} UI</strong>
+          <small>{{ formatTime(insulin.administeredAt) }}</small>
+        </article>
+        }
+        @if (latestMedication(); as medication) {
+        <article>
+          <span>{{ 'dashboard.lastMedication' | translate }}</span>
+          <strong>{{ medication.medicationName }}</strong>
+          <small>{{ medication.doseAmount }} {{ medication.doseUnit }} · {{ formatTime(medication.administeredAt)
+            }}</small>
+        </article>
+        }
+      </div>
+    </section>
+    }
+
+    @if (foodEnabled()) {
     <section class="summary-section" [attr.aria-label]="'accessibility.dailyCalories' | translate">
       <div class="section-heading summary-heading">
         <h2>{{ 'dashboard.todaySummary' | translate }}</h2>
         @if (pet().dailyKcalTarget !== undefined) {
-          <span class="daily-goal">{{ 'dashboard.dailyGoal' | translate: { amount: pet().dailyKcalTarget } }}</span>
+        <span class="daily-goal">{{ 'dashboard.dailyGoal' | translate: { amount: pet().dailyKcalTarget } }}</span>
         }
       </div>
       <article class="calorie-card">
@@ -62,67 +111,101 @@
             <span class="eyebrow">{{ 'dashboard.remaining' | translate }}</span>
             <p>
               @if (caloriesRemaining() !== undefined) {
-                <strong>{{ caloriesRemaining() | number: '1.1-1' }}</strong>
-                <span>kcal</span>
+              <strong>{{ caloriesRemaining() | number: '1.1-1' }}</strong>
+              <span>kcal</span>
               } @else {
-                <strong>—</strong>
+              <strong>—</strong>
               }
             </p>
           </div>
         </div>
         @if (pet().dailyKcalTarget !== undefined) {
-          <div
-            class="progress-track"
-            role="progressbar"
-            [attr.aria-label]="'accessibility.dailyCalories' | translate"
-            [attr.aria-valuenow]="calorieProgress() | number: '1.0-0'"
-            aria-valuemin="0"
-            aria-valuemax="100"
-          >
-            <span [style.width.%]="calorieProgress()"></span>
-          </div>
-          <div class="progress-caption">
-            <span class="progress-dot"></span>
-            <span>{{ 'dashboard.dailyGoalProgress' | translate: { percent: calorieProgress() | number: '1.0-0' } }}</span>
-          </div>
+        <div class="progress-track" role="progressbar" [attr.aria-label]="'accessibility.dailyCalories' | translate"
+          [attr.aria-valuenow]="calorieProgress() | number: '1.0-0'" aria-valuemin="0" aria-valuemax="100">
+          <span [style.width.%]="calorieProgress()"></span>
+        </div>
+        <div class="progress-caption">
+          <span class="progress-dot"></span>
+          <span>{{ 'dashboard.dailyGoalProgress' | translate: { percent: calorieProgress() | number: '1.0-0' } }}</span>
+        </div>
         }
       </article>
     </section>
+    }
 
+    @if (foodEnabled()) {
     <section class="records-section" [attr.aria-label]="'accessibility.mealHistory' | translate">
       <div class="section-heading">
         <h2>{{ 'dashboard.meals' | translate }}</h2>
-        <button class="text-button" type="button">
+        <a class="text-button" routerLink="/food-diary">
           {{ 'dashboard.viewHistory' | translate }} <span aria-hidden="true">›</span>
-        </button>
+        </a>
       </div>
       <div class="record-list">
-        @for (record of records(); track $index) {
-          <article
-            class="record-card"
-            [class.dry-food]="record.type === 'dryFood'"
-            [class.wet-food]="record.type === 'wetFood'"
-            [class.treat-food]="record.type === 'treat'"
-          >
-            <span class="record-icon" aria-hidden="true">
-              @switch (record.type) {
-                @case ('dryFood') { <span class="food-bowl">●</span> }
-                @case ('wetFood') { <span class="food-fish">◆</span> }
-                @case ('treat') { <span class="food-treat">●</span> }
-              }
-            </span>
-            <span class="record-copy">
-              <strong>{{ record.typeKey | translate }}</strong>
-              <small>{{ 'dashboard.mealDetails' | translate: { grams: record.grams, time: record.time } }}</small>
-            </span>
-            <span class="record-calories">
-              <strong>{{ record.calories | number: '1.0-1' }}</strong>
-              <small>kcal</small>
-            </span>
-          </article>
+        @for (record of records(); track record.id) {
+        <article class="record-card" [class.dry-food]="record.type === 'dryFood'"
+          [class.wet-food]="record.type === 'wetFood'" [class.treat-food]="record.type === 'treat'">
+          <span class="record-icon" aria-hidden="true">
+            @switch (record.type) {
+            @case ('dryFood') {
+              <svg viewBox="0 0 24 24"><path d="M4 11h16l-1.7 6.2a2 2 0 0 1-1.9 1.5H7.6a2 2 0 0 1-1.9-1.5L4 11Z" /><path d="M3 9h18M8 6c0-1 1-1.5 1-2m4 2c0-1 1-1.5 1-2" /></svg>
+            }
+            @case ('wetFood') {
+              <svg viewBox="0 0 24 24"><path d="M3 12c2-3.5 5-5 8-5 4 0 7 2 10 5-3 3-6 5-10 5-3 0-6-1.5-8-5Z" /><circle cx="14" cy="10" r="1" /><path d="M3 12 1.5 9m1.5 3-1.5 3" /></svg>
+            }
+            @case ('treat') {
+              <svg viewBox="0 0 24 24"><path d="M12 3.5c-1.7-1.5-4.8-.5-4.8 2a3.5 3.5 0 0 0-2.8 3.6c-1.8 1.8-1.2 4.7.7 5.6-.4 2.5 1.8 4.5 4.3 3.7 1.5 1.7 4.2 1.2 5-.7 2.4.1 4-2.2 3-4.3 1.4-2 .4-4.8-1.8-5.3.2-2.7-1.8-4.3-3.6-3.8Z" /><circle cx="9" cy="10" r="1" /><circle cx="15" cy="10" r="1" /><circle cx="12" cy="14" r="1.2" /></svg>
+            }
+            }
+          </span>
+          <span class="record-copy">
+            <strong>{{ record.typeKey | translate }}</strong>
+            <small>{{ 'dashboard.mealDetails' | translate: { grams: record.grams, time: record.time } }}</small>
+          </span>
+          <span class="record-calories">
+            <strong>{{ record.calories | number: '1.0-1' }}</strong>
+            <small>kcal</small>
+          </span>
+        </article>
         }
       </div>
     </section>
+    }
+
+    @if (healthTrackingEnabled()) {
+    <section class="health-records-section">
+      <div class="section-heading">
+        <h2>{{ 'dashboard.healthRecords' | translate }}</h2>
+      </div>
+      @if (healthRecords().length > 0) {
+      <div class="health-record-list">
+        @for (record of healthRecords(); track record.id) {
+        <article class="health-record" [class.blood-glucose]="record.type === 'bloodGlucose'"
+          [class.insulin]="record.type === 'insulin'" [class.medication]="record.type === 'medication'">
+          <span class="health-record-icon" aria-hidden="true">
+            @switch (record.type) {
+            @case ('bloodGlucose') { ◉ }
+            @case ('insulin') { ✳ }
+            @case ('medication') { + }
+            }
+          </span>
+          <span class="health-record-copy">
+            @if (record.medicationName) {
+            <strong>{{ record.medicationName }}</strong>
+            } @else {
+            <strong>{{ record.typeKey | translate }}</strong>
+            }
+            <small>{{ 'dashboard.recordTime' | translate: { time: record.time } }}</small>
+          </span>
+          <strong class="health-record-value">{{ record.amount }}</strong>
+        </article>
+        }
+      </div>
+      } @else {
+      <p class="empty-records">{{ 'dashboard.noHealthRecords' | translate }}</p>
+      }
+    </section>
+    }
 
     <aside class="health-tip">
       <span class="tip-icon" aria-hidden="true">i</span>
@@ -133,17 +216,10 @@
     </aside>
   </div>
 
-  <button
-    class="add-button"
-    type="button"
-    [attr.aria-expanded]="addMenuOpen()"
-    [attr.aria-label]="'accessibility.addRecord' | translate"
-    (click)="toggleAddMenu()"
-  >
-    {{ addMenuOpen() ? '×' : '+' }}
-  </button>
-  @if (addMenuOpen()) {
-    <div class="add-popover" role="status">{{ 'dashboard.chooseRecordType' | translate }}</div>
-  }
+  <a class="add-button" routerLink="/records/new" [attr.aria-label]="'accessibility.addRecord' | translate">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 5v14M5 12h14" />
+    </svg>
+  </a>
 
 </main>

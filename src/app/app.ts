@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { BottomNavigation } from './core/components/bottom-navigation/bottom-navigation';
+import { PetData } from './core/services/pet-data';
 import { Theme } from './core/services/theme';
 
 @Component({
@@ -11,5 +12,6 @@ import { Theme } from './core/services/theme';
 })
 export class App {
   protected readonly title = signal('pet-health');
+  readonly setupComplete = inject(PetData).setupComplete;
   private readonly theme = inject(Theme);
 }

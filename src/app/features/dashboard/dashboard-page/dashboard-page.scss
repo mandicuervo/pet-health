@@ -68,6 +68,7 @@
   border-radius: 13px;
   background: var(--surface-muted);
   font-size: 23px;
+  object-fit: cover;
 }
 
 .pet-heading {
@@ -83,8 +84,10 @@
 
 .pet-meta {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 7px;
+  margin-bottom: 18px;
 }
 
 .goal-badge {
@@ -175,7 +178,7 @@
 .eyebrow {
   display: block;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 750;
   letter-spacing: 0.65px;
 }
@@ -187,7 +190,7 @@
 
   strong {
     color: var(--dashboard-strong-text);
-    font-size: 12px;
+    font-size: 14px;
   }
 }
 
@@ -205,7 +208,7 @@
   h2 {
     margin: 0;
     color: var(--text);
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 750;
   }
 }
@@ -326,6 +329,7 @@
   font-size: 12px;
   font-weight: 750;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .record-list {
@@ -352,32 +356,31 @@
   flex: 0 0 38px;
   place-items: center;
   border-radius: 12px;
-  font-size: 15px;
+
+  svg {
+    width: 23px;
+    height: 23px;
+    fill: currentColor;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.2;
+  }
 }
 
 .dry-food .record-icon {
-  background: #38372f;
-  color: #ff9f3f;
+  background: #fff8e8;
+  color: #ff9d3c;
 }
 
 .wet-food .record-icon {
-  background: #293433;
-  color: #45d8c0;
+  background: #e9f9f2;
+  color: #19bea5;
 }
 
 .treat-food .record-icon {
-  background: #382a37;
-  color: #ff8bbd;
-}
-
-.food-bowl,
-.food-treat {
-  font-size: 16px;
-}
-
-.food-fish {
-  transform: rotate(45deg);
-  font-size: 14px;
+  background: #fff0f7;
+  color: #f47db7;
 }
 
 .record-copy {
@@ -389,7 +392,7 @@
   strong {
     overflow: hidden;
     color: var(--dashboard-strong-text);
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 750;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -408,7 +411,7 @@
 
   strong {
     color: var(--dashboard-strong-text);
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 750;
   }
 
@@ -449,7 +452,7 @@
 .tip-copy {
   strong {
     color: var(--dashboard-health-title);
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 750;
   }
 
@@ -475,24 +478,22 @@
   background: linear-gradient(145deg, #f7a5df, #de8de8);
   box-shadow: 0 6px 16px #e78be64d;
   color: #fff;
-  font-size: 27px;
-  line-height: 1;
   cursor: pointer;
-}
+  text-decoration: none;
 
-.add-popover {
-  position: fixed;
-  z-index: 3;
-  right: max(calc((100vw - 420px) / 2), 18px);
-  bottom: calc(126px + env(safe-area-inset-bottom));
-  max-width: calc(100vw - 36px);
-  padding: 10px 13px;
-  border: 1px solid var(--dashboard-popover-border);
-  border-radius: 11px;
-  background: var(--dashboard-popover-background);
-  box-shadow: var(--app-shadow);
-  color: var(--dashboard-subtle-text);
-  font-size: 12px;
+  svg {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-width: 2.5;
+  }
+
+  &:focus-visible {
+    outline: 3px solid #d5a5ed;
+    outline-offset: 3px;
+  }
 }
 
 @media (max-width: 360px) {
@@ -523,8 +524,7 @@
     padding-left: 24px;
   }
 
-  .add-button,
-  .add-popover {
+  .add-button {
     right: max(calc((100vw - 420px) / 2), calc((100vw - 460px) / 2 + 24px));
   }
 }
