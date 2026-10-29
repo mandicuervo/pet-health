@@ -1,0 +1,88 @@
+<section class="form-card" [attr.aria-label]="'records.title' | translate">
+  <form (submit)="save($event)">
+    @if (entryType() === 'bloodGlucose') {
+      <label class="value-field">
+        <span>{{ 'records.glucoseValue' | translate }}</span>
+        <span class="number-with-unit">
+          <input
+            name="value"
+            type="number"
+            min="1"
+            max="2000"
+            step="1"
+            inputmode="decimal"
+            required
+          />
+          <strong>mg/dL</strong>
+        </span>
+      </label>
+    } @else if (entryType() === 'insulin') {
+      <label class="value-field">
+        <span>{{ 'records.insulinDose' | translate }}</span>
+        <span class="number-with-unit">
+          <input
+            name="dose"
+            type="number"
+            min="0.01"
+            max="1000"
+            step="0.01"
+            inputmode="decimal"
+            required
+          />
+          <strong>{{ 'records.units' | translate }}</strong>
+        </span>
+      </label>
+    } @else {
+      <label>
+        <span>{{ 'records.medicationName' | translate }}</span>
+        <input name="medicationName" type="text" maxlength="100" required />
+      </label>
+      <div class="dose-row">
+        <label>
+          <span>{{ 'records.amount' | translate }}</span>
+          <input
+            name="doseAmount"
+            type="number"
+            min="0.001"
+            max="10000"
+            step="0.001"
+            inputmode="decimal"
+            required
+          />
+        </label>
+        <label>
+          <span>{{ 'records.unit' | translate }}</span>
+          <select name="doseUnit" required>
+            <option value="mg">{{ 'records.milligrams' | translate }}</option>
+            <option value="ml">{{ 'records.milliliters' | translate }}</option>
+            <option value="tablet">{{ 'records.tablets' | translate }}</option>
+            <option value="drop">{{ 'records.drops' | translate }}</option>
+            <option value="other">{{ 'records.otherUnit' | translate }}</option>
+          </select>
+        </label>
+      </div>
+    }
+
+    <div class="date-row">
+      <label>
+        <span>{{ 'records.date' | translate }}</span>
+        <input name="date" type="date" [value]="currentDate" required />
+      </label>
+      <label>
+        <span>{{ 'records.time' | translate }}</span>
+        <input name="time" type="time" [value]="currentTime" required />
+      </label>
+    </div>
+
+    <label>
+      <span>{{ 'records.notes' | translate }}</span>
+      <textarea name="notes" rows="3" maxlength="500"></textarea>
+    </label>
+
+    @if (errorKey()) {
+      <p class="form-error" role="alert">{{ errorKey() | translate }}</p>
+    }
+
+    <button class="save-button" type="submit">{{ 'records.save' | translate }}</button>
+  </form>
+</section>

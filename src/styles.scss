@@ -53,6 +53,79 @@ button {
   font: inherit;
 }
 
+.record-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin: 0 -2px 15px;
+  padding: 2px 2px 8px;
+  scrollbar-width: thin;
+}
+
+.record-tab {
+  min-height: 39px;
+  flex: 0 0 auto;
+  padding: 9px 14px;
+  border: 1px solid var(--app-border);
+  border-radius: 14px;
+  background: var(--app-surface);
+  color: var(--app-muted);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.record-tab.active {
+  border-color: transparent;
+  background: #e8f7fd;
+  color: #428dae;
+}
+
+.record-tab:focus-visible {
+  outline: 3px solid #d5a5ed;
+  outline-offset: 2px;
+}
+
+.dashboard-shell .progress-track,
+.diary-shell .progress-track {
+  height: 11px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: var(--app-surface-muted);
+}
+
+.dashboard-shell .progress-track span,
+.diary-shell .progress-track span {
+  display: block;
+  height: 100%;
+  min-width: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #a9e8f5, #dbaeff);
+  transition: width 180ms ease;
+}
+
+.dashboard-shell .progress-caption,
+.diary-shell .progress-caption {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 11px;
+  color: var(--app-muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.dashboard-shell .progress-dot,
+.diary-shell .progress-dot {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 8px;
+  border-radius: 50%;
+  background: #a8e8f5;
+}
+
 .dashboard-shell .glucose-summary {
   margin-top: 13px;
   padding: 18px;

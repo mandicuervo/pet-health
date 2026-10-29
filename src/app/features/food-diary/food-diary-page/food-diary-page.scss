@@ -24,22 +24,19 @@
 }
 
 .diary-header {
-  display: grid;
-  grid-template-columns: 36px 1fr 36px;
+  display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 15px;
+  justify-content: space-between;
+  margin-bottom: 12px;
 
   h1 {
     margin: 0;
     color: var(--diary-ink);
-    font-size: 18px;
+    font-size: 19px;
     font-weight: 800;
-    text-align: center;
   }
 }
 
-.back-button,
 .calendar-button {
   display: grid;
   width: 34px;
@@ -50,12 +47,6 @@
   background: var(--diary-card);
   box-shadow: var(--app-shadow);
   color: var(--diary-muted);
-  text-decoration: none;
-}
-
-.back-button {
-  font-size: 25px;
-  line-height: 1;
 }
 
 .calendar-button {
@@ -82,7 +73,7 @@
     position: relative;
     display: grid;
     min-width: 0;
-    min-height: 54px;
+    min-height: 48px;
     align-content: center;
     justify-items: center;
     gap: 5px;
@@ -111,6 +102,7 @@
       color: #a45cc0;
     }
   }
+
 }
 
 .meal-dot {
@@ -211,61 +203,176 @@
   }
 }
 
-.day-summary {
+.trend-card {
+  margin-bottom: 19px;
+  padding: 13px 13px 9px;
+  border: 1px solid var(--diary-border);
+  border-radius: 18px;
+  background: var(--diary-card);
+  box-shadow: var(--app-shadow);
+}
+
+.section-heading {
   display: flex;
-  min-height: 68px;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 23px;
-  padding: 12px 14px;
-  border: 1px solid rgb(255 255 255 / 55%);
-  border-radius: 17px;
-  background: linear-gradient(110deg, #e1f1fb 0%, #f2e7f7 58%, #e8f4ec 100%);
-  box-shadow: var(--app-shadow);
+  gap: 8px;
 
-  div {
-    display: grid;
-    min-width: 0;
-    gap: 4px;
-  }
-
-  span {
-    color: #68758a;
-    font-size: 12px;
+  h2 {
+    margin: 0;
+    color: var(--diary-ink);
+    font-size: 13px;
     font-weight: 800;
-    letter-spacing: 0.45px;
-    text-transform: uppercase;
   }
+}
 
-  strong {
-    color: #11243e;
-    font-size: 20px;
-    font-weight: 850;
-    white-space: nowrap;
-  }
+.trend-period {
+  display: flex;
+  padding: 2px;
+  border-radius: 14px;
+  background: var(--app-surface-muted);
 
-  small {
-    font-size: 12px;
-    font-weight: 650;
-  }
+  button {
+    padding: 5px 8px;
+    border: 0;
+    border-radius: 12px;
+    background: transparent;
+    color: var(--diary-muted);
+    font: inherit;
+    font-size: 10px;
+    font-weight: 750;
 
-  .remaining {
-    text-align: right;
-
-    strong {
-      color: #d86fb1;
+    &.selected {
+      background: var(--diary-card);
+      box-shadow: var(--app-shadow);
+      color: #bb78ca;
     }
   }
 }
 
-.diary-records {
-  h2 {
-    margin: 0 0 12px 2px;
-    color: var(--diary-ink);
-    font-size: 15px;
-    font-weight: 800;
+.trend-chart {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  overflow: visible;
+}
+
+.chart-grid {
+  stroke: var(--diary-border);
+  stroke-dasharray: 3 4;
+  stroke-width: 1;
+}
+
+.glucose-bar {
+  fill: #e9cffa;
+}
+
+.trend-line {
+  fill: none;
+  stroke: #b57ad4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+.trend-point {
+  fill: var(--diary-card);
+  stroke: #b57ad4;
+  stroke-width: 2;
+}
+
+.calorie-trend {
+  padding-bottom: 13px;
+}
+
+.daily-goal {
+  color: var(--diary-muted);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.calorie-values {
+  display: flex;
+  min-height: 62px;
+  justify-content: space-between;
+  padding: 13px 0 9px;
+
+  > div > span {
+    color: var(--diary-muted);
+    font-size: 11px;
+    font-weight: 750;
   }
+
+  p {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    margin: 6px 0 0;
+
+    strong {
+      color: var(--diary-ink);
+      font-size: 22px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    small {
+      color: var(--diary-muted);
+      font-size: 11px;
+    }
+  }
+}
+
+.remaining-value {
+  text-align: right;
+
+  p {
+    justify-content: flex-end;
+
+    strong,
+    small {
+      color: #e487bc;
+    }
+
+    strong {
+      font-size: 16px;
+    }
+  }
+}
+
+.chart-label {
+  fill: var(--diary-muted);
+  font-size: 8px;
+}
+
+.chart-empty {
+  margin: 8px 0 3px;
+  color: var(--diary-muted);
+  font-size: 11px;
+}
+
+.diary-records {
+  margin-top: 2px;
+}
+
+.records-heading {
+  margin: 0 1px 9px;
+}
+
+.record-count {
+  color: var(--diary-muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.record-date {
+  grid-column: 1 / -1;
+  margin: 7px 0 -3px;
+  color: var(--diary-muted);
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 0.35px;
+  text-transform: uppercase;
 }
 
 .meal-list {
@@ -316,6 +423,30 @@
 
 .treat-food .timeline-dot {
   background: #f28dc3;
+}
+
+.blood-glucose-record .timeline-dot,
+.blood-glucose-record .meal-icon {
+  background: #e8f4ff;
+  color: #438ac4;
+}
+
+.insulin-record .timeline-dot,
+.insulin-record .meal-icon {
+  background: #f0eafa;
+  color: #8062b0;
+}
+
+.medication-record .timeline-dot,
+.medication-record .meal-icon {
+  background: #fff0e8;
+  color: #df8754;
+}
+
+.weight-record .timeline-dot,
+.weight-record .meal-icon {
+  background: #e9f5eb;
+  color: #5a9a62;
 }
 
 .meal-icon {
@@ -374,6 +505,12 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+
+  .record-notes {
+    overflow: visible;
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
 }
 
 .meal-calories {
@@ -399,20 +536,6 @@
   align-items: center;
   justify-content: center;
   margin-top: 20px;
-}
-
-.month-view-button {
-  min-height: 38px;
-  padding: 8px 16px;
-  border: 1px dashed var(--diary-border);
-  border-radius: 20px;
-  background: transparent;
-  color: var(--diary-muted);
-  font-family: inherit;
-  font-size: 12px;
-  font-weight: 800;
-  text-transform: uppercase;
-  cursor: pointer;
 }
 
 .add-button {

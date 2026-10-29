@@ -1,5 +1,5 @@
 <nav class="bottom-nav" [attr.aria-label]="'navigation.label' | translate">
-  @for (item of navigation(); track item.path) {
+  @for (item of navigation; track item.path) {
     <a
       class="nav-item"
       [routerLink]="item.path"
@@ -9,8 +9,11 @@
       [attr.aria-current]="link.isActive ? 'page' : null"
     >
       @switch (item.icon) {
-        @case ('nutrition') {
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9h-9Z" /><path d="M14 3.2V10h6.8A9 9 0 0 0 14 3.2Z" /></svg>
+        @case ('home') {
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10Z" /></svg>
+        }
+        @case ('records') {
+          <svg class="records-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h13v16H7a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3Z" /><path d="M8 9h8M8 13h8M8 17h5M4 8h3" /></svg>
         }
         @case ('weight') {
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v4M12 17v4M5.6 5.6l2.8 2.8m7.2 7.2 2.8 2.8M3 12h4m10 0h4M5.6 18.4l2.8-2.8m7.2-7.2 2.8-2.8" /><circle cx="12" cy="12" r="4" /></svg>

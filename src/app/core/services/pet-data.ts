@@ -322,7 +322,7 @@ export class PetData {
   saveFood(
     food: Omit<Food, 'id'>,
     id?: string,
-  ): void {
+  ): Food {
     if (
       !food.name.trim() ||
       !Number.isFinite(food.kcalPerKg) ||
@@ -347,6 +347,10 @@ export class PetData {
       name: food.name.trim(),
       brand: food.brand?.trim() || undefined,
     };
+    const savedFood: Food = {
+      ...normalizedFood,
+      id: id ?? `f${Date.now()}`,
+    };
 
     this._foods.update((foods) => {
       if (id && !foods.some((item) => item.id === id)) {
@@ -354,15 +358,13 @@ export class PetData {
       }
       if (id) {
         return foods.map((item) =>
-          item.id === id ? { ...normalizedFood, id } : item,
+          item.id === id ? savedFood : item,
         );
       }
-      return [
-        ...foods,
-        { ...normalizedFood, id: `f${Date.now()}` },
-      ];
+      return [...foods, savedFood];
     });
     this.persistData();
+    return savedFood;
   }
 
   deleteFood(id: string): 'deleted' | 'in-use' {
@@ -403,6 +405,7 @@ export class PetData {
       !Number.isFinite(event.grams) ||
       event.grams <= 0 ||
       !Number.isFinite(new Date(event.eatenAt).getTime()) ||
+      (event.notes !== undefined && typeof event.notes !== 'string') ||
       this._mealEvents().some((existing) => existing.id === event.id)
     ) {
       throw new Error('Meal entry details are invalid');

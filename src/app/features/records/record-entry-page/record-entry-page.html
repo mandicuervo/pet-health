@@ -15,102 +15,21 @@
         role="tab"
         [attr.aria-selected]="activeTab() === tab.id"
         (click)="selectTab(tab.id)"
-      >{{ tab.labelKey | translate }}</button>
+      >
+        {{ tab.labelKey | translate }}
+      </button>
     }
   </nav>
 
   @if (tabs().length === 0) {
     <p class="empty-state">{{ 'records.noEnabledTypes' | translate }}</p>
-  } @else if (activeTab() === 'food' && foods().length === 0) {
-    <section class="empty-state">
-      <p>{{ 'records.noFoods' | translate }}</p>
-      <a routerLink="/foods">{{ 'records.manageFoods' | translate }}</a>
-    </section>
+  } @else if (activeTab() === 'food') {
+    <app-food-form (saved)="onFoodSaved()" />
   } @else {
-    <section class="form-card" [attr.aria-label]="'records.title' | translate">
-      @if (activeTab() === 'bloodGlucose') {
-        <form (submit)="saveRecord($event)">
-          <label class="value-field">
-            <span>{{ 'records.glucoseValue' | translate }}</span>
-            <span class="number-with-unit">
-              <input name="value" type="number" min="1" max="2000" step="1" inputmode="decimal" required />
-              <strong>mg/dL</strong>
-            </span>
-          </label>
-          <ng-container *ngTemplateOutlet="dateAndTimeFields" />
-          <label>
-            <span>{{ 'records.notes' | translate }}</span>
-            <textarea name="notes" rows="3" maxlength="500"></textarea>
-          </label>
-          <button class="save-button" type="submit">{{ 'records.save' | translate }}</button>
-        </form>
-      } @else if (activeTab() === 'insulin') {
-        <form (submit)="saveRecord($event)">
-          <label class="value-field">
-            <span>{{ 'records.insulinDose' | translate }}</span>
-            <span class="number-with-unit">
-              <input name="dose" type="number" min="0.01" max="1000" step="0.01" inputmode="decimal" required />
-              <strong>{{ 'records.units' | translate }}</strong>
-            </span>
-          </label>
-          <ng-container *ngTemplateOutlet="dateAndTimeFields" />
-          <label>
-            <span>{{ 'records.notes' | translate }}</span>
-            <textarea name="notes" rows="3" maxlength="500"></textarea>
-          </label>
-          <button class="save-button" type="submit">{{ 'records.save' | translate }}</button>
-        </form>
-      } @else if (activeTab() === 'medication') {
-        <form (submit)="saveRecord($event)">
-          <label>
-            <span>{{ 'records.medicationName' | translate }}</span>
-            <input name="medicationName" type="text" maxlength="100" required />
-          </label>
-          <div class="dose-row">
-            <label>
-              <span>{{ 'records.amount' | translate }}</span>
-              <input name="doseAmount" type="number" min="0.001" max="10000" step="0.001" inputmode="decimal" required />
-            </label>
-            <label>
-              <span>{{ 'records.unit' | translate }}</span>
-              <select name="doseUnit" required>
-                <option value="mg">{{ 'records.milligrams' | translate }}</option>
-                <option value="ml">{{ 'records.milliliters' | translate }}</option>
-                <option value="tablet">{{ 'records.tablets' | translate }}</option>
-                <option value="drop">{{ 'records.drops' | translate }}</option>
-                <option value="other">{{ 'records.otherUnit' | translate }}</option>
-              </select>
-            </label>
-          </div>
-          <ng-container *ngTemplateOutlet="dateAndTimeFields" />
-          <label>
-            <span>{{ 'records.notes' | translate }}</span>
-            <textarea name="notes" rows="3" maxlength="500"></textarea>
-          </label>
-          <button class="save-button" type="submit">{{ 'records.save' | translate }}</button>
-        </form>
-      } @else {
-        <form (submit)="saveRecord($event)">
-          <label>
-            <span>{{ 'records.foodName' | translate }}</span>
-            <select name="foodId" required>
-              @for (food of foods(); track food.id) {
-                <option [value]="food.id">{{ food.name }}</option>
-              }
-            </select>
-          </label>
-          <label class="value-field">
-            <span>{{ 'records.foodAmount' | translate }}</span>
-            <span class="number-with-unit">
-              <input name="grams" type="number" min="0.1" max="2000" step="0.1" inputmode="decimal" required />
-              <strong>g</strong>
-            </span>
-          </label>
-          <ng-container *ngTemplateOutlet="dateAndTimeFields" />
-          <button class="save-button" type="submit">{{ 'records.save' | translate }}</button>
-        </form>
-      }
-    </section>
+    <app-health-entry-form
+      [entryType]="healthEntryType()"
+      (saved)="onHealthEntrySaved()"
+    />
   }
 
   @if (errorKey()) {
@@ -120,16 +39,4 @@
     <p class="form-message success" role="status">{{ successKey() | translate }}</p>
   }
 
-  <ng-template #dateAndTimeFields>
-    <div class="date-row">
-      <label>
-        <span>{{ 'records.date' | translate }}</span>
-        <input name="date" type="date" [value]="currentDate" required />
-      </label>
-      <label>
-        <span>{{ 'records.time' | translate }}</span>
-        <input name="time" type="time" [value]="currentTime" required />
-      </label>
-    </div>
-  </ng-template>
 </main>

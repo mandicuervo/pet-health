@@ -1,0 +1,139 @@
+<main class="auth-shell" [class.welcome-page]="mode() === 'welcome'">
+  @if (mode() === 'welcome') {
+    <section class="welcome-content">
+      <div class="brand-illustration" aria-hidden="true">
+        <svg viewBox="0 0 220 205">
+          <path class="sparkle sparkle-pink" d="M37 145c0-7 5-12 12-12s12 5 12 12c0 7-5 12-12 12s-12-5-12-12Zm144-96c0-7 5-12 12-12s12 5 12 12c0 7-5 12-12 12s-12-5-12-12Z" />
+          <path class="sparkle sparkle-purple" d="M179 143c0-8 6-14 14-14s14 6 14 14-6 14-14 14-14-6-14-14ZM24 67c0-6 5-11 11-11s11 5 11 11-5 11-11 11-11-5-11-11Z" />
+          <path class="tail" d="M156 144c27 2 44-16 46-39 1-8 8-11 13-7 8 7 3 28-8 42-12 16-28 25-51 23Z" />
+          <path class="ear" d="m60 75 4-47c1-8 7-11 14-6l39 33m15 0 35-33c7-6 15-2 15 7l-2 48Z" />
+          <path class="cat-body" d="M48 111c0-37 27-65 62-65s62 28 62 65v44c0 19-14 32-32 32H79c-18 0-31-13-31-32Z" />
+          <path class="ear-inner" d="m72 61 2-23 23 19m69 4 1-23-23 20Z" />
+          <ellipse class="eye" cx="87" cy="106" rx="13" ry="17" />
+          <ellipse class="eye" cx="135" cy="106" rx="13" ry="17" />
+          <circle class="eye-glint" cx="91" cy="101" r="4" />
+          <circle class="eye-glint" cx="139" cy="101" r="4" />
+          <path class="nose" d="m105 126 7-5 7 5-7 6Z" />
+          <path class="face-line" d="M112 132c-3 6-8 7-13 4m13-4c3 6 8 7 13 4M57 119l-26-5m27 13-29 3m31 3-24 11m117-25 26-5m-27 13 29 3m-31 3 24 11" />
+          <path class="paw" d="M82 187v-11m16 11v-13m30 13v-13m14 13v-11" />
+          <circle class="cheek" cx="72" cy="130" r="7" />
+          <circle class="cheek" cx="152" cy="130" r="7" />
+        </svg>
+      </div>
+      <h1>Pet Health</h1>
+      <p class="welcome-copy">{{ 'auth.welcomeCopy' | translate }}</p>
+      <p class="welcome-highlight">{{ 'auth.welcomeHighlight' | translate }}</p>
+      <div class="welcome-actions">
+        <a class="primary-button" routerLink="/register">{{ 'auth.getStarted' | translate }}</a>
+        <a class="secondary-button" routerLink="/login">{{ 'auth.haveAccount' | translate }}</a>
+      </div>
+      <p class="made-with">{{ 'auth.madeWith' | translate }}</p>
+    </section>
+  } @else {
+    <section class="form-page">
+      <a class="back-button" routerLink="/welcome" [attr.aria-label]="'auth.back' | translate">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h11" /></svg>
+      </a>
+
+      <header class="form-heading">
+        <p class="eyebrow">Pet Health</p>
+        <h1>{{ (mode() === 'register' ? 'auth.registerTitle' : 'auth.loginTitle') | translate }}</h1>
+        <p>{{ (mode() === 'register' ? 'auth.registerIntro' : 'auth.loginIntro') | translate }}</p>
+      </header>
+
+      <form class="auth-form" (submit)="submit($event)">
+        @if (mode() === 'register') {
+          <label class="auth-field">
+            <span>{{ 'auth.fullName' | translate }}</span>
+            <span class="input-wrap">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5" /><path d="M5 20a7 7 0 0 1 14 0" /></svg>
+              <input
+                name="fullName"
+                type="text"
+                autocomplete="name"
+                maxlength="100"
+                [placeholder]="'auth.namePlaceholder' | translate"
+                required
+                (input)="clearMessage()"
+              />
+            </span>
+          </label>
+        }
+
+        <label class="auth-field">
+          <span>{{ 'auth.email' | translate }}</span>
+          <span class="input-wrap">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="14" rx="3" /><path d="m5 7 7 6 7-6" /></svg>
+            <input
+              name="email"
+              type="email"
+              autocomplete="email"
+              [placeholder]="'auth.emailPlaceholder' | translate"
+              required
+              (input)="clearMessage()"
+            />
+          </span>
+        </label>
+
+        <label class="auth-field">
+          <span>{{ 'auth.password' | translate }}</span>
+          <span class="input-wrap">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="3" /><path d="M8 10V7a4 4 0 0 1 8 0v3" /></svg>
+            <input
+              name="password"
+              [type]="showPassword() ? 'text' : 'password'"
+              [attr.autocomplete]="mode() === 'register' ? 'new-password' : 'current-password'"
+              minlength="8"
+              [placeholder]="'auth.passwordPlaceholder' | translate"
+              required
+              (input)="clearMessage()"
+            />
+            <button
+              class="password-toggle"
+              type="button"
+              (click)="togglePassword()"
+              [attr.aria-label]="(showPassword() ? 'auth.hidePassword' : 'auth.showPassword') | translate"
+              [attr.aria-pressed]="showPassword()"
+            >
+              @if (showPassword()) {
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 3 18 18M10.6 10.6a2 2 0 0 0 2.8 2.8" /><path d="M9.9 5.2A10.7 10.7 0 0 1 12 5c5.5 0 9 7 9 7a16 16 0 0 1-3 3.8M6.2 6.2C4.1 7.7 3 10 3 12c0 0 3.5 7 9 7a10 10 0 0 0 3-.5" /></svg>
+              } @else {
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12s3.5-7 9-7 9 7 9 7-3.5 7-9 7-9-7-9-7Z" /><circle cx="12" cy="12" r="2.5" /></svg>
+              }
+            </button>
+          </span>
+        </label>
+
+        @if (mode() === 'register') {
+          <label class="terms-field">
+            <input name="terms" type="checkbox" required (change)="clearMessage()" />
+            <span>{{ 'auth.acceptTerms' | translate }}</span>
+          </label>
+        } @else {
+          <span class="forgot-password">{{ 'auth.forgotPassword' | translate }}</span>
+        }
+
+        @if (messageKey()) {
+          <p class="form-message" role="status">{{ messageKey() | translate }}</p>
+        }
+        <button class="primary-button submit-button" type="submit">
+          {{ (mode() === 'register' ? 'auth.registerAction' : 'auth.loginAction') | translate }}
+        </button>
+      </form>
+
+      <div class="social-divider"><span>{{ 'auth.orContinueWith' | translate }}</span></div>
+      <div class="social-options" [attr.aria-label]="'auth.socialUnavailable' | translate">
+        <button type="button" disabled aria-label="Google">G</button>
+        <button type="button" disabled aria-label="Facebook">f</button>
+        <button type="button" disabled aria-label="Apple">●</button>
+      </div>
+      <p class="auth-switch">
+        {{ (mode() === 'register' ? 'auth.alreadyHaveAccount' : 'auth.noAccount') | translate }}
+        <a [routerLink]="mode() === 'register' ? '/login' : '/register'">
+          {{ (mode() === 'register' ? 'auth.loginAction' : 'auth.registerAction') | translate }}
+        </a>
+      </p>
+      <a class="continue-without-account" routerLink="/">{{ 'auth.continueWithoutAccount' | translate }}</a>
+    </section>
+  }
+</main>

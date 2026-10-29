@@ -3,9 +3,10 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
 import { DailyFoodPlan, Food } from '../../../core/models/food.model';
 import { PetData } from '../../../core/services/pet-data';
+import { FoodForm } from '../food-form/food-form';
 
 @Component({
-  imports: [DecimalPipe, TranslatePipe],
+  imports: [DecimalPipe, FoodForm, TranslatePipe],
   selector: 'app-foods-page',
   styleUrl: './foods-page.scss',
   templateUrl: './foods-page.html',
@@ -129,53 +130,4 @@ export class FoodsPage {
     this.pendingDelete.set(undefined);
   }
 
-  saveFood(event: Event): void {
-    event.preventDefault();
-    const form = event.currentTarget;
-    if (!(form instanceof HTMLFormElement) || !form.reportValidity()) {
-      return;
-    }
-    const data = new FormData(form);
-    const category = String(data.get('category'));
-    if (
-      category !== 'dryFood' &&
-      category !== 'wetFood' &&
-      category !== 'treat'
-    ) {
-      throw new Error(`Unsupported food category: ${category}`);
-    }
-    const food: Omit<Food, 'id'> = {
-      name: String(data.get('name')),
-      brand: String(data.get('brand')),
-      category,
-      kcalPerKg: Number(data.get('kcalPer100g')) * 10,
-      ...(this.optionalNumber(data.get('kcalPerUnit')) !== undefined
-        ? { kcalPerUnit: this.optionalNumber(data.get('kcalPerUnit')) }
-        : {}),
-      ...(this.optionalNumber(data.get('fiberPercent')) !== undefined
-        ? { fiberPercent: this.optionalNumber(data.get('fiberPercent')) }
-        : {}),
-      ...(this.optionalNumber(data.get('proteinPercent')) !== undefined
-        ? { proteinPercent: this.optionalNumber(data.get('proteinPercent')) }
-        : {}),
-    };
-
-    try {
-      this.petData.saveFood(food, this.foodFormItem()?.id);
-      this.closeFoodForm();
-    } catch (error) {
-      if (!(error instanceof Error)) {
-        throw error;
-      }
-      this.errorKey.set('foods.invalidFood');
-    }
-  }
-
-  private optionalNumber(value: FormDataEntryValue | null): number | undefined {
-    if (value === null || value === '') {
-      return undefined;
-    }
-    const numberValue = Number(value);
-    return Number.isFinite(numberValue) ? numberValue : undefined;
-  }
 }

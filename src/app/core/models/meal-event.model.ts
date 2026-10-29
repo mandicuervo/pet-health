@@ -7,4 +7,5 @@ export interface MealEvent {
   foodId: string;
   grams: number;
   eatenAt: string;
+  notes?: string;
 }

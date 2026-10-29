@@ -63,124 +63,12 @@
   line-height: 1.45;
 }
 
-.record-tabs {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  margin: 0 -2px 15px;
-  padding: 2px 2px 8px;
-  scrollbar-width: thin;
-}
-
-.record-tab {
-  min-height: 39px;
-  flex: 0 0 auto;
-  padding: 9px 14px;
-  border: 1px solid var(--page-border);
-  border-radius: 14px;
-  background: var(--page-card);
-  color: var(--page-muted);
-  font-family: inherit;
-  font-size: 12px;
-  font-weight: 750;
-  cursor: pointer;
-
-  &.active {
-    border-color: transparent;
-    background: #e8f7fd;
-    color: #428dae;
-  }
-
-  &:focus-visible {
-    outline: 3px solid #d5a5ed;
-    outline-offset: 2px;
-  }
-}
-
-.form-card,
 .empty-state {
   padding: 18px;
   border: 1px solid var(--page-border);
   border-radius: 22px;
   background: var(--page-card);
   box-shadow: var(--page-shadow);
-}
-
-.form-card form {
-  display: grid;
-  gap: 14px;
-}
-
-label {
-  display: grid;
-  min-width: 0;
-  gap: 7px;
-  color: var(--page-muted);
-  font-size: 12px;
-  font-weight: 750;
-
-  input,
-  select,
-  textarea {
-    width: 100%;
-    min-width: 0;
-    min-height: 43px;
-    padding: 10px 12px;
-    border: 1px solid var(--page-border);
-    border-radius: 12px;
-    background: var(--app-background);
-    color: var(--page-ink);
-    font: inherit;
-    font-size: 15px;
-  }
-
-  textarea {
-    min-height: 78px;
-    resize: vertical;
-  }
-}
-
-.value-field input {
-  font-size: 22px;
-  font-weight: 800;
-}
-
-.number-with-unit {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-
-  input {
-    flex: 1;
-  }
-
-  strong {
-    min-width: 52px;
-    color: var(--page-muted);
-    font-size: 13px;
-  }
-}
-
-.date-row,
-.dose-row {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-}
-
-.save-button {
-  min-height: 50px;
-  margin-top: 3px;
-  padding: 12px;
-  border: 0;
-  border-radius: 15px;
-  background: linear-gradient(100deg, #ddaef3, #fb91c7);
-  box-shadow: 0 7px 18px rgb(224 161 236 / 25%);
-  color: #fff;
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 800;
-  cursor: pointer;
 }
 
 .empty-state {
@@ -214,7 +102,4 @@ label {
     padding-left: 16px;
   }
 
-  .form-card {
-    padding: 14px;
-  }
 }

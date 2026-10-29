@@ -6,6 +6,36 @@
     "switchToSoft": "Activar tema suave",
     "switchToDark": "Activar tema oscuro"
   },
+  "auth": {
+    "back": "Volver",
+    "welcomeCopy": "El cuidado que merece tu mejor amigo,",
+    "welcomeHighlight": "en la palma de tu mano.",
+    "getStarted": "Empezar ahora",
+    "haveAccount": "Ya tengo una cuenta",
+    "madeWith": "Hecho con ♥ para quienes aman a sus mascotas",
+    "registerTitle": "Crea tu cuenta",
+    "registerIntro": "Únete a nuestra comunidad de cuidado.",
+    "loginTitle": "Te damos la bienvenida",
+    "loginIntro": "Inicia sesión para seguir cuidando a quien quieres.",
+    "fullName": "Nombre completo",
+    "namePlaceholder": "¿Cómo te llamas?",
+    "email": "Correo electrónico",
+    "emailPlaceholder": "tu@email.com",
+    "password": "Contraseña",
+    "passwordPlaceholder": "Mínimo 8 caracteres",
+    "showPassword": "Mostrar contraseña",
+    "hidePassword": "Ocultar contraseña",
+    "acceptTerms": "Acepto los Términos de uso y la Política de privacidad.",
+    "forgotPassword": "Olvidé mi contraseña",
+    "registerAction": "Registrarme",
+    "loginAction": "Iniciar sesión",
+    "orContinueWith": "O regístrate con",
+    "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+    "noAccount": "¿Todavía no tienes una cuenta?",
+    "socialUnavailable": "El registro con redes sociales estará disponible después de la integración.",
+    "apiNotConnected": "La pantalla está lista. El registro y el inicio de sesión se conectarán a la API cuando esté disponible.",
+    "continueWithoutAccount": "Continuar sin cuenta"
+  },
   "dashboard": {
     "weightLoss": "BAJAR DE PESO",
     "weightEvolution": "EVOLUCIÓN",
@@ -43,7 +73,7 @@
     "chooseRecordType": "Elige el tipo de registro"
   },
   "foodDiary": {
-    "title": "Diario Alimentario",
+    "title": "Historial General",
     "back": "Volver al panel",
     "monthView": "Ver mes",
     "weekView": "Volver a la semana",
@@ -53,7 +83,19 @@
     "totalToday": "Total del día",
     "remaining": "Meta restante",
     "records": "Registros",
-    "noMeals": "No hay alimentos registrados este día."
+    "noRecords": "No hay registros para este período.",
+    "filters": "Filtrar registros",
+    "all": "Todos",
+    "glucoseTrend": "Tendencia de glucosa",
+    "daily": "Diario",
+    "weekly": "Semanal",
+    "monthly": "Mensual",
+    "glucoseChart": "Gráfico de tendencia de glucosa",
+    "noGlucoseData": "Añade registros de glucosa para ver la tendencia.",
+    "noCalorieGoal": "Define una meta diaria en el perfil para seguir las calorías.",
+    "recentRecords": "Registros recientes",
+    "today": "Hoy",
+    "yesterday": "Ayer"
   },
   "questionnaire": {
     "title": "Sobre tu mascota",
@@ -93,7 +135,11 @@
   },
   "navigation": {
     "label": "Navegación principal",
+    "home": "Inicio",
+    "history": "Historial",
+    "food": "Alimentos",
     "nutrition": "Nutrición",
+    "records": "Registros",
     "weight": "Peso",
     "foods": "Alimentos",
     "profile": "Perfil"
@@ -120,6 +166,7 @@
     "chartDescription": "Gráfico de la evolución del peso de la mascota",
     "noHistory": "Aún no hay registros de peso.",
     "history": "Historial",
+    "addNew": "+ Nuevo",
     "showLess": "Ver Menos",
     "viewAll": "Ver Todo",
     "entryForm": "Formulario de registro de peso",
@@ -228,7 +275,7 @@
     "weightProgress": "Evolución del peso de la mascota",
     "dailyCalories": "Resumen diario de calorías",
     "mealHistory": "Historial de comidas",
-    "addRecord": "Añadir un registro nutricional"
+    "addRecord": "Añadir un registro"
   },
   "customization": {
     "eyebrow": "Perfil de salud",
@@ -257,6 +304,7 @@
     "insulin": "Insulina",
     "medication": "Medicación",
     "food": "Alimentación",
+    "weight": "Peso",
     "glucoseValue": "Valor de glucemia",
     "insulinDose": "Dosis de insulina",
     "units": "UI",
@@ -279,6 +327,7 @@
     "noEnabledTypes": "No hay tipos de registro activos en el perfil.",
     "noFoods": "Añade un alimento antes de registrar una comida.",
     "manageFoods": "Ir a Alimentos",
+    "foodSaved": "Alimento guardado.",
     "back": "Volver al inicio"
   },
   "language": {

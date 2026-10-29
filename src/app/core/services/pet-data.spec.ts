@@ -125,6 +125,7 @@ describe('PetData', () => {
       foodId: 'f1',
       grams: 32,
       eatenAt: '2026-10-15T18:00:00',
+      notes: 'Comeu tudo',
     });
 
     TestBed.resetTestingModule();
@@ -134,6 +135,7 @@ describe('PetData', () => {
     expect(service.mealEvents().at(-1)).toMatchObject({
       grams: 32,
       foodId: 'f1',
+      notes: 'Comeu tudo',
     });
   });
 });

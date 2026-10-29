@@ -6,6 +6,36 @@
     "switchToSoft": "Ativar tema suave",
     "switchToDark": "Ativar tema escuro"
   },
+  "auth": {
+    "back": "Voltar",
+    "welcomeCopy": "O cuidado que seu melhor amigo merece,",
+    "welcomeHighlight": "na palma da sua mão.",
+    "getStarted": "Começar agora",
+    "haveAccount": "Já tenho uma conta",
+    "madeWith": "Feito com ♥ para amantes de pets",
+    "registerTitle": "Crie sua conta",
+    "registerIntro": "Junte-se à nossa comunidade de cuidado.",
+    "loginTitle": "Bem-vindo de volta",
+    "loginIntro": "Entre para continuar cuidando de quem você ama.",
+    "fullName": "Nome completo",
+    "namePlaceholder": "Como você se chama?",
+    "email": "E-mail",
+    "emailPlaceholder": "seu@email.com",
+    "password": "Senha",
+    "passwordPlaceholder": "Mínimo de 8 caracteres",
+    "showPassword": "Mostrar senha",
+    "hidePassword": "Ocultar senha",
+    "acceptTerms": "Eu aceito os Termos de Uso e a Política de Privacidade.",
+    "forgotPassword": "Esqueci minha senha",
+    "registerAction": "Cadastrar",
+    "loginAction": "Entrar",
+    "orContinueWith": "Ou cadastre-se com",
+    "alreadyHaveAccount": "Já tem uma conta?",
+    "noAccount": "Ainda não tem uma conta?",
+    "socialUnavailable": "Cadastro por redes sociais ficará disponível depois da integração.",
+    "apiNotConnected": "A tela está pronta. O cadastro e o login serão conectados à API quando ela estiver disponível.",
+    "continueWithoutAccount": "Continuar sem conta"
+  },
   "dashboard": {
     "weightLoss": "PERDER PESO",
     "weightEvolution": "EVOLUÇÃO",
@@ -43,7 +73,7 @@
     "chooseRecordType": "Escolha o tipo de registro"
   },
   "foodDiary": {
-    "title": "Diário Alimentar",
+    "title": "Histórico Geral",
     "back": "Voltar ao painel",
     "monthView": "Ver visão mensal",
     "weekView": "Voltar à visão semanal",
@@ -53,7 +83,19 @@
     "totalToday": "Total do dia",
     "remaining": "Meta restante",
     "records": "Registros",
-    "noMeals": "Nenhum alimento registrado neste dia."
+    "noRecords": "Nenhum registro neste período.",
+    "filters": "Filtrar registros",
+    "all": "Todos",
+    "glucoseTrend": "Tendência de glicemia",
+    "daily": "Diário",
+    "weekly": "Semanal",
+    "monthly": "Mensal",
+    "glucoseChart": "Gráfico de tendência da glicemia",
+    "noGlucoseData": "Registre a glicemia para acompanhar a tendência.",
+    "noCalorieGoal": "Defina uma meta diária no perfil para acompanhar as calorias.",
+    "recentRecords": "Registros recentes",
+    "today": "Hoje",
+    "yesterday": "Ontem"
   },
   "questionnaire": {
     "title": "Sobre seu pet",
@@ -93,8 +135,12 @@
   },
   "navigation": {
     "label": "Navegação principal",
+    "home": "Home",
+    "history": "Histórico",
+    "food": "Food",
     "nutrition": "Nutrição",
-    "weight": "Peso",
+    "records": "Registros",
+    "weight": "Weight",
     "foods": "Alimentos",
     "profile": "Perfil"
   },
@@ -120,6 +166,7 @@
     "chartDescription": "Gráfico com a evolução do peso do pet",
     "noHistory": "Nenhum registro de peso ainda.",
     "history": "Histórico",
+    "addNew": "+ Novo",
     "showLess": "Ver Menos",
     "viewAll": "Ver Tudo",
     "entryForm": "Formulário de registro de peso",
@@ -228,7 +275,7 @@
     "weightProgress": "Evolução do peso do pet",
     "dailyCalories": "Resumo diário de calorias",
     "mealHistory": "Histórico de refeições",
-    "addRecord": "Adicionar registro nutricional"
+    "addRecord": "Adicionar registro"
   },
   "customization": {
     "eyebrow": "Perfil de saúde",
@@ -257,6 +304,7 @@
     "insulin": "Insulina",
     "medication": "Medicação",
     "food": "Alimentação",
+    "weight": "Peso",
     "glucoseValue": "Valor da glicemia",
     "insulinDose": "Dose de insulina",
     "units": "UI",
@@ -279,6 +327,7 @@
     "noEnabledTypes": "Não há tipos de registro ativos no perfil.",
     "noFoods": "Cadastre um alimento antes de registrar uma refeição.",
     "manageFoods": "Ir para Alimentos",
+    "foodSaved": "Alimento cadastrado.",
     "back": "Voltar ao início"
   },
   "language": {

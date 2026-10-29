@@ -8,6 +8,7 @@ import { PetCustomizationPage } from './features/pet-customization/pet-customiza
 import { ProfilePage } from './features/profile/profile-page/profile-page';
 import { RecordEntryPage } from './features/records/record-entry-page/record-entry-page';
 import { WeightPage } from './features/weight/weight-page/weight-page';
+import { AuthPage } from './features/auth/auth-page/auth-page';
 
 const requireSetup: CanActivateFn = () => {
   const setupComplete = inject(PetData).setupComplete();
@@ -19,14 +20,13 @@ const requireFirstSetup: CanActivateFn = () => {
   return setupComplete ? inject(Router).parseUrl('/') : true;
 };
 
-const requireWeightTracking: CanActivateFn = () =>
-  inject(PetData).pet().tracking.includes('weight') ||
-  inject(Router).parseUrl('/');
-
 export const routes: Routes = [
   { path: '', component: DashboardPage, canActivate: [requireSetup] },
+  { path: 'welcome', component: AuthPage, data: { authMode: 'welcome' } },
+  { path: 'login', component: AuthPage, data: { authMode: 'login' } },
+  { path: 'register', component: AuthPage, data: { authMode: 'register' } },
   { path: 'setup', component: PetCustomizationPage, canActivate: [requireFirstSetup], data: { firstSetup: true } },
-  { path: 'weight', component: WeightPage, canActivate: [requireSetup, requireWeightTracking] },
+  { path: 'weight', component: WeightPage, canActivate: [requireSetup] },
   { path: 'records/new', component: RecordEntryPage, canActivate: [requireSetup] },
   { path: 'food-diary', component: FoodDiaryPage, canActivate: [requireSetup] },
   {

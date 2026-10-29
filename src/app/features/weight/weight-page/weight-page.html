@@ -106,11 +106,16 @@
   <section class="history-section">
     <div class="card-heading history-heading">
       <h2>{{ 'weight.history' | translate }}</h2>
-      @if (weightEntries().length > 3) {
-        <button class="text-button" type="button" (click)="toggleHistory()">
-          {{ (showAllHistory() ? 'weight.showLess' : 'weight.viewAll') | translate }}
+      <div class="history-actions">
+        @if (weightEntries().length > 3) {
+          <button class="text-button" type="button" (click)="toggleHistory()">
+            {{ (showAllHistory() ? 'weight.showLess' : 'weight.viewAll') | translate }}
+          </button>
+        }
+        <button class="text-button" type="button" (click)="openNewEntry()">
+          {{ 'weight.addNew' | translate }}
         </button>
-      }
+      </div>
     </div>
 
     @if (formOpen()) {
@@ -175,10 +180,4 @@
     }
   </section>
 
-  <button
-    class="add-button"
-    type="button"
-    (click)="openNewEntry()"
-    [attr.aria-label]="'weight.addEntry' | translate"
-  >+</button>
 </main>

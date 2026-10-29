@@ -6,6 +6,36 @@
     "switchToSoft": "Switch to soft theme",
     "switchToDark": "Switch to dark theme"
   },
+  "auth": {
+    "back": "Back",
+    "welcomeCopy": "The care your best friend deserves,",
+    "welcomeHighlight": "in the palm of your hand.",
+    "getStarted": "Get started",
+    "haveAccount": "I already have an account",
+    "madeWith": "Made with ♥ for pet lovers",
+    "registerTitle": "Create your account",
+    "registerIntro": "Join our caring community.",
+    "loginTitle": "Welcome back",
+    "loginIntro": "Sign in to keep caring for the ones you love.",
+    "fullName": "Full name",
+    "namePlaceholder": "What should we call you?",
+    "email": "Email",
+    "emailPlaceholder": "you@email.com",
+    "password": "Password",
+    "passwordPlaceholder": "At least 8 characters",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "acceptTerms": "I accept the Terms of Use and Privacy Policy.",
+    "forgotPassword": "Forgot password?",
+    "registerAction": "Sign up",
+    "loginAction": "Sign in",
+    "orContinueWith": "Or sign up with",
+    "alreadyHaveAccount": "Already have an account?",
+    "noAccount": "Don't have an account yet?",
+    "socialUnavailable": "Social sign-up will be available after integration.",
+    "apiNotConnected": "The screen is ready. Sign-up and sign-in will connect to the API when it becomes available.",
+    "continueWithoutAccount": "Continue without an account"
+  },
   "dashboard": {
     "weightLoss": "WEIGHT LOSS",
     "weightEvolution": "WEIGHT PROGRESS",
@@ -43,7 +73,7 @@
     "chooseRecordType": "Choose a record type to add"
   },
   "foodDiary": {
-    "title": "Food Diary",
+    "title": "General History",
     "back": "Back to dashboard",
     "monthView": "View month",
     "weekView": "Back to week",
@@ -53,7 +83,19 @@
     "totalToday": "Daily total",
     "remaining": "Goal remaining",
     "records": "Entries",
-    "noMeals": "No food recorded for this day."
+    "noRecords": "No entries recorded for this period.",
+    "filters": "Filter records",
+    "all": "All",
+    "glucoseTrend": "Glucose trend",
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "monthly": "Monthly",
+    "glucoseChart": "Blood glucose trend chart",
+    "noGlucoseData": "Add blood glucose entries to see the trend.",
+    "noCalorieGoal": "Set a daily goal in the profile to track calories.",
+    "recentRecords": "Recent records",
+    "today": "Today",
+    "yesterday": "Yesterday"
   },
   "questionnaire": {
     "title": "About your pet",
@@ -93,7 +135,11 @@
   },
   "navigation": {
     "label": "Main navigation",
+    "home": "Home",
+    "history": "History",
+    "food": "Food",
     "nutrition": "Nutrition",
+    "records": "Records",
     "weight": "Weight",
     "foods": "Foods",
     "profile": "Profile"
@@ -120,6 +166,7 @@
     "chartDescription": "Chart showing your pet's weight progress",
     "noHistory": "No weight entries yet.",
     "history": "History",
+    "addNew": "+ New",
     "showLess": "Show Less",
     "viewAll": "View All",
     "entryForm": "Weight entry form",
@@ -228,7 +275,7 @@
     "weightProgress": "Pet weight progress",
     "dailyCalories": "Daily calorie summary",
     "mealHistory": "Meal history",
-    "addRecord": "Add a nutrition record"
+    "addRecord": "Add a record"
   },
   "customization": {
     "eyebrow": "Health profile",
@@ -257,6 +304,7 @@
     "insulin": "Insulin",
     "medication": "Medication",
     "food": "Food",
+    "weight": "Weight",
     "glucoseValue": "Blood glucose value",
     "insulinDose": "Insulin dose",
     "units": "units",
@@ -279,6 +327,7 @@
     "noEnabledTypes": "There are no active record types in this profile.",
     "noFoods": "Add a food before recording a meal.",
     "manageFoods": "Go to Foods",
+    "foodSaved": "Food saved.",
     "back": "Back to home"
   },
   "language": {

@@ -32,13 +32,29 @@ describe('App', () => {
   it('should provide routes for each section in the navigation', () => {
     expect(routes.map(({ path }) => path)).toEqual([
       '',
+      'welcome',
+      'login',
+      'register',
       'setup',
       'weight',
       'records/new',
+      'food-diary',
       'foods',
       'profile',
       'profile/customization',
       '**',
     ]);
+  });
+
+  it('should expose welcome, login, and registration as separate public screens', () => {
+    expect(routes.find(({ path }) => path === 'welcome')?.data).toEqual({
+      authMode: 'welcome',
+    });
+    expect(routes.find(({ path }) => path === 'login')?.data).toEqual({
+      authMode: 'login',
+    });
+    expect(routes.find(({ path }) => path === 'register')?.data).toEqual({
+      authMode: 'register',
+    });
   });
 });
