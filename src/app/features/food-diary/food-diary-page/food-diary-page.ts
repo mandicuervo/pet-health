@@ -2,6 +2,7 @@ import { DecimalPipe, DOCUMENT } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
+import { PageHeader } from '../../../core/components/page-header/page-header';
 import { Food, FoodCategory } from '../../../core/models/food.model';
 import { HealthEntry } from '../../../core/models/health-entry.model';
 import { MealEvent } from '../../../core/models/meal-event.model';
@@ -56,7 +57,7 @@ interface WeightPoint {
 }
 
 @Component({
-  imports: [DecimalPipe, RouterLink, TranslatePipe],
+  imports: [DecimalPipe, PageHeader, RouterLink, TranslatePipe],
   selector: 'app-food-diary-page',
   styleUrl: './food-diary-page.scss',
   templateUrl: './food-diary-page.html',
@@ -173,8 +174,7 @@ export class FoodDiaryPage {
   readonly selectedDayCalories = computed(() =>
     this.records()
       .filter(
-        (record) =>
-          record.dateKey === this.selectedDate() && record.foodCategory !== undefined,
+        (record) => record.dateKey === this.selectedDate() && record.foodCategory !== undefined,
       )
       .reduce((total, record) => total + (record.calories ?? 0), 0),
   );
@@ -186,14 +186,15 @@ export class FoodDiaryPage {
   });
   readonly remainingCalories = computed<number | undefined>(() => {
     const target = this.pet().dailyKcalTarget;
-    return target === undefined
-      ? undefined
-      : Math.max(0, target - this.selectedDayCalories());
+    return target === undefined ? undefined : Math.max(0, target - this.selectedDayCalories());
   });
 
   readonly glucosePoints = computed<GlucosePoint[]>(() => {
-    const points = this.trendPeriod() === 'week' ? this.weekGlucosePoints() : this.monthGlucosePoints();
-    const values = points.map((point) => point.value).filter((value): value is number => value !== undefined);
+    const points =
+      this.trendPeriod() === 'week' ? this.weekGlucosePoints() : this.monthGlucosePoints();
+    const values = points
+      .map((point) => point.value)
+      .filter((value): value is number => value !== undefined);
     if (values.length === 0) {
       return [];
     }
@@ -210,8 +211,7 @@ export class FoodDiaryPage {
 
     return points.map((point, index) => {
       const x = 20 + slotWidth * index + slotWidth / 2;
-      const normalized =
-        point.value === undefined ? 0 : (point.value - domainMin) / domainRange;
+      const normalized = point.value === undefined ? 0 : (point.value - domainMin) / domainRange;
       const y = chartBottom - normalized * chartHeight;
       const barHeight = point.value === undefined ? 0 : Math.max(4, normalized * chartHeight);
       return { label: point.label, value: point.value ?? 0, x, y, barHeight };
@@ -258,8 +258,7 @@ export class FoodDiaryPage {
       y:
         point.value === undefined
           ? chartBottom
-          : chartBottom -
-            ((point.value - domainMinimum) / domainRange) * (chartBottom - chartTop),
+          : chartBottom - ((point.value - domainMinimum) / domainRange) * (chartBottom - chartTop),
     }));
   });
 
@@ -419,21 +418,29 @@ export class FoodDiaryPage {
     if (key === yesterday) {
       return 'foodDiary.yesterday';
     }
-    return date.toLocaleDateString(this.locale(), { weekday: 'long', day: 'numeric', month: 'long' });
+    return date.toLocaleDateString(this.locale(), {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+    });
   }
 
   private weekGlucosePoints(): { label: string; value?: number }[] {
     return this.weekDates().map((date) => {
-      const entries = this.petData.healthEntries().filter(
-        (entry) =>
-          entry.petId === this.pet().id &&
-          entry.type === 'bloodGlucose' &&
-          localDateKey(new Date(entry.measuredAt)) === date.key,
-      );
+      const entries = this.petData
+        .healthEntries()
+        .filter(
+          (entry) =>
+            entry.petId === this.pet().id &&
+            entry.type === 'bloodGlucose' &&
+            localDateKey(new Date(entry.measuredAt)) === date.key,
+        );
       const value =
         entries.length > 0
-          ? entries.reduce((sum, entry) => sum + (entry.type === 'bloodGlucose' ? entry.valueMgDl : 0), 0) /
-            entries.length
+          ? entries.reduce(
+              (sum, entry) => sum + (entry.type === 'bloodGlucose' ? entry.valueMgDl : 0),
+              0,
+            ) / entries.length
           : undefined;
       return { label: date.weekday, value };
     });
@@ -444,16 +451,20 @@ export class FoodDiaryPage {
     return Array.from({ length: 6 }, (_, index) => {
       const month = new Date(selected.getFullYear(), selected.getMonth() - 5 + index, 1, 12);
       const key = localDateKey(month).slice(0, 7);
-      const entries = this.petData.healthEntries().filter(
-        (entry) =>
-          entry.petId === this.pet().id &&
-          entry.type === 'bloodGlucose' &&
-          localDateKey(new Date(entry.measuredAt)).startsWith(key),
-      );
+      const entries = this.petData
+        .healthEntries()
+        .filter(
+          (entry) =>
+            entry.petId === this.pet().id &&
+            entry.type === 'bloodGlucose' &&
+            localDateKey(new Date(entry.measuredAt)).startsWith(key),
+        );
       const value =
         entries.length > 0
-          ? entries.reduce((sum, entry) => sum + (entry.type === 'bloodGlucose' ? entry.valueMgDl : 0), 0) /
-            entries.length
+          ? entries.reduce(
+              (sum, entry) => sum + (entry.type === 'bloodGlucose' ? entry.valueMgDl : 0),
+              0,
+            ) / entries.length
           : undefined;
       return {
         label: month.toLocaleDateString(this.locale(), { month: 'short' }),

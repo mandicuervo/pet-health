@@ -1,6 +1,12 @@
 <main class="foods-shell">
-  <header class="page-header">
-    <h1>{{ 'foods.title' | translate }}</h1>
+  <app-page-header
+    [eyebrowText]="pet().name"
+    titleKey="foods.title"
+    descriptionKey="pages.foodsDescription"
+    backLink="/"
+    backLabelKey="pages.backHome"
+    [hasActions]="true"
+  >
     <button
       class="icon-button search-button"
       type="button"
@@ -13,7 +19,7 @@
         <path d="m15.5 15.5 4.2 4.2" />
       </svg>
     </button>
-  </header>
+  </app-page-header>
 
   @if (searchOpen()) {
     <label class="search-field">
@@ -35,7 +41,12 @@
     <div class="plan-heading">
       <div>
         <h2>{{ 'foods.dailyPlan' | translate }}</h2>
-        <p>{{ 'foods.petPlanDetails' | translate: { name: pet().name, lifeStage: (lifeStageKey() | translate) } }}</p>
+        <p>
+          {{
+            'foods.petPlanDetails'
+              | translate: { name: pet().name, lifeStage: (lifeStageKey() | translate) }
+          }}
+        </p>
       </div>
       <button class="plan-edit-button" type="button" (click)="togglePlanForm()">
         {{ 'foods.editPlan' | translate }}
@@ -47,26 +58,52 @@
         <label>
           <span>{{ 'foods.morning' | translate }}</span>
           <span class="plan-input">
-            <input name="morning" type="number" min="0" max="1000" step="1" [value]="dailyPlan().morningGrams" required />
+            <input
+              name="morning"
+              type="number"
+              min="0"
+              max="1000"
+              step="1"
+              [value]="dailyPlan().morningGrams"
+              required
+            />
             <small>{{ 'foods.gramsShort' | translate }}</small>
           </span>
         </label>
         <label>
           <span>{{ 'foods.afternoon' | translate }}</span>
           <span class="plan-input">
-            <input name="afternoon" type="number" min="0" max="1000" step="1" [value]="dailyPlan().afternoonGrams" required />
+            <input
+              name="afternoon"
+              type="number"
+              min="0"
+              max="1000"
+              step="1"
+              [value]="dailyPlan().afternoonGrams"
+              required
+            />
             <small>{{ 'foods.gramsShort' | translate }}</small>
           </span>
         </label>
         <label>
           <span>{{ 'foods.night' | translate }}</span>
           <span class="plan-input">
-            <input name="night" type="number" min="0" max="1000" step="1" [value]="dailyPlan().nightGrams" required />
+            <input
+              name="night"
+              type="number"
+              min="0"
+              max="1000"
+              step="1"
+              [value]="dailyPlan().nightGrams"
+              required
+            />
             <small>{{ 'foods.gramsShort' | translate }}</small>
           </span>
         </label>
         <div class="plan-actions">
-          <button class="secondary-button" type="button" (click)="togglePlanForm()">{{ 'foods.cancel' | translate }}</button>
+          <button class="secondary-button" type="button" (click)="togglePlanForm()">
+            {{ 'foods.cancel' | translate }}
+          </button>
           <button class="primary-button" type="submit">{{ 'foods.save' | translate }}</button>
         </div>
       </form>
@@ -109,11 +146,19 @@
     }
 
     @if (pendingDelete(); as foodToDelete) {
-      <section class="delete-confirmation" role="alertdialog" [attr.aria-label]="'foods.confirmDelete' | translate: { name: foodToDelete.name }">
+      <section
+        class="delete-confirmation"
+        role="alertdialog"
+        [attr.aria-label]="'foods.confirmDelete' | translate: { name: foodToDelete.name }"
+      >
         <p>{{ 'foods.confirmDelete' | translate: { name: foodToDelete.name } }}</p>
         <div>
-          <button class="secondary-button" type="button" (click)="cancelDelete()">{{ 'foods.cancel' | translate }}</button>
-          <button class="delete-button" type="button" (click)="confirmDelete()">{{ 'foods.deleteFood' | translate }}</button>
+          <button class="secondary-button" type="button" (click)="cancelDelete()">
+            {{ 'foods.cancel' | translate }}
+          </button>
+          <button class="delete-button" type="button" (click)="confirmDelete()">
+            {{ 'foods.deleteFood' | translate }}
+          </button>
         </div>
       </section>
     }
@@ -123,16 +168,36 @@
         @for (food of foods(); track food.id) {
           <article class="food-card">
             <div class="food-main">
-              <span class="food-icon" [class.dry]="food.category === 'dryFood'" [class.wet]="food.category === 'wetFood'" [class.treat]="food.category === 'treat'" aria-hidden="true">
+              <span
+                class="food-icon"
+                [class.dry]="food.category === 'dryFood'"
+                [class.wet]="food.category === 'wetFood'"
+                [class.treat]="food.category === 'treat'"
+                aria-hidden="true"
+              >
                 @switch (food.category) {
                   @case ('dryFood') {
-                    <svg viewBox="0 0 24 24"><path d="M4 11h16l-1.7 6.2a2 2 0 0 1-1.9 1.5H7.6a2 2 0 0 1-1.9-1.5L4 11Z" /><path d="M3 9h18M8 6c0-1 1-1.5 1-2m4 2c0-1 1-1.5 1-2" /></svg>
+                    <svg viewBox="0 0 24 24">
+                      <path d="M4 11h16l-1.7 6.2a2 2 0 0 1-1.9 1.5H7.6a2 2 0 0 1-1.9-1.5L4 11Z" />
+                      <path d="M3 9h18M8 6c0-1 1-1.5 1-2m4 2c0-1 1-1.5 1-2" />
+                    </svg>
                   }
                   @case ('wetFood') {
-                    <svg viewBox="0 0 24 24"><path d="M3 12c2-3.5 5-5 8-5 4 0 7 2 10 5-3 3-6 5-10 5-3 0-6-1.5-8-5Z" /><circle cx="14" cy="10" r="1" /><path d="M3 12 1.5 9m1.5 3-1.5 3" /></svg>
+                    <svg viewBox="0 0 24 24">
+                      <path d="M3 12c2-3.5 5-5 8-5 4 0 7 2 10 5-3 3-6 5-10 5-3 0-6-1.5-8-5Z" />
+                      <circle cx="14" cy="10" r="1" />
+                      <path d="M3 12 1.5 9m1.5 3-1.5 3" />
+                    </svg>
                   }
                   @case ('treat') {
-                    <svg viewBox="0 0 24 24"><path d="M12 3.5c-1.7-1.5-4.8-.5-4.8 2a3.5 3.5 0 0 0-2.8 3.6c-1.8 1.8-1.2 4.7.7 5.6-.4 2.5 1.8 4.5 4.3 3.7 1.5 1.7 4.2 1.2 5-.7 2.4.1 4-2.2 3-4.3 1.4-2 .4-4.8-1.8-5.3.2-2.7-1.8-4.3-3.6-3.8Z" /><circle cx="9" cy="10" r="1" /><circle cx="15" cy="10" r="1" /><circle cx="12" cy="14" r="1.2" /></svg>
+                    <svg viewBox="0 0 24 24">
+                      <path
+                        d="M12 3.5c-1.7-1.5-4.8-.5-4.8 2a3.5 3.5 0 0 0-2.8 3.6c-1.8 1.8-1.2 4.7.7 5.6-.4 2.5 1.8 4.5 4.3 3.7 1.5 1.7 4.2 1.2 5-.7 2.4.1 4-2.2 3-4.3 1.4-2 .4-4.8-1.8-5.3.2-2.7-1.8-4.3-3.6-3.8Z"
+                      />
+                      <circle cx="9" cy="10" r="1" />
+                      <circle cx="15" cy="10" r="1" />
+                      <circle cx="12" cy="14" r="1.2" />
+                    </svg>
                   }
                 }
               </span>
@@ -148,13 +213,19 @@
                 (click)="toggleFoodMenu(food.id)"
                 [attr.aria-label]="'foods.actionsFor' | translate: { name: food.name }"
                 [attr.aria-expanded]="openMenuId() === food.id"
-              >⋮</button>
+              >
+                ⋮
+              </button>
             </div>
 
             @if (openMenuId() === food.id) {
               <div class="food-menu">
-                <button type="button" (click)="openFoodForm(food)">{{ 'foods.editFood' | translate }}</button>
-                <button type="button" (click)="requestDelete(food)">{{ 'foods.deleteFood' | translate }}</button>
+                <button type="button" (click)="openFoodForm(food)">
+                  {{ 'foods.editFood' | translate }}
+                </button>
+                <button type="button" (click)="requestDelete(food)">
+                  {{ 'foods.deleteFood' | translate }}
+                </button>
               </div>
             }
 
@@ -163,9 +234,15 @@
                 <span>{{ 'foods.density' | translate }}</span>
                 <strong>
                   @if (food.kcalPerUnit !== undefined) {
-                    {{ 'foods.caloriesPerUnitShort' | translate: { amount: (food.kcalPerUnit | number: '1.0-1') } }}
+                    {{
+                      'foods.caloriesPerUnitShort'
+                        | translate: { amount: (food.kcalPerUnit | number: '1.0-1') }
+                    }}
                   } @else {
-                    {{ 'foods.caloriesPer100gShort' | translate: { amount: (food.kcalPerKg / 10 | number: '1.0-1') } }}
+                    {{
+                      'foods.caloriesPer100gShort'
+                        | translate: { amount: (food.kcalPerKg / 10 | number: '1.0-1') }
+                    }}
                   }
                 </strong>
               </div>
@@ -181,7 +258,9 @@
                   <strong>{{ food.proteinPercent | number: '1.0-1' }}%</strong>
                 </div>
               }
-              <button class="edit-link" type="button" (click)="openFoodForm(food)">{{ 'foods.edit' | translate }}</button>
+              <button class="edit-link" type="button" (click)="openFoodForm(food)">
+                {{ 'foods.edit' | translate }}
+              </button>
             </div>
           </article>
         }

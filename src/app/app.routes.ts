@@ -26,6 +26,7 @@ export const routes: Routes = [
   { path: 'login', component: AuthPage, data: { authMode: 'login' } },
   { path: 'register', component: AuthPage, data: { authMode: 'register' } },
   { path: 'setup', component: PetCustomizationPage, canActivate: [requireFirstSetup], data: { firstSetup: true } },
+  { path: 'pets/new', component: PetCustomizationPage, data: { firstSetup: true, serverPet: true } },
   { path: 'weight', component: WeightPage, canActivate: [requireSetup] },
   { path: 'records/new', component: RecordEntryPage, canActivate: [requireSetup] },
   { path: 'food-diary', component: FoodDiaryPage, canActivate: [requireSetup] },

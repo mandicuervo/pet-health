@@ -27,62 +27,6 @@
   background: var(--app-background);
 }
 
-.page-header {
-  position: relative;
-  display: grid;
-  justify-items: center;
-  padding: 8px 6px 25px;
-  text-align: center;
-
-  h1 {
-    max-width: 330px;
-    margin: 14px 0 0;
-    color: var(--page-ink);
-    font-size: 25px;
-    font-weight: 850;
-    line-height: 1.17;
-  }
-}
-
-.back-button {
-  position: absolute;
-  top: 0;
-  left: 0;
-  color: var(--page-muted);
-  font-size: 29px;
-  line-height: 1;
-  text-decoration: none;
-}
-
-.pet-avatar {
-  display: grid;
-  width: 62px;
-  height: 62px;
-  place-items: center;
-  border: 2px solid #fff;
-  border-radius: 21px;
-  background: #f4e7fc;
-  box-shadow: var(--page-shadow);
-  font-size: 35px;
-}
-
-.eyebrow {
-  margin: 16px 0 0;
-  color: #b48acb;
-  font-size: 14px;
-  font-weight: 850;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-.intro {
-  max-width: 320px;
-  margin: 9px 0 0;
-  color: var(--page-muted);
-  font-size: 14px;
-  line-height: 1.5;
-}
-
 .mode-list {
   display: grid;
   gap: 12px;
@@ -145,7 +89,9 @@
   color: var(--page-ink);
   text-align: left;
   cursor: pointer;
-  transition: border-color 150ms ease, transform 150ms ease;
+  transition:
+    border-color 150ms ease,
+    transform 150ms ease;
 
   &:active {
     transform: scale(0.99);

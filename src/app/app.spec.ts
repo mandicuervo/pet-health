@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
 import { provideTranslateService } from '@ngx-translate/core';
 import { App } from './app';
 import { DashboardPage } from './features/dashboard/dashboard-page/dashboard-page';
@@ -11,6 +12,7 @@ describe('App', () => {
       imports: [App],
       providers: [
         provideRouter([]),
+        provideHttpClient(),
         provideTranslateService({ lang: 'en', fallbackLang: 'en' }),
       ],
     })
@@ -36,6 +38,7 @@ describe('App', () => {
       'login',
       'register',
       'setup',
+      'pets/new',
       'weight',
       'records/new',
       'food-diary',

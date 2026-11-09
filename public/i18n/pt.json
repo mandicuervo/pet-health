@@ -2,6 +2,12 @@
   "app": {
     "name": "Saúde Pet"
   },
+  "petSwitcher": {
+    "open": "Trocar pet. Pet atual: {{name}}",
+    "title": "Escolher pet",
+    "close": "Fechar seletor de pets",
+    "addPet": "Cadastrar outro pet"
+  },
   "theme": {
     "switchToSoft": "Ativar tema suave",
     "switchToDark": "Ativar tema escuro"
@@ -33,10 +39,24 @@
     "alreadyHaveAccount": "Já tem uma conta?",
     "noAccount": "Ainda não tem uma conta?",
     "socialUnavailable": "Cadastro por redes sociais ficará disponível depois da integração.",
+    "continueWithGoogle": "Continuar com Google",
+    "googleSignInCancelled": "A entrada com Google foi cancelada.",
+    "googleDomainNotAuthorized": "Este domínio não está autorizado no Firebase Authentication.",
+    "googleProviderNotEnabled": "Ative o provedor Google no Firebase Authentication e tente novamente.",
+    "googlePopupBlocked": "O navegador bloqueou a janela do Google. Permita pop-ups e tente novamente.",
+    "googleSignInError": "Não foi possível entrar com Google. Tente novamente.",
+    "apiTokenValidationError": "O Google autenticou sua conta, mas a API não validou o token. Verifique se a API está iniciada com a credencial do Firebase Admin.",
     "apiNotConnected": "A tela está pronta. O cadastro e o login serão conectados à API quando ela estiver disponível.",
     "continueWithoutAccount": "Continuar sem conta"
   },
   "dashboard": {
+    "setupTitle": "Configure o acompanhamento de {{name}}",
+    "setupDescription": "Preencha os dados iniciais para começar a registrar e acompanhar a evolução",
+    "setupWeight": "Registrar o peso inicial",
+    "setupFood": "Cadastrar um alimento",
+    "setupMeal": "Registrar a primeira refeição",
+    "setupTaskComplete": "{{task}} concluído",
+    "setupTaskPending": "Registrar: {{task}}",
     "weightLoss": "PERDER PESO",
     "weightEvolution": "EVOLUÇÃO",
     "weightChangeSinceStart": "{{value}} kg desde o início",
@@ -145,8 +165,10 @@
     "profile": "Perfil"
   },
   "pages": {
+    "backHome": "Voltar ao painel",
     "weightDescription": "Acompanhe o peso e a evolução do seu pet ao longo do tempo.",
     "foodsDescription": "Gerencie os alimentos e as refeições do plano nutricional do seu pet.",
+    "foodDiaryDescription": "Consulte o histórico de alimentação e os registros do seu pet.",
     "profileDescription": "Consulte e gerencie o perfil e as preferências do seu pet."
   },
   "weight": {
@@ -230,6 +252,7 @@
     "senior": "Sênior"
   },
   "profile": {
+    "eyebrow": "Perfil do pet",
     "editProfile": "Editar perfil do pet",
     "petSummary": "Resumo do perfil do pet",
     "profileImage": "Foto de {{name}}",
@@ -279,6 +302,7 @@
   },
   "customization": {
     "eyebrow": "Perfil de saúde",
+    "newPetTitle": "Vamos conhecer seu pet",
     "title": "Como está a saúde de {{name}}?",
     "intro": "Escolha os acompanhamentos que fazem sentido para seu pet. Você pode selecionar mais de uma opção.",
     "diabetes": "Diabetes",
@@ -294,7 +318,8 @@
     "profileLink": "Personalizar acompanhamentos",
     "profileLinkDescription": "Escolha os registros e cuidados do seu pet",
     "selectAtLeastOne": "Selecione pelo menos um acompanhamento.",
-    "saveError": "Não foi possível salvar. Confira o perfil do pet e tente novamente."
+    "saveError": "Não foi possível salvar. Confira o perfil do pet e tente novamente.",
+    "apiSaveError": "Não foi possível salvar o pet no servidor. Verifique se a API e o MongoDB estão iniciados e tente novamente."
   },
   "records": {
     "title": "Novo registro",

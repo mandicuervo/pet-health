@@ -1,29 +1,31 @@
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
-import {
-  PetCondition,
-  PetProfileMode,
-  PetTracking,
-} from '../../../core/models/pet.model';
+import { PageHeader } from '../../../core/components/page-header/page-header';
+import { PetApi } from '../../../core/services/pet-api';
+import { PetCondition, PetProfileMode, PetTracking } from '../../../core/models/pet.model';
 import { PetData } from '../../../core/services/pet-data';
 import { localDateKey } from '../../../core/utils/date';
 
 type CustomizationMode = PetProfileMode;
 
 @Component({
-  imports: [RouterLink, TranslatePipe],
+  imports: [PageHeader, RouterLink, TranslatePipe],
   selector: 'app-pet-customization-page',
   styleUrl: './pet-customization-page.scss',
   templateUrl: './pet-customization-page.html',
 })
 export class PetCustomizationPage {
   private readonly petData = inject(PetData);
+  private readonly petApi = inject(PetApi);
   private readonly router = inject(Router);
   readonly pet = this.petData.pet;
-  readonly firstSetup = inject(ActivatedRoute).snapshot.data['firstSetup'] === true;
+  private readonly routeData = inject(ActivatedRoute).snapshot.data;
+  readonly firstSetup = this.routeData['firstSetup'] === true;
+  readonly serverPet = this.routeData['serverPet'] === true;
   readonly selectedModes = signal<Set<CustomizationMode>>(new Set());
   readonly errorKey = signal<string | undefined>(undefined);
+  readonly saving = signal(false);
   readonly currentDate = localDateKey(new Date());
 
   constructor() {
@@ -114,34 +116,84 @@ export class PetCustomizationPage {
       }
       species = speciesValue;
     }
-    try {
-      this.petData.savePet({
-        ...this.pet(),
-        ...(this.firstSetup
-          ? {
-              name: String(data.get('name')),
-              species,
-              birthDate: String(data.get('birthDate')),
-            }
-          : {}),
-        conditions,
-        tracking: [...tracking],
-        profileModes: [...selected],
+    const pet = {
+      ...(this.firstSetup
+        ? {
+            ...this.pet(),
+            name: String(data.get('name')),
+            species,
+            birthDate: String(data.get('birthDate')),
+            breed: undefined,
+            photoUrl: undefined,
+            activityLevel: 'moderate' as const,
+            nutritionGoal: 'maintain' as const,
+            targetWeightKg: undefined,
+            dailyKcalTarget: undefined,
+          }
+        : this.pet()),
+      conditions,
+      tracking: [...tracking],
+      profileModes: [...selected],
+    };
+
+    if (this.serverPet) {
+      this.saving.set(true);
+      this.petApi.createPet(pet).subscribe({
+        next: (createdPet) => {
+          this.petData.addPetFromServer(createdPet);
+          this.finishSave();
+          this.saving.set(false);
+        },
+        error: () => {
+          this.errorKey.set('customization.apiSaveError');
+          this.saving.set(false);
+        },
       });
-      if (this.firstSetup) {
-        this.petData.completeSetup();
-        void this.router.navigateByUrl('/');
-      } else {
-        void this.router.navigateByUrl('/profile');
-      }
-    } catch (error) {
-      if (
-        !(error instanceof Error) ||
-        error.message !== 'Pet profile details are invalid'
-      ) {
-        throw error;
-      }
-      this.errorKey.set('customization.saveError');
+      return;
     }
+
+    if (this.firstSetup) {
+      try {
+        this.petData.savePet(pet);
+        this.finishSave();
+      } catch (error) {
+        this.handleSaveError(error);
+      }
+      return;
+    }
+
+    this.saving.set(true);
+    this.petApi.updatePet(pet).subscribe({
+      next: (updatedPet) => {
+        try {
+          this.petData.savePet(updatedPet);
+          this.finishSave();
+        } catch (error) {
+          this.handleSaveError(error);
+        } finally {
+          this.saving.set(false);
+        }
+      },
+      error: () => {
+        this.errorKey.set('customization.apiSaveError');
+        this.saving.set(false);
+      },
+    });
+  }
+
+  private finishSave(): void {
+    if (this.firstSetup) {
+      this.petData.completeSetup();
+      void this.router.navigateByUrl('/');
+    } else {
+      void this.router.navigateByUrl('/profile');
+    }
+  }
+
+  private handleSaveError(error: unknown): void {
+    if (!(error instanceof Error) || error.message !== 'Pet profile details are invalid') {
+      throw error;
+    }
+    this.errorKey.set('customization.saveError');
   }
 }

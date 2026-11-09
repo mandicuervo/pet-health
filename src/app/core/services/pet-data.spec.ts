@@ -5,19 +5,26 @@ import { PetData } from './pet-data';
 describe('PetData', () => {
   let service: PetData;
 
+  function clearPetStorage(): void {
+    for (let index = window.localStorage.length - 1; index >= 0; index -= 1) {
+      const key = window.localStorage.key(index);
+      if (key?.startsWith('pet-health-')) {
+        window.localStorage.removeItem(key);
+      }
+    }
+  }
+
   beforeEach(() => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date(2026, 9, 15, 17, 0));
-    window.localStorage.removeItem('pet-health-data');
-    window.localStorage.removeItem('pet-health-setup-complete');
+    clearPetStorage();
     TestBed.configureTestingModule({});
     service = TestBed.inject(PetData);
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
-    window.localStorage.removeItem('pet-health-data');
-    window.localStorage.removeItem('pet-health-setup-complete');
+    clearPetStorage();
     vi.useRealTimers();
   });
 
@@ -115,6 +122,49 @@ describe('PetData', () => {
       doseUnit: 'tablet',
     });
     expect(service.weightEntries()).toHaveLength(6);
+  });
+
+  it('should keep health data separate when switching between pets', () => {
+    const firstPet = service.pet();
+    const secondPet = {
+      ...firstPet,
+      id: 'pet-2',
+      name: 'Falafel',
+    };
+
+    service.addPetFromServer(secondPet);
+    service.saveHealthEntry({
+      id: 'g-pet-2',
+      petId: secondPet.id,
+      type: 'bloodGlucose',
+      valueMgDl: 120,
+      measuredAt: '2026-10-15T17:00:00',
+    });
+
+    service.selectPet(firstPet.id);
+    expect(service.healthEntries()).toEqual([]);
+
+    service.selectPet(secondPet.id);
+    expect(service.healthEntries()).toHaveLength(1);
+    expect(service.healthEntries()[0].petId).toBe(secondPet.id);
+  });
+
+  it('should preserve local records when adopting the matching server pet', () => {
+    const localPet = { ...service.pet(), name: 'Falafel' };
+    service.savePet(localPet);
+    service.saveHealthEntry({
+      id: 'g-legacy',
+      petId: localPet.id,
+      type: 'bloodGlucose',
+      valueMgDl: 135,
+      measuredAt: '2026-10-15T17:00:00',
+    });
+
+    const serverPet = { ...localPet, id: 'mongo-pet-id' };
+    service.adoptLegacyPetFromServer(serverPet);
+
+    expect(service.pet().id).toBe('mongo-pet-id');
+    expect(service.healthEntries()[0].petId).toBe('mongo-pet-id');
   });
 
   it('should persist food diary quantities in grams', () => {

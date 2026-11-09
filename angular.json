@@ -64,7 +64,8 @@
               "buildTarget": "pet-health:build:production"
             },
             "development": {
-              "buildTarget": "pet-health:build:development"
+              "buildTarget": "pet-health:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

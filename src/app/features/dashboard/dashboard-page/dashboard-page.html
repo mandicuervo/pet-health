@@ -1,11 +1,7 @@
 <main class="dashboard-shell">
   <div class="dashboard">
     <header class="pet-header">
-      @if (pet().photoUrl) {
-        <img class="pet-avatar" [src]="pet().photoUrl" [alt]="'profile.profileImage' | translate: { name: pet().name }" />
-      } @else {
-        <div class="pet-avatar" aria-hidden="true">{{ pet().species === 'cat' ? '🐱' : '🐕' }}</div>
-      }
+      <app-pet-switcher />
       <div class="pet-heading">
         <h1>{{ pet().name }}</h1>
       </div>
@@ -31,6 +27,8 @@
         </svg>
       </button>
     </header>
+
+    <app-setup-reminder [petName]="pet().name" [tasks]="setupTasks()" />
 
     <section >
       <div class="pet-meta">

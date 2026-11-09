@@ -7,6 +7,11 @@ import { HealthEntry } from '../../../core/models/health-entry.model';
 import { localDateKey } from '../../../core/utils/date';
 import { PetData } from '../../../core/services/pet-data';
 import { Theme } from '../../../core/services/theme';
+import { PetSwitcher } from '../../../core/components/pet-switcher/pet-switcher';
+import {
+  SetupReminder,
+  type SetupTask,
+} from '../../../core/components/setup-reminder/setup-reminder';
 
 type LanguageCode = 'en' | 'pt' | 'es';
 
@@ -29,7 +34,7 @@ interface DashboardHealthRecord {
 }
 
 @Component({
-  imports: [DecimalPipe, RouterLink, TranslatePipe],
+  imports: [DecimalPipe, PetSwitcher, RouterLink, SetupReminder, TranslatePipe],
   selector: 'app-dashboard-page',
   styleUrl: './dashboard-page.scss',
   templateUrl: './dashboard-page.html',
@@ -75,7 +80,39 @@ export class DashboardPage {
   readonly latestGlucoseTime = computed(() =>
     this.formatTime(this.latestGlucose()?.measuredAt),
   );
+  readonly setupTasks = computed<SetupTask[]>(() => {
+    const tracking = this.pet().tracking;
+    const tasks: SetupTask[] = [];
 
+    if (tracking.includes('weight')) {
+      tasks.push({
+        key: 'dashboard.setupWeight',
+        path: '/weight',
+        complete: this.petData
+          .weightEntries()
+          .some((entry) => entry.petId === this.pet().id),
+      });
+    }
+
+    if (tracking.includes('food')) {
+      tasks.push(
+        {
+          key: 'dashboard.setupFood',
+          path: '/foods',
+          complete: this.petData.foods().length > 0,
+        },
+        {
+          key: 'dashboard.setupMeal',
+          path: '/records/new',
+          complete: this.petData
+            .mealEvents()
+            .some((event) => event.petId === this.pet().id),
+        },
+      );
+    }
+
+    return tasks;
+  });
   readonly records = computed<DashboardRecord[]>(() => {
     const meals = this.petData.mealEvents()
       .filter((event) => event.petId === this.pet().id)

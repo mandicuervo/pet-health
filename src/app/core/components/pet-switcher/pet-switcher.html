@@ -1,0 +1,65 @@
+<button
+  class="pet-avatar switcher-trigger"
+  type="button"
+  [attr.aria-label]="'petSwitcher.open' | translate: { name: pet().name }"
+  [attr.aria-haspopup]="'dialog'"
+  (click)="openSelector()"
+>
+  @if (pet().photoUrl) {
+    <img [src]="pet().photoUrl" [alt]="pet().name" />
+  } @else {
+    <span aria-hidden="true">{{ pet().species === 'cat' ? '🐱' : '🐕' }}</span>
+  }
+  @if (pets().length > 1) {
+    <span class="switcher-indicator" aria-hidden="true">⌄</span>
+  }
+</button>
+
+@if (open()) {
+  <div class="switcher-backdrop" (click)="closeSelector()">
+    <section
+      class="switcher-dialog"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-label]="'petSwitcher.title' | translate"
+      (click)="$event.stopPropagation()"
+    >
+      <header>
+        <h2>{{ 'petSwitcher.title' | translate }}</h2>
+        <button
+          type="button"
+          class="close-button"
+          [attr.aria-label]="'petSwitcher.close' | translate"
+          (click)="closeSelector()"
+        >×</button>
+      </header>
+
+      <div class="pet-list">
+        @for (option of pets(); track option.id) {
+          <button
+            type="button"
+            class="pet-option"
+            [class.selected]="option.id === pet().id"
+            [attr.aria-current]="option.id === pet().id ? 'true' : null"
+            (click)="selectPet(option)"
+          >
+            @if (option.photoUrl) {
+              <img [src]="option.photoUrl" [alt]="option.name" />
+            } @else {
+              <span class="option-avatar" aria-hidden="true">{{ option.species === 'cat' ? '🐱' : '🐕' }}</span>
+            }
+            <span>{{ option.name }}</span>
+            @if (option.id === pet().id) {
+              <span class="selected-mark" aria-hidden="true">✓</span>
+            }
+          </button>
+        }
+      </div>
+
+      <button type="button" class="add-pet-button" (click)="addPet()">
+        <span aria-hidden="true">＋</span>
+        {{ 'petSwitcher.addPet' | translate }}
+      </button>
+    </section>
+  </div>
+}

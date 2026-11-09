@@ -9,6 +9,8 @@ import { localDateKey } from '../utils/date';
 
 const STORAGE_KEY = 'pet-health-data';
 const SETUP_STORAGE_KEY = 'pet-health-setup-complete';
+const PETS_STORAGE_KEY = 'pet-health-pets';
+const ACTIVE_PET_STORAGE_KEY = 'pet-health-active-pet-id';
 const STORAGE_VERSION = 1;
 
 interface PersistedPetData {
@@ -107,6 +109,7 @@ export class PetData {
     tracking: ['weight', 'food'],
     profileModes: ['obesity'],
   });
+  private readonly _pets = signal<Pet[]>([]);
 
   private readonly _weightEntries = signal<WeightEntry[]>([
     { id: 'w1', petId: '1', date: '2026-09-10', weightKg: 6.4 },
@@ -178,6 +181,7 @@ export class PetData {
   private readonly _healthEntries = signal<HealthEntry[]>([]);
 
   readonly pet = this._pet.asReadonly();
+  readonly pets = this._pets.asReadonly();
   readonly weightEntries = this._weightEntries.asReadonly();
   readonly foods = this._foods.asReadonly();
   readonly dailyFoodPlan = this._dailyFoodPlan.asReadonly();
@@ -185,12 +189,132 @@ export class PetData {
   readonly healthEntries = this._healthEntries.asReadonly();
 
   constructor() {
-    this.restorePersistedData();
+    const activePetId = this.storage?.getItem(ACTIVE_PET_STORAGE_KEY);
+    this._pets.set(this.readSavedPets());
+    if (this._pets().length === 0) {
+      this.restorePersistedData();
+      this._pets.set([this._pet()]);
+      return;
+    }
+
+    const activePet =
+      this._pets().find((pet) => pet.id === activePetId) ?? this._pets()[0];
+    this._pet.set(activePet);
+    this.restorePetData(activePet);
   }
 
   completeSetup(): void {
     this.storage?.setItem(SETUP_STORAGE_KEY, 'true');
+    this.storage?.setItem(ACTIVE_PET_STORAGE_KEY, this._pet().id);
     this.setupComplete.set(true);
+  }
+
+  setPetsFromServer(pets: Pet[]): void {
+    this._pets.set(pets);
+    this.storage?.setItem(PETS_STORAGE_KEY, JSON.stringify(pets));
+
+    if (pets.length === 0) {
+      this.storage?.removeItem(SETUP_STORAGE_KEY);
+      this.setupComplete.set(false);
+      return;
+    }
+
+    this.storage?.setItem(SETUP_STORAGE_KEY, 'true');
+    this.setupComplete.set(true);
+    const savedActiveId = this.storage?.getItem(ACTIVE_PET_STORAGE_KEY);
+    const activePet =
+      pets.find((pet) => pet.id === savedActiveId) ?? pets[0];
+    this.selectPet(activePet.id);
+  }
+
+  addPetFromServer(pet: Pet): void {
+    this.persistData();
+    const pets = [...this._pets().filter((item) => item.id !== pet.id), pet];
+    this._pets.set(pets);
+    this.storage?.setItem(PETS_STORAGE_KEY, JSON.stringify(pets));
+    this._pet.set(pet);
+    this.resetPetData();
+    this.storage?.setItem(ACTIVE_PET_STORAGE_KEY, pet.id);
+    this.completeSetup();
+    this.persistData();
+  }
+
+  adoptLegacyPetFromServer(pet: Pet): void {
+    const localPet = this._pet();
+    this.persistData();
+    const saved =
+      this.storage?.getItem(this.petStorageKey(localPet.id)) ??
+      this.storage?.getItem(STORAGE_KEY);
+    let data: PersistedPetData | undefined;
+
+    if (saved) {
+      let value: unknown;
+      try {
+        value = JSON.parse(saved);
+      } catch {
+        throw new Error('Saved pet data is not valid JSON');
+      }
+      if (!isPersistedPetData(value)) {
+        throw new Error('Saved pet data has an unsupported or invalid format');
+      }
+      if (
+        value.pet.name === pet.name &&
+        value.pet.species === pet.species &&
+        value.pet.birthDate === pet.birthDate
+      ) {
+        data = {
+          ...value,
+          pet,
+          weightEntries: value.weightEntries.map((entry) => ({
+            ...entry,
+            petId: pet.id,
+          })),
+          mealEvents: value.mealEvents.map((entry) => ({
+            ...entry,
+            petId: pet.id,
+          })),
+          healthEntries: value.healthEntries.map((entry) => ({
+            ...entry,
+            petId: pet.id,
+          })),
+        };
+      }
+    }
+
+    const pets = [...this._pets().filter((item) => item.id !== pet.id), pet];
+    this._pets.set(pets);
+    this._pet.set(pet);
+    this.storage?.setItem(PETS_STORAGE_KEY, JSON.stringify(pets));
+    this.storage?.setItem(ACTIVE_PET_STORAGE_KEY, pet.id);
+    if (data) {
+      this._weightEntries.set(data.weightEntries);
+      this._foods.set(data.foods);
+      this._dailyFoodPlan.set(data.dailyFoodPlan);
+      this._mealEvents.set(data.mealEvents);
+      this._healthEntries.set(data.healthEntries);
+      this.persistData();
+    } else {
+      this.resetPetData();
+    }
+    this.completeSetup();
+  }
+
+  selectPet(petId: string): void {
+    const selectedPet = this._pets().find((pet) => pet.id === petId);
+    if (!selectedPet) {
+      throw new Error(`Pet ${petId} is not available for this account`);
+    }
+    if (this._pet().id === selectedPet.id) {
+      this._pet.set(selectedPet);
+      this.restorePetData(selectedPet);
+      this.storage?.setItem(ACTIVE_PET_STORAGE_KEY, selectedPet.id);
+      return;
+    }
+
+    this.persistData();
+    this._pet.set(selectedPet);
+    this.restorePetData(selectedPet);
+    this.storage?.setItem(ACTIVE_PET_STORAGE_KEY, selectedPet.id);
   }
 
   private readonly sortedWeightEntries = computed(() =>
@@ -273,10 +397,11 @@ export class PetData {
     this.persistData();
   }
 
-  savePet(pet: Pet): void {
+  savePet(pet: Pet, allowInitialId = false): void {
     const parsedBirthDate = new Date(`${pet.birthDate}T00:00:00`);
     if (
-      pet.id !== this._pet().id ||
+      (pet.id !== this._pet().id &&
+        (!allowInitialId || this.setupComplete())) ||
       !pet.name.trim() ||
       !/^\d{4}-\d{2}-\d{2}$/.test(pet.birthDate) ||
       localDateKey(parsedBirthDate) !== pet.birthDate ||
@@ -317,6 +442,15 @@ export class PetData {
     };
     this.persistData(normalizedPet);
     this._pet.set(normalizedPet);
+    this._pets.update((pets) => {
+      const existing = pets.some((item) => item.id === normalizedPet.id);
+      return existing
+        ? pets.map((item) =>
+            item.id === normalizedPet.id ? normalizedPet : item,
+          )
+        : [...pets, normalizedPet];
+    });
+    this.storage?.setItem(PETS_STORAGE_KEY, JSON.stringify(this._pets()));
   }
 
   saveFood(
@@ -455,8 +589,10 @@ export class PetData {
     this.persistData();
   }
 
-  private restorePersistedData(): void {
-    const saved = this.storage?.getItem(STORAGE_KEY);
+  private restorePersistedData(petId?: string): void {
+    const saved = petId
+      ? this.storage?.getItem(this.petStorageKey(petId))
+      : this.storage?.getItem(STORAGE_KEY);
     if (saved === null || saved === undefined) {
       return;
     }
@@ -480,6 +616,81 @@ export class PetData {
     this._healthEntries.set(value.healthEntries);
   }
 
+  private readSavedPets(): Pet[] {
+    const saved = this.storage?.getItem(PETS_STORAGE_KEY);
+    if (!saved) {
+      return [];
+    }
+
+    let value: unknown;
+    try {
+      value = JSON.parse(saved);
+    } catch {
+      throw new Error('Saved pet list is not valid JSON');
+    }
+    if (
+      !Array.isArray(value) ||
+      !value.every(
+        (pet) =>
+          isRecord(pet) &&
+          typeof pet['id'] === 'string' &&
+          typeof pet['name'] === 'string',
+      )
+    ) {
+      throw new Error('Saved pet list has an unsupported or invalid format');
+    }
+    return value as Pet[];
+  }
+
+  private restorePetData(pet: Pet): void {
+    const saved =
+      this.storage?.getItem(this.petStorageKey(pet.id)) ??
+      this.storage?.getItem(STORAGE_KEY);
+    if (!saved) {
+      this.resetPetData();
+      return;
+    }
+
+    let value: unknown;
+    try {
+      value = JSON.parse(saved);
+    } catch {
+      throw new Error('Saved pet data is not valid JSON');
+    }
+    if (!isPersistedPetData(value)) {
+      throw new Error('Saved pet data has an unsupported or invalid format');
+    }
+
+    if (value.pet.id !== pet.id) {
+      this.resetPetData();
+      this._pet.set(pet);
+      return;
+    }
+
+    this._pet.set(pet);
+    this._weightEntries.set(value.weightEntries);
+    this._foods.set(value.foods);
+    this._dailyFoodPlan.set(value.dailyFoodPlan);
+    this._mealEvents.set(value.mealEvents);
+    this._healthEntries.set(value.healthEntries);
+  }
+
+  private resetPetData(): void {
+    this._weightEntries.set([]);
+    this._foods.set([]);
+    this._dailyFoodPlan.set({
+      morningGrams: 0,
+      afternoonGrams: 0,
+      nightGrams: 0,
+    });
+    this._mealEvents.set([]);
+    this._healthEntries.set([]);
+  }
+
+  private petStorageKey(petId: string): string {
+    return `${STORAGE_KEY}:${petId}`;
+  }
+
   private persistData(pet: Pet = this._pet()): void {
     if (!this.storage) {
       return;
@@ -495,5 +706,6 @@ export class PetData {
       healthEntries: this._healthEntries(),
     };
     this.storage.setItem(STORAGE_KEY, JSON.stringify(data));
+    this.storage.setItem(this.petStorageKey(pet.id), JSON.stringify(data));
   }
 }

@@ -23,29 +23,23 @@
   max-width: 460px;
   min-height: 100dvh;
   margin: 0 auto;
-  padding: 0 20px calc(100px + env(safe-area-inset-bottom));
+  padding: 20px 20px calc(100px + env(safe-area-inset-bottom));
   background: var(--profile-background);
 }
 
 .pet-profile {
-  position: relative;
   display: grid;
   justify-items: center;
-  padding: 28px 0 20px;
-  background:
-    radial-gradient(ellipse at 50% 3%, #b8d9f5 0, #ecc9e8 45%, transparent 80%);
+  padding: 4px 0 20px;
+  background: radial-gradient(ellipse at 50% 3%, #b8d9f5 0, #ecc9e8 45%, transparent 80%);
   text-align: center;
 }
 
 :host-context(html[data-theme='dark']) .pet-profile {
-  background:
-    radial-gradient(ellipse at 50% 3%, #314966 0, #3b304a 42%, transparent 80%);
+  background: radial-gradient(ellipse at 50% 3%, #314966 0, #3b304a 42%, transparent 80%);
 }
 
 .edit-profile-button {
-  position: absolute;
-  top: 20px;
-  right: 3px;
   display: grid;
   width: 32px;
   height: 32px;
@@ -128,19 +122,6 @@
     stroke-linejoin: round;
     stroke-width: 1.7;
   }
-}
-
-.pet-profile h1 {
-  margin: 12px 0 0;
-  color: var(--profile-ink);
-  font-size: 22px;
-  font-weight: 800;
-}
-
-.pet-description {
-  margin: 3px 0 0;
-  color: var(--profile-muted);
-  font-size: 12px;
 }
 
 .pet-stats {

@@ -1,6 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
+import { PageHeader } from '../../../core/components/page-header/page-header';
 import { PetTracking } from '../../../core/models/pet.model';
 import { PetData } from '../../../core/services/pet-data';
 import { FoodForm } from '../../foods/food-form/food-form';
@@ -21,7 +21,7 @@ const RECORD_TABS: RecordTabOption[] = [
 ];
 
 @Component({
-  imports: [FoodForm, HealthEntryForm, RouterLink, TranslatePipe],
+  imports: [FoodForm, HealthEntryForm, PageHeader, TranslatePipe],
   selector: 'app-record-entry-page',
   styleUrl: './record-entry-page.scss',
   templateUrl: './record-entry-page.html',

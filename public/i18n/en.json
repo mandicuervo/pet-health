@@ -2,6 +2,12 @@
   "app": {
     "name": "Pet Health"
   },
+  "petSwitcher": {
+    "open": "Switch pet. Current pet: {{name}}",
+    "title": "Choose a pet",
+    "close": "Close pet selector",
+    "addPet": "Add another pet"
+  },
   "theme": {
     "switchToSoft": "Switch to soft theme",
     "switchToDark": "Switch to dark theme"
@@ -33,10 +39,24 @@
     "alreadyHaveAccount": "Already have an account?",
     "noAccount": "Don't have an account yet?",
     "socialUnavailable": "Social sign-up will be available after integration.",
+    "continueWithGoogle": "Continue with Google",
+    "googleSignInCancelled": "Google sign-in was cancelled.",
+    "googleDomainNotAuthorized": "This domain is not authorized in Firebase Authentication.",
+    "googleProviderNotEnabled": "Enable the Google provider in Firebase Authentication and try again.",
+    "googlePopupBlocked": "Your browser blocked the Google sign-in popup. Allow pop-ups and try again.",
+    "googleSignInError": "Could not sign in with Google. Please try again.",
+    "apiTokenValidationError": "Google signed you in, but the API could not validate the token. Check that the API is running with the Firebase Admin credential.",
     "apiNotConnected": "The screen is ready. Sign-up and sign-in will connect to the API when it becomes available.",
     "continueWithoutAccount": "Continue without an account"
   },
   "dashboard": {
+    "setupTitle": "Set up {{name}}'s tracking",
+    "setupDescription": "Add the first details to start tracking your pet's routine.",
+    "setupWeight": "Record an initial weight",
+    "setupFood": "Add a food",
+    "setupMeal": "Record the first meal",
+    "setupTaskComplete": "{{task}} complete",
+    "setupTaskPending": "Add: {{task}}",
     "weightLoss": "WEIGHT LOSS",
     "weightEvolution": "WEIGHT PROGRESS",
     "weightChangeSinceStart": "{{value}} kg since start",
@@ -145,8 +165,10 @@
     "profile": "Profile"
   },
   "pages": {
+    "backHome": "Back to dashboard",
     "weightDescription": "Track your pet's weight and progress over time.",
     "foodsDescription": "Manage the foods and meals in your pet's nutrition plan.",
+    "foodDiaryDescription": "Review your pet's meal history and health records.",
     "profileDescription": "View and manage your pet's profile and preferences."
   },
   "weight": {
@@ -230,6 +252,7 @@
     "senior": "Senior"
   },
   "profile": {
+    "eyebrow": "Pet profile",
     "editProfile": "Edit pet profile",
     "petSummary": "Pet profile summary",
     "profileImage": "{{name}}'s photo",
@@ -279,6 +302,7 @@
   },
   "customization": {
     "eyebrow": "Health profile",
+    "newPetTitle": "Let's meet your pet",
     "title": "How is {{name}}'s health?",
     "intro": "Choose the tracking options that suit your pet. You can select more than one.",
     "diabetes": "Diabetes",
@@ -294,7 +318,8 @@
     "profileLink": "Customize tracking",
     "profileLinkDescription": "Choose your pet's records and care",
     "selectAtLeastOne": "Select at least one tracking option.",
-    "saveError": "Could not save. Check the pet profile and try again."
+    "saveError": "Could not save. Check the pet profile and try again.",
+    "apiSaveError": "Could not save the pet to the server. Check that the API and MongoDB are running, then try again."
   },
   "records": {
     "title": "New record",

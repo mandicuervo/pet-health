@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { map } from 'rxjs';
 import { WeightEntry } from '../../../core/models/weight-entry.model';
+import { PageHeader } from '../../../core/components/page-header/page-header';
 import { PetData } from '../../../core/services/pet-data';
 import { Theme } from '../../../core/services/theme';
 import { localDateKey } from '../../../core/utils/date';
@@ -18,7 +19,7 @@ interface ChartPoint {
 }
 
 @Component({
-  imports: [DecimalPipe, RouterLink, TranslatePipe],
+  imports: [DecimalPipe, PageHeader, RouterLink, TranslatePipe],
   selector: 'app-weight-page',
   styleUrl: './weight-page.scss',
   templateUrl: './weight-page.html',
@@ -27,10 +28,9 @@ export class WeightPage {
   private readonly petData = inject(PetData);
   private readonly translate = inject(TranslateService);
   readonly theme = inject(Theme);
-  private readonly language = toSignal(
-    this.translate.onLangChange.pipe(map(({ lang }) => lang)),
-    { initialValue: this.translate.getCurrentLang() ?? 'en' },
-  );
+  private readonly language = toSignal(this.translate.onLangChange.pipe(map(({ lang }) => lang)), {
+    initialValue: this.translate.getCurrentLang() ?? 'en',
+  });
 
   readonly pet = this.petData.pet;
   readonly weightEntries = computed(() =>
@@ -44,9 +44,7 @@ export class WeightPage {
   readonly targetDifference = computed(() => {
     const current = this.currentWeight();
     const target = this.targetWeight();
-    return current === undefined || target === undefined
-      ? undefined
-      : Math.abs(current - target);
+    return current === undefined || target === undefined ? undefined : Math.abs(current - target);
   });
   readonly monthlyChange = computed(() => {
     const entries = this.weightEntries();
@@ -61,13 +59,9 @@ export class WeightPage {
     if (monthEntries.length < 2) {
       return undefined;
     }
-    return Number(
-      (monthEntries.at(-1)!.weightKg - monthEntries[0].weightKg).toFixed(1),
-    );
+    return Number((monthEntries.at(-1)!.weightKg - monthEntries[0].weightKg).toFixed(1));
   });
-  readonly monthlyChangeAmount = computed(() =>
-    Math.abs(this.monthlyChange() ?? 0),
-  );
+  readonly monthlyChangeAmount = computed(() => Math.abs(this.monthlyChange() ?? 0));
 
   readonly period = signal<Period>('3m');
   readonly showAllHistory = signal(false);
@@ -77,11 +71,7 @@ export class WeightPage {
   readonly formWeight = signal('');
   readonly dateLocale = computed(() => {
     const language = this.language();
-    return language.startsWith('pt')
-      ? 'pt-BR'
-      : language.startsWith('es')
-        ? 'es'
-        : 'en-US';
+    return language.startsWith('pt') ? 'pt-BR' : language.startsWith('es') ? 'es' : 'en-US';
   });
 
   readonly chartEntries = computed(() => {
@@ -241,9 +231,6 @@ export class WeightPage {
       const [year, month, day] = dateKey.split('-').map(Number);
       return Date.UTC(year, month - 1, day) / 86_400_000;
     };
-    return Math.max(
-      0,
-      toUtcDays(localDateKey(new Date())) - toUtcDays(date),
-    );
+    return Math.max(0, toUtcDays(localDateKey(new Date())) - toUtcDays(date));
   }
 }

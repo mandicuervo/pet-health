@@ -1,0 +1,73 @@
+:host {
+  display: block;
+}
+
+.setup-reminder {
+  margin: 0 0 18px;
+  padding: 12px;
+  border-radius: 20px;
+  background: #ff5555;
+  color: #fff;
+}
+
+.setup-reminder-heading {
+  display: flex;
+  gap: 10px;
+
+  h2,
+  p {
+    margin: 0;
+  }
+  p {
+    margin-top: 4px;
+  }
+
+  h3 {
+    margin-bottom: 0;
+    margin-top: 2px;
+  }
+}
+
+ul {
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.setup-task {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px;
+  color: inherit;
+  text-decoration: none;
+
+  &.completed {
+    text-decoration: line-through;
+
+    .setup-task-status {
+      background: #e9f8ef;
+      color: #55a875;
+    }
+  }
+}
+
+.setup-task-status {
+  display: grid;
+  width: 23px;
+  height: 23px;
+  flex: 0 0 23px;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff0f0;
+  color: #e38b91;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.setup-task-arrow {
+  margin-left: auto;
+  color: inherit;
+  font-size: 20px;
+  line-height: 1;
+}

@@ -1,0 +1,39 @@
+<header class="page-header" [class.has-actions]="hasActions()">
+  @if (backLink() && backLabelKey()) {
+    <a class="back-button" [routerLink]="backLink()" [attr.aria-label]="backLabelKey() | translate">
+      ‹
+    </a>
+  }
+  @if (hasActions()) {
+    <div class="page-header-actions">
+      <ng-content />
+    </div>
+  }
+  <div class="page-header-content">
+    @if (eyebrowKey() || eyebrowText()) {
+      <p class="eyebrow">
+        @if (eyebrowKey()) {
+          {{ eyebrowKey() | translate }}
+        } @else {
+          {{ eyebrowText() }}
+        }
+      </p>
+    }
+    <h1>
+      @if (titleKey()) {
+        {{ titleKey() | translate: titleParams() }}
+      } @else {
+        {{ titleText() }}
+      }
+    </h1>
+    @if (descriptionKey() || descriptionText()) {
+      <p class="intro">
+        @if (descriptionKey()) {
+          {{ descriptionKey() | translate: descriptionParams() }}
+        } @else {
+          {{ descriptionText() }}
+        }
+      </p>
+    }
+  </div>
+</header>

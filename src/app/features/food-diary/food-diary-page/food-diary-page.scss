@@ -23,20 +23,6 @@
   background: var(--app-background);
 }
 
-.diary-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-
-  h1 {
-    margin: 0;
-    color: var(--diary-ink);
-    font-size: 19px;
-    font-weight: 800;
-  }
-}
-
 .calendar-button {
   display: grid;
   width: 34px;
@@ -102,7 +88,6 @@
       color: #a45cc0;
     }
   }
-
 }
 
 .meal-dot {

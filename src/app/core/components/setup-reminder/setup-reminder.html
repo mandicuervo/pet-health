@@ -1,0 +1,36 @@
+@if (hasIncompleteTasks()) {
+  <section
+    class="setup-reminder"
+    role="region"
+    [attr.aria-label]="'dashboard.setupTitle' | translate: { name: petName() }"
+  >
+    <div class="setup-reminder-heading">
+      <div>
+        <h3>
+          {{ 'dashboard.setupTitle' | translate: { name: petName() } }}
+        </h3>
+        <p>{{ 'dashboard.setupDescription' | translate }}</p>
+      </div>
+    </div>
+    <ul>
+      @for (task of tasks(); track task.key) {
+        <li>
+          <a
+            [routerLink]="task.path"
+            class="setup-task"
+            [class.completed]="task.complete"
+            [attr.aria-label]="
+              (task.complete ? 'dashboard.setupTaskComplete' : 'dashboard.setupTaskPending')
+                | translate: { task: task.key | translate }
+            "
+          >
+            <span class="setup-task-status" aria-hidden="true">
+              {{ task.complete ? '✓' : '×' }}
+            </span>
+            <span>{{ task.key | translate }}</span>
+          </a>
+        </li>
+      }
+    </ul>
+  </section>
+}

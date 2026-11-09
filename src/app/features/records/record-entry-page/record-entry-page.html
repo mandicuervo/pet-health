@@ -1,10 +1,12 @@
 <main class="record-shell">
-  <header class="page-header">
-    <a class="back-button" routerLink="/" [attr.aria-label]="'records.back' | translate">‹</a>
-    <p class="eyebrow">{{ pet().name }}</p>
-    <h1>{{ 'records.title' | translate }}</h1>
-    <p class="intro">{{ 'records.intro' | translate: { name: pet().name } }}</p>
-  </header>
+  <app-page-header
+    [eyebrowText]="pet().name"
+    titleKey="records.title"
+    descriptionKey="records.intro"
+    [descriptionParams]="{ name: pet().name }"
+    backLink="/"
+    backLabelKey="records.back"
+  />
 
   <nav class="record-tabs" role="tablist" [attr.aria-label]="'records.chooseType' | translate">
     @for (tab of tabs(); track tab.id) {
@@ -26,10 +28,7 @@
   } @else if (activeTab() === 'food') {
     <app-food-form (saved)="onFoodSaved()" />
   } @else {
-    <app-health-entry-form
-      [entryType]="healthEntryType()"
-      (saved)="onHealthEntrySaved()"
-    />
+    <app-health-entry-form [entryType]="healthEntryType()" (saved)="onHealthEntrySaved()" />
   }
 
   @if (errorKey()) {
@@ -38,5 +37,4 @@
   @if (successKey()) {
     <p class="form-message success" role="status">{{ successKey() | translate }}</p>
   }
-
 </main>

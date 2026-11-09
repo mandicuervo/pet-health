@@ -1,18 +1,28 @@
 <main class="weight-shell">
-  <header class="page-header">
-    <h1>{{ 'weight.title' | translate }}</h1>
+  <app-page-header
+    [eyebrowText]="pet().name"
+    titleKey="weight.title"
+    descriptionKey="pages.weightDescription"
+    backLink="/"
+    backLabelKey="pages.backHome"
+    [hasActions]="true"
+  >
     <div class="header-actions">
       <button
         class="theme-button"
         type="button"
         (click)="theme.toggle()"
-        [attr.aria-label]="(theme.mode() === 'dark' ? 'theme.switchToSoft' : 'theme.switchToDark') | translate"
+        [attr.aria-label]="
+          (theme.mode() === 'dark' ? 'theme.switchToSoft' : 'theme.switchToDark') | translate
+        "
         [attr.aria-pressed]="theme.mode() === 'dark'"
       >
         <svg viewBox="0 0 24 24" aria-hidden="true">
           @if (theme.mode() === 'dark') {
             <circle cx="12" cy="12" r="4" />
-            <path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" />
+            <path
+              d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"
+            />
           } @else {
             <path d="M20.5 15.2A8.5 8.5 0 0 1 8.8 3.5 8.5 8.5 0 1 0 20.5 15.2Z" />
           }
@@ -25,11 +35,13 @@
       >
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M12 8.2a3.8 3.8 0 1 0 0 7.6 3.8 3.8 0 0 0 0-7.6Z" />
-          <path d="m19.1 13.7 1.2.9-1.2 2.1-1.4-.5a7.4 7.4 0 0 1-1.5.9l-.2 1.5h-2.4l-.4-1.4a7.4 7.4 0 0 1-1.7 0l-.7 1.2-2.1-1.2.5-1.4a7.4 7.4 0 0 1-.9-1.5l-1.5-.2v-2.4l1.4-.4a7.4 7.4 0 0 1 0-1.7l-1.2-.7 1.2-2.1 1.4.5a7.4 7.4 0 0 1 1.5-.9l.2-1.5h2.4l.4 1.4a7.4 7.4 0 0 1 1.7 0l.7-1.2 2.1 1.2-.5 1.4a7.4 7.4 0 0 1 .9 1.5l1.5.2v2.4l-1.4.4a7.4 7.4 0 0 1 0 1.5Z" />
+          <path
+            d="m19.1 13.7 1.2.9-1.2 2.1-1.4-.5a7.4 7.4 0 0 1-1.5.9l-.2 1.5h-2.4l-.4-1.4a7.4 7.4 0 0 1-1.7 0l-.7 1.2-2.1-1.2.5-1.4a7.4 7.4 0 0 1-.9-1.5l-1.5-.2v-2.4l1.4-.4a7.4 7.4 0 0 1 0-1.7l-1.2-.7 1.2-2.1 1.4.5a7.4 7.4 0 0 1 1.5-.9l.2-1.5h2.4l.4 1.4a7.4 7.4 0 0 1 1.7 0l.7-1.2 2.1 1.2-.5 1.4a7.4 7.4 0 0 1 .9 1.5l1.5.2v2.4l-1.4.4a7.4 7.4 0 0 1 0 1.5Z"
+          />
         </svg>
       </a>
     </div>
-  </header>
+  </app-page-header>
 
   <section class="summary-cards" [attr.aria-label]="'weight.summary' | translate">
     <article class="summary-card">
@@ -43,7 +55,10 @@
       </p>
       @if (monthlyChange() !== undefined) {
         <span class="monthly-change" [class.increase]="monthlyChange()! > 0">
-          {{ (monthlyChange()! <= 0 ? 'weight.monthlyLoss' : 'weight.monthlyGain') | translate: { amount: (monthlyChangeAmount() | number: '1.1-1') } }}
+          {{
+            (monthlyChange()! <= 0 ? 'weight.monthlyLoss' : 'weight.monthlyGain')
+              | translate: { amount: (monthlyChangeAmount() | number: '1.1-1') }
+          }}
         </span>
       }
     </article>
@@ -86,7 +101,9 @@
         >
           @for (tick of chartTicks(); track tick.y) {
             <line class="chart-grid" x1="48" [attr.y1]="tick.y" x2="340" [attr.y2]="tick.y" />
-            <text class="chart-tick" x="40" [attr.y]="tick.y + 3" text-anchor="end">{{ tick.value }}</text>
+            <text class="chart-tick" x="40" [attr.y]="tick.y + 3" text-anchor="end">
+              {{ tick.value }}
+            </text>
           }
           <polygon class="chart-area" [attr.points]="chartArea()" />
           <polyline class="chart-line" [attr.points]="chartLine()" />
@@ -94,7 +111,9 @@
             <circle class="chart-point" [attr.cx]="point.x" [attr.cy]="point.y" r="3.5" />
           }
           @for (label of chartLabels(); track $index) {
-            <text class="chart-label" [attr.x]="label.x" y="164" text-anchor="middle">{{ label.label }}</text>
+            <text class="chart-label" [attr.x]="label.x" y="164" text-anchor="middle">
+              {{ label.label }}
+            </text>
           }
         </svg>
       } @else {
@@ -124,15 +143,34 @@
         <form (submit)="saveEntry($event)">
           <label>
             <span>{{ 'weight.date' | translate }}</span>
-            <input name="date" type="date" [value]="formDate()" (input)="updateFormDate($event)" required />
+            <input
+              name="date"
+              type="date"
+              [value]="formDate()"
+              (input)="updateFormDate($event)"
+              required
+            />
           </label>
           <label>
             <span>{{ 'weight.weight' | translate }} (kg)</span>
-            <input name="weight" type="number" min="0.1" max="300" step="0.1" [value]="formWeight()" (input)="updateFormWeight($event)" required />
+            <input
+              name="weight"
+              type="number"
+              min="0.1"
+              max="300"
+              step="0.1"
+              [value]="formWeight()"
+              (input)="updateFormWeight($event)"
+              required
+            />
           </label>
           <div class="form-actions">
-            <button class="cancel-button" type="button" (click)="closeForm()">{{ 'weight.cancel' | translate }}</button>
-            <button class="save-button" type="submit">{{ 'questionnaire.save' | translate }}</button>
+            <button class="cancel-button" type="button" (click)="closeForm()">
+              {{ 'weight.cancel' | translate }}
+            </button>
+            <button class="save-button" type="submit">
+              {{ 'questionnaire.save' | translate }}
+            </button>
           </div>
         </form>
       </section>
@@ -149,7 +187,10 @@
               [class.tone-2]="index % 3 === 2"
               aria-hidden="true"
             >
-              <svg viewBox="0 0 24 24"><path d="M7 3v3m10-3v3M4 9h16M5 5h14a1 1 0 0 1 1 1v13H4V6a1 1 0 0 1 1-1Z" /><path d="M8 12h2v2H8zm5 0h2v2h-2z" /></svg>
+              <svg viewBox="0 0 24 24">
+                <path d="M7 3v3m10-3v3M4 9h16M5 5h14a1 1 0 0 1 1 1v13H4V6a1 1 0 0 1 1-1Z" />
+                <path d="M8 12h2v2H8zm5 0h2v2h-2z" />
+              </svg>
             </span>
             <span class="history-copy">
               <strong>{{ formatDate(entry.date) }}</strong>
@@ -168,9 +209,14 @@
               class="edit-button"
               type="button"
               (click)="editEntry(entry)"
-              [attr.aria-label]="'weight.editEntryLabel' | translate: { date: formatDate(entry.date) }"
+              [attr.aria-label]="
+                'weight.editEntryLabel' | translate: { date: formatDate(entry.date) }
+              "
             >
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-6" /><path d="m10 14 8.5-8.5a2.1 2.1 0 0 1 3 3L13 17l-4 1z" /></svg>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-6" />
+                <path d="m10 14 8.5-8.5a2.1 2.1 0 0 1 3 3L13 17l-4 1z" />
+              </svg>
             </button>
           </article>
         }
@@ -179,5 +225,4 @@
       <p class="empty-history">{{ 'weight.noHistory' | translate }}</p>
     }
   </section>
-
 </main>

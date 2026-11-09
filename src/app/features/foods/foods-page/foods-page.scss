@@ -30,7 +30,6 @@
   background: var(--foods-background);
 }
 
-.page-header,
 .section-heading,
 .plan-heading,
 .food-main,
@@ -41,22 +40,9 @@
   align-items: center;
 }
 
-.page-header,
 .section-heading,
 .plan-heading {
   justify-content: space-between;
-}
-
-.page-header {
-  margin-bottom: 12px;
-
-  h1 {
-    margin: 0;
-    color: var(--foods-ink);
-    font-size: 18px;
-    font-weight: 800;
-    letter-spacing: -0.35px;
-  }
 }
 
 .icon-button {

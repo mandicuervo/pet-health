@@ -1,12 +1,13 @@
 import { DecimalPipe } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
+import { PageHeader } from '../../../core/components/page-header/page-header';
 import { DailyFoodPlan, Food } from '../../../core/models/food.model';
 import { PetData } from '../../../core/services/pet-data';
 import { FoodForm } from '../food-form/food-form';
 
 @Component({
-  imports: [DecimalPipe, FoodForm, TranslatePipe],
+  imports: [DecimalPipe, FoodForm, PageHeader, TranslatePipe],
   selector: 'app-foods-page',
   styleUrl: './foods-page.scss',
   templateUrl: './foods-page.html',
@@ -40,17 +41,12 @@ export class FoodsPage {
     let age = today.getFullYear() - birthDate.getFullYear();
     const birthdayHasPassed =
       today.getMonth() > birthDate.getMonth() ||
-      (today.getMonth() === birthDate.getMonth() &&
-        today.getDate() >= birthDate.getDate());
+      (today.getMonth() === birthDate.getMonth() && today.getDate() >= birthDate.getDate());
     if (!birthdayHasPassed) {
       age -= 1;
     }
     const seniorAge = this.pet().species === 'cat' ? 11 : 7;
-    return age < 1
-      ? 'foods.junior'
-      : age >= seniorAge
-        ? 'foods.senior'
-        : 'foods.adult';
+    return age < 1 ? 'foods.junior' : age >= seniorAge ? 'foods.senior' : 'foods.adult';
   });
 
   toggleSearch(): void {
@@ -129,5 +125,4 @@ export class FoodsPage {
     }
     this.pendingDelete.set(undefined);
   }
-
 }

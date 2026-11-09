@@ -2,19 +2,24 @@ import { DecimalPipe, DOCUMENT } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
+import { firstValueFrom } from 'rxjs';
+import { PageHeader } from '../../../core/components/page-header/page-header';
 import { Pet } from '../../../core/models/pet.model';
+import { PetSwitcher } from '../../../core/components/pet-switcher/pet-switcher';
+import { PetApi } from '../../../core/services/pet-api';
 import { PetData } from '../../../core/services/pet-data';
 
 type ProfilePanel = 'health' | 'help' | 'signOut' | undefined;
 
 @Component({
-  imports: [DecimalPipe, RouterLink, TranslatePipe],
+  imports: [DecimalPipe, PageHeader, PetSwitcher, RouterLink, TranslatePipe],
   selector: 'app-profile-page',
   styleUrl: './profile-page.scss',
   templateUrl: './profile-page.html',
 })
 export class ProfilePage {
   private readonly petData = inject(PetData);
+  private readonly petApi = inject(PetApi);
   private readonly storage = inject(DOCUMENT).defaultView?.localStorage;
 
   readonly pet = this.petData.pet;
@@ -24,6 +29,7 @@ export class ProfilePage {
   );
   readonly openPanel = signal<ProfilePanel>(undefined);
   readonly errorKey = signal<string | undefined>(undefined);
+  readonly saving = signal(false);
   readonly today = new Date();
   readonly age = computed(() => {
     const birthDate = new Date(`${this.pet().birthDate}T00:00:00`);
@@ -88,9 +94,7 @@ export class ProfilePage {
     const activityLevel = String(data.get('activityLevel'));
     if (
       (species !== 'cat' && species !== 'dog') ||
-      (activityLevel !== 'low' &&
-        activityLevel !== 'moderate' &&
-        activityLevel !== 'high')
+      (activityLevel !== 'low' && activityLevel !== 'moderate' && activityLevel !== 'high')
     ) {
       throw new Error('Unsupported pet profile selection');
     }
@@ -102,8 +106,7 @@ export class ProfilePage {
       species,
       breed: String(data.get('breed')),
       birthDate: String(data.get('birthDate')),
-      targetWeightKg:
-        targetWeightValue === '' ? undefined : Number(targetWeightValue),
+      targetWeightKg: targetWeightValue === '' ? undefined : Number(targetWeightValue),
       activityLevel,
     });
   }
@@ -114,37 +117,48 @@ export class ProfilePage {
   }
 
   private savePet(pet: Pet): void {
-    try {
-      this.petData.savePet(pet);
-      this.editing.set(false);
-      this.errorKey.set(undefined);
-    } catch (error) {
-      if (!(error instanceof Error)) {
-        throw error;
-      }
-      this.errorKey.set(
-        error.message === 'Pet profile details are invalid'
-          ? 'profile.invalidProfile'
-          : 'profile.saveError',
-      );
-    }
+    this.saving.set(true);
+    this.petApi.updatePet(pet).subscribe({
+      next: (updatedPet) => {
+        try {
+          this.petData.savePet(updatedPet);
+          this.editing.set(false);
+          this.errorKey.set(undefined);
+        } catch (error) {
+          this.handleSaveError(error);
+        } finally {
+          this.saving.set(false);
+        }
+      },
+      error: () => {
+        this.errorKey.set('profile.saveError');
+        this.saving.set(false);
+      },
+    });
   }
 
   private async savePhoto(file: File): Promise<void> {
     try {
       const photoUrl = await this.compressPhoto(file);
-      this.petData.savePet({ ...this.pet(), photoUrl });
+      const updatedPet = await firstValueFrom(this.petApi.updatePet({ ...this.pet(), photoUrl }));
+      this.petData.savePet(updatedPet);
       this.errorKey.set(undefined);
     } catch (error) {
-      if (!(error instanceof Error)) {
-        throw error;
-      }
-      this.errorKey.set(
-        error.message === 'Photo could not be decoded'
+      this.handleSaveError(error);
+    }
+  }
+
+  private handleSaveError(error: unknown): void {
+    if (!(error instanceof Error)) {
+      throw error;
+    }
+    this.errorKey.set(
+      error.message === 'Pet profile details are invalid'
+        ? 'profile.invalidProfile'
+        : error.message === 'Photo could not be decoded'
           ? 'profile.photoReadError'
           : 'profile.saveError',
-      );
-    }
+    );
   }
 
   private async compressPhoto(file: File): Promise<string> {
@@ -168,10 +182,7 @@ export class ProfilePage {
 
       const blob = await new Promise<Blob>((resolve, reject) => {
         canvas.toBlob(
-          (result) =>
-            result
-              ? resolve(result)
-              : reject(new Error('Photo compression failed')),
+          (result) => (result ? resolve(result) : reject(new Error('Photo compression failed'))),
           'image/jpeg',
           0.8,
         );
@@ -179,8 +190,7 @@ export class ProfilePage {
 
       return await new Promise<string>((resolve, reject) => {
         const reader = new FileReader();
-        reader.onerror = () =>
-          reject(new Error('Photo could not be decoded'));
+        reader.onerror = () => reject(new Error('Photo could not be decoded'));
         reader.onload = () => {
           if (typeof reader.result !== 'string') {
             reject(new Error('Photo could not be decoded'));
